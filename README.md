@@ -1,5 +1,5 @@
 # PracticasALG
-##Este repositorio servirá como espacio donde trabajaremos con las prácticas de la asignatura de Algoritmica.
+## Este repositorio servirá como espacio donde trabajaremos con las prácticas de la asignatura de Algoritmica.
 El funcionamiento será una carpeta root (el main) y a raíz de ello añadiremos las carpetas de las prácticas necesarias
 
                                                   PracticasALG
