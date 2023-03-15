@@ -17,9 +17,12 @@ CFLAGS := -Wall -Wextra -Wpedantic
 
 ######################### Execution (por rellenar según el programa)
 
+RANDOM_INT := $(shell bash -c "awk 'BEGIN{srand();print( int(65536*rand()) )}'")
+
 RR := ./
-OUTPUT_FILE := ./$(TXTD)/burbuja_times.txt
-SIZE := 1000 2000 3000 10000 20000 30000
+SIZES := 1000 2000 3000 10000 20000 30000
+MAX_VALUE := $(RANDOM_INT)
+SEED := $(RANDOM_INT)
 
 ######################### Colors
 
@@ -66,12 +69,29 @@ preamble:
 
 indexes:
 	@echo "\n$(IFG)Execution indexes (type make <index> to execute):$(EC)"
-	@echo "$(IFG) - rb:$(EC) $(BIND)/burbuja.bin $(OUTPUT_FILE) $(SIZE)"
+	@echo "$(IFG) - rb:$(EC) $(BIND)/burbuja.bin $(TXTD)/burbuja_times.txt $(SIZES)"
+	@echo "$(IFG) - rh:$(EC) $(BIND)/heapsort.bin <RANDOM_INT> $(SIZES) > $(TXTD)/heapsort_times.txt"
+	@echo "$(IFG) - rm:$(EC) $(BIND)/mergesort.bin <RANDOM_INT> $(SIZES) > $(TXTD)/mergesort_times.txt"
 
 rb: burbuja
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!"
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
+	@cat ./$(TXTD)/$<_times.txt
+
+rh: heapsort
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
+	@cat ./$(TXTD)/$<_times.txt
+
+rm: mergesort
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
+	@cat ./$(TXTD)/$<_times.txt
 
 burbuja: $(BIND)/burbuja.bin
-	$(RR)$< ./$(TXTD)/$@_times.txt $(SIZE)
+	$(RR)$< ./$(TXTD)/$@_times.txt $(SIZES)
+
+heapsort: $(BIND)/heapsort.bin
+	$(RR)$< $(MAX_VALUE) $(SIZES) > ./$(TXTD)/$@_times.txt
+
+mergesort: $(BIND)/mergesort.bin
+	$(RR)$< $(SEED) $(SIZES) > ./$(TXTD)/$@_times.txt
 
 .PHONY: all clean

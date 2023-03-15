@@ -14,7 +14,6 @@ int main(int argc, char *argv[]) {
 	int *v;
 	int n, i, argumento;
     chrono::time_point<std::chrono::high_resolution_clock> t0, tf; // Para medir el tiempo de ejecución
-	double tejecucion; // tiempo de ejecucion del algoritmo en ms
 	unsigned long int semilla;
 	ofstream fsalida;
 	
