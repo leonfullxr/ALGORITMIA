@@ -13,4 +13,4 @@ El funcionamiento será una carpeta root (el main) y a raíz de ello añadiremos
 - En cada carpeta de la practica correspondiente tendremos una carpeta src para los archivos ejecutables .cpp y una carpeta bin para los ejecutables
 - **/src** estarán todos los archivos y programas **.cpp**
 - **/data** estarán todos los archivos **.txt** y las salidas de los programas ejecutables para las gráficas, comparación de tiempos, etc.
-- **/bin** estarán todos los ejecutables **.exe**
+- **/bin** estarán todos los binarios **.bin**
