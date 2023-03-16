@@ -5,17 +5,21 @@
 #include <cstdlib> // Para usar srand y rand
 
 void eliminaDuplicados(int numElementos, *elementos){
-	unordered_map<int,bool> mapa;
+	unordered_map<int,int> mapa;
 	
-	for(int i = 0; i < numElementos; i++)
+	for(int i = 0; i < numElementos; i++){
 		if(mapa.find(elementos[i] == mapa.end())    
-		    mapa[elementos[i]] = true;
+		    mapa[elementos[i]] = 1;
+		else
+		   mapa[elementos[i]]++;
+	}
 	
 	elementos = delete[];
 	elementos = new int[mapa.size()];
 	
-	for(int j = 0; j < mapa.size(); j++)
-	    elementos[j] = mapa[j];
+	for(auto it = mapa.begin(); it != mapa.end(); it++)
+	    if(it->second == 1)
+		   elementos[j] = *it.first;
     
 }
 
