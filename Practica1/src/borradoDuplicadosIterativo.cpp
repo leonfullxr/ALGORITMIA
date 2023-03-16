@@ -5,15 +5,17 @@
 #include <cstdlib> // Para usar srand y rand
 
 void eliminaDuplicados(int numElementos, *elementos){
-	unordered_set<int> set; //Contenedor unordered_set donde guardaré los valores no repetidos
+	set<int> contenedor; //Contenedor unordered_set donde guardaré los valores no repetidos
+	contenedor.reserve(numElementos);
 	
 	for(int i = 0; i < numElementos; i++)   //Recorro los valores del Array
-		set.insert(elementos[i]);           //Inserto los valores de manera no duplicada
+		if(contenedor.find(elementos[i]) == contenedor.end())
+			contenedor.insert(elementos[i]);           //Inserto los valores de manera no duplicada
 	
 	elementos = delete[];                   //Borro los datos del set
-	elementos = new int[set.size()];        //Reservo la cantidad de elementos que hay en el set
+	elementos = new int[contenedor.size()];        //Reservo la cantidad de elementos que hay en el set
 	
-	for(auto it = set.begin(); it != set.end(); it++)
+	for(auto it = contenedor.begin(); it != contenedor.end(); it++)
 	    elementos[i] = it*;                 //Inserto los valores no duplicados del set al Array
 }
 
