@@ -5,22 +5,16 @@
 #include <cstdlib> // Para usar srand y rand
 
 void eliminaDuplicados(int numElementos, *elementos){
-	unordered_map<int,int> mapa;
+	unordered_set<int> set; //Contenedor unordered_set donde guardaré los valores no repetidos
 	
-	for(int i = 0; i < numElementos; i++){
-		if(mapa.find(elementos[i] == mapa.end())    
-		    mapa[elementos[i]] = 1;
-		else
-		   mapa[elementos[i]]++;
-	}
+	for(int i = 0; i < numElementos; i++)   //Recorro los valores del Array
+		set.insert(elementos[i]);           //Inserto los valores de manera no duplicada
 	
-	elementos = delete[];
-	elementos = new int[mapa.size()];
+	elementos = delete[];                   //Borro los datos del set
+	elementos = new int[set.size()];        //Reservo la cantidad de elementos que hay en el set
 	
-	for(auto it = mapa.begin(); it != mapa.end(); it++)
-	    if(it->second == 1)
-		   elementos[j] = *it.first;
-    
+	for(auto it = set.begin(); it != set.end(); it++)
+	    elementos[i] = it*;                 //Inserto los valores no duplicados del set al Array
 }
 
 int main(){
