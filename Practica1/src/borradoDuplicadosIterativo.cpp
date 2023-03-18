@@ -1,25 +1,27 @@
 #include <iostream>
 #include <chrono>
-#include <map>
+#include <set>
 #include <fstream>
 #include <cstdlib> // Para usar srand y rand
 
-void eliminaDuplicados(int numElementos, *elementos){
+using namespace std;
+
+void eliminaDuplicados(int numElementos, int *elementos){
 	set<int> contenedor; //Contenedor unordered_set donde guardaré los valores no repetidos
-	contenedor.reserve(numElementos);
 	
-	for(int i = 0; i < numElementos; i++)   //Recorro los valores del Array
-		if(contenedor.find(elementos[i]) == contenedor.end())
-			contenedor.insert(elementos[i]);           //Inserto los valores de manera no duplicada
+	for(int i = 0; i < numElementos; i++)           /* O(n) */
+		contenedor.insert(elementos[i]);           /* O(log(n)) */
 	
-	elementos = delete[];                   //Borro los datos del set
+	delete [] elementos;                   //Borro los datos del set
 	elementos = new int[contenedor.size()];        //Reservo la cantidad de elementos que hay en el set
-	
-	for(auto it = contenedor.begin(); it != contenedor.end(); it++)
-	    elementos[i] = it*;                 //Inserto los valores no duplicados del set al Array
+	int i = 0;
+	for(auto it = contenedor.begin(); it != contenedor.end(); it++){ /* O(n) */
+	    elementos[i] = *it;                 //Inserto los valores no duplicados del set al Array
+        i++;
+    }
 }
 
-int main(){
+int main(int argc, char **argv){
 	int *v;
 	int n, i, argumento;
     	chrono::time_point<std::chrono::high_resolution_clock> t0, tf; // Para medir el tiempo de ejecución
@@ -57,7 +59,7 @@ int main(){
 		for (i= 0; i<n; i++)
 			v[i]= rand()%n;
 		
-		cerr << "Ejecutando Burbuja para tam. caso: " << n << endl;
+		cerr << "Ejecutando eliminaDuplicados para tam. caso: " << n << endl;
 		
 		t0= std::chrono::high_resolution_clock::now(); // Cogemos el tiempo en que comienza la ejecuciÛn del algoritmo
 		eliminaDuplicados(n, v); // Ejecutamos el algoritmo para tamaÒo de caso tam
@@ -68,7 +70,7 @@ int main(){
 		cerr << "\tTiempo de ejec. (us): " << tejecucion << " para tam. caso "<< n<<endl;
 		
 		// Guardamos tam. de caso y t_ejecucion a fichero de salida
-		fsalida<<n<<" "<<tejecucion<<"\n";
+		fsalida<<n<<"\t"<<tejecucion<<"\n";
 		
 		
 		// Liberamos memoria del vector
