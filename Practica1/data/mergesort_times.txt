@@ -1,0 +1,18 @@
+Size: 1000
+Time: 89 µs
+
+Size: 2000
+Time: 181 µs
+
+Size: 3000
+Time: 302 µs
+
+Size: 10000
+Time: 1166 µs
+
+Size: 20000
+Time: 2656 µs
+
+Size: 30000
+Time: 3818 µs
+
