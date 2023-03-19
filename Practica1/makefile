@@ -12,19 +12,20 @@ TXTD := data
 SRCF := $(wildcard $(SRCD)/*.cpp)
 BINF := $(SRCF:$(SRCD)/%.cpp=$(BIND)/%.bin)
 
-ARG_HANOI := 6 Y
-
 CC := g++
 CFLAGS := -Wall -Wextra -Wpedantic
 
 ######################### Execution (por rellenar según el programa)
 
-RANDOM_INT := $(shell bash -c "awk 'BEGIN{srand();print( int(65536*rand()) )}'")
+RANDOM_MAXV := $(shell bash -c "awk 'BEGIN{srand();print( int(100000*rand()) )}'")
+RANDOM_SEED := $(shell bash -c "awk 'BEGIN{srand();print( int(65536*rand()) )}'")
 
 RR := ./
 SIZES := $(shell seq 1000 1000 100000)
-MAX_VALUE := $(RANDOM_INT)
-SEED := 123456
+MAX_VALUE := $(RANDOM_MAXV)
+SEED := $(RANDOM_SEED)
+DISCS := 6
+ANIMATION := Y
 
 ######################### Colors
 
@@ -73,11 +74,9 @@ preamble:
 indexes:
 	@echo "\n$(IFG)Execution indexes (type make <index> to execute):$(EC)"
 	@echo
-	@echo "$(IFG) - <no arguments>:$(EC) compiles all missing executables."
-	@echo
 	@echo "$(IFG) - rb:$(EC) $(BIND)/burbuja.bin $(TXTD)/burbuja_times.txt $(SIZES)"
 	@echo
-	@echo "$(IFG) - rh:$(EC) $(BIND)/heapsort.bin $(SEED) $(SIZES) > $(TXTD)/heapsort_times.txt"
+	@echo "$(IFG) - rh:$(EC) $(BIND)/heapsort.bin $(SEED) $(MAX_VALUE) $(SIZES) > $(TXTD)/heapsort_times.txt"
 	@echo
 	@echo "$(IFG) - rm:$(EC) $(BIND)/mergesort.bin $(SEED) $(SIZES) > $(TXTD)/mergesort_times.txt"
 	@echo
@@ -85,11 +84,7 @@ indexes:
 	@echo
 	@echo "$(IFG) - rdo:$(EC) $(BIND)/borradoDuplicadosIterativoOrdenado.bin $(TXTD)/borradoDuplicadosIterativoOrdenado_times.txt $(SIZES)"
 	@echo
-	@echo "$(IFG) - han:$(EC) $(BIND)/hanoi.bin $(ARG_HANOI)"
-
-
-
-
+	@echo "$(IFG) - rt:$(EC) $(BIND)/hanoi.bin $(DISCS) $(ANIMATION)"
 
 rb: burbuja
 	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(PFG)"
@@ -115,38 +110,25 @@ rm: mergesort
 	@cat ./$(TXTD)/$<_times.txt
 	@echo "$(EC)"
 
-han: hanoi
-
-
-
-
+rt: hanoi
+	@echo "\n$(PFG)"
 
 burbuja: $(BIND)/burbuja.bin
-	@mkdir $(TXTD)
-	
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 
 borradoDuplicadosIterativo: $(BIND)/borradoDuplicadosIterativo.bin
-	@mkdir $(TXTD)
-	
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 	
 borradoDuplicadosIterativoOrdenado: $(BIND)/borradoDuplicadosIterativoOrdenado.bin
-	@mkdir $(TXTD)
-	
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 
 heapsort: $(BIND)/heapsort.bin
-	@mkdir $(TXTD)
-	
 	$(RR)$< $(SEED) $(MAX_VALUE) $(SIZES) > ./$(TXTD)/$@_times.txt
 
-mergesort: $(BIND)/mergesort.bin
-	@mkdir $(TXTD)
-	
+mergesort: $(BIND)/mergesort.bin	
 	$(RR)$< $(SEED) $(SIZES) > ./$(TXTD)/$@_times.txt
 
 hanoi: $(BIND)/hanoi.bin
-	$(RR)$< $(ARG_HANOI)
+	$(RR)$< $(DISCS) $(ANIMATION)
 
 .PHONY: all clean

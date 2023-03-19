@@ -43,8 +43,6 @@ int main(int argc, char *argv[]) {
   uli seed = atoi(argv[2]);
   srand(seed);
 
-
-  cout << "Size\tTime" << endl;
   for(int arg = 2; arg < argc; ++arg) {
     int vsize = atoi(argv[arg]);
 
@@ -71,7 +69,7 @@ int main(int argc, char *argv[]) {
 //    for(int i = 0; i < vsize; ++i)
 //      fprintf(stdout, "v[%d] = %d\n", i, v[i]);
 
-    cout <<  vsize << "\t" << T << endl;
+    cout << "Size: " << vsize << "\nTime: " << T << " µs\n" << endl;
 
     delete [] v;
     delete [] vaux;
