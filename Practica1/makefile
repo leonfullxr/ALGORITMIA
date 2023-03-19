@@ -92,7 +92,7 @@ burbuja: $(BIND)/burbuja.bin
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SIZES)
 
 heapsort: $(BIND)/heapsort.bin
-	$(RR)$< $(MAX_VALUE) $(SIZES) > ./$(TXTD)/$@_times.txt
+	$(RR)$< $(SEED) $(MAX_VALUE) $(SIZES) > ./$(TXTD)/$@_times.txt
 
 mergesort: $(BIND)/mergesort.bin
 	$(RR)$< $(SEED) $(SIZES) > ./$(TXTD)/$@_times.txt

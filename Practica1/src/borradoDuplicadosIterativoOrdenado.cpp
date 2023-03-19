@@ -1,24 +1,30 @@
 #include <iostream>
 #include <chrono>
-#include <set>
 #include <fstream>
 #include <cstdlib> // Para usar srand y rand
 
 using namespace std;
 
-void eliminaDuplicados(int numElementos, int *elementos){
-	set<int> contenedor; //Contenedor unordered_set donde guardaré los valores no repetidos
+void eliminaDuplicadosOrdenados(int numElementos, int *elementos){
+  int *auxiliar = new int[numElementos];
+  int j = 0;  //Indice donde insertar los elementos no duplicados al Array auxiliar
+  
+  if(numElementos > j)
+    auxiliar[j] = elementos[j];
 	
-	for(int i = 0; i < numElementos; i++)           /* O(n) */
-		contenedor.insert(elementos[i]);           /* O(log(n)) */
+	for(int i = 1; i < numElementos; i++){   /* O(n) */
+		if(elementos[i] > elementos[i-1]){
+            j++;    
+            auxiliar[j] = elementos[i];
+        }
+    }
 	
 	delete [] elementos;                   //Borro los datos del set
-	elementos = new int[contenedor.size()];        //Reservo la cantidad de elementos que hay en el set
-	int i = 0;
-	for(auto it = contenedor.begin(); it != contenedor.end(); it++){ /* O(n) */
-	    elementos[i] = *it;                 //Inserto los valores no duplicados del set al Array
-        i++;
-    }
+	elementos = new int[j];        //Reservo la cantidad de elementos que hay en el Array auxiliar
+	
+	for(int i = 0; i < j; i++)              /* O(n) */
+	    elementos[i] = auxiliar[i];                 //Inserto los valores no duplicados del set al Array
+	delete [] auxiliar;
 }
 
 int main(int argc, char **argv){
@@ -58,11 +64,22 @@ int main(int argc, char **argv){
 		// Generamos vector aleatorio de prueba, con componentes entre 0 y n-1
 		for (i= 0; i<n; i++)
 			v[i]= rand()%n;
+	    
+	    //Ordeno los valores
+	    for (int i = 0; i < n-1; i++) {
+            for (int j = 0; j < n-i-1; j++) {
+                if (v[j] > v[j+1]) {
+                    int temp = v[j];
+                    v[j] = v[j+1];
+                    v[j+1] = temp;
+                }
+            }
+        }
 		
-		cerr << "Ejecutando eliminaDuplicados para tam. caso: " << n << endl;
+		cerr << "Ejecutando eliminaDuplicadosOrdenados para tam. caso: " << n << endl;
 		
 		t0= std::chrono::high_resolution_clock::now(); // Cogemos el tiempo en que comienza la ejecuciÛn del algoritmo
-		eliminaDuplicados(n, v); // Ejecutamos el algoritmo para tamaÒo de caso tam
+		eliminaDuplicadosOrdenados(n, v); // Ejecutamos el algoritmo para tamaÒo de caso tam
 		tf= std::chrono::high_resolution_clock::now(); // Cogemos el tiempo en que finaliza la ejecuciÛn del algoritmo
 		
 		unsigned long tejecucion= std::chrono::duration_cast<std::chrono::microseconds>(tf - t0).count();
@@ -71,7 +88,6 @@ int main(int argc, char **argv){
 		
 		// Guardamos tam. de caso y t_ejecucion a fichero de salida
 		fsalida<<n<<"\t"<<tejecucion<<"\n";
-		
 	}
 	
 	// Liberamos memoria del vector
