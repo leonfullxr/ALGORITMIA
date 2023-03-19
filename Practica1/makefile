@@ -22,9 +22,9 @@ CFLAGS := -Wall -Wextra -Wpedantic
 RANDOM_INT := $(shell bash -c "awk 'BEGIN{srand();print( int(65536*rand()) )}'")
 
 RR := ./
-SIZES := 1000 2000 3000 10000 20000 30000
+SIZES := $(shell seq 0 1000 100000)
 MAX_VALUE := $(RANDOM_INT)
-SEED := $(RANDOM_INT)
+SEED := 123456
 
 ######################### Colors
 
@@ -65,7 +65,7 @@ preamble:
 	@echo "$(PBG)*-----------------------------------------------*$(EC)"
 	@echo "$(PBG)*$(EC) Trabajo realizado por:                        $(PBG)*$(EC)"
 	@echo "$(PBG)*$(EC) - Toni Marti Albons                           $(PBG)*$(EC)"
-	@echo "$(PBG)*$(EC) - León (Rellena nombre xd)                    $(PBG)*$(EC)"
+	@echo "$(PBG)*$(EC) - León Elliott Fuller                      $(PBG)*$(EC)"
 	@echo "$(PBG)*$(EC) - Alejandro Madueño Buciegas                  $(PBG)*$(EC)"
 	@echo "$(PBG)*************************************************$(EC)"
 
@@ -75,8 +75,14 @@ indexes:
 	@echo "$(IFG) - rh:$(EC) $(BIND)/heapsort.bin <RANDOM_INT> $(SIZES) > $(TXTD)/heapsort_times.txt"
 	@echo "$(IFG) - rm:$(EC) $(BIND)/mergesort.bin <RANDOM_INT> $(SIZES) > $(TXTD)/mergesort_times.txt"
 	@echo "$(IFG) - han:$(EC) $(BIND)/hanoi.bin $(ARG_HANOI)"
+	@echo "$(IFG) - rd:$(EC) $(BIND)/borradoDuplicadosIterativo.bin $(TXTD)/borradoDuplicadosIterativo_times.txt $(SIZES)"
+	@echo "$(IFG) - rdo:$(EC) $(BIND)/borradoDuplicadosIterativoOrdenado.bin $(TXTD)/borradoDuplicadosIterativoOrdenado_times.txt $(SIZES)"
 
-rb: burbuja
+rd: borradoDuplicadosIterativo
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
+	@cat ./$(TXTD)/$<_times.txt
+	
+rdo: borradoDuplicadosIterativoOrdenado
 	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
 
@@ -90,8 +96,11 @@ rm: mergesort
 
 han: hanoi
 
-burbuja: $(BIND)/burbuja.bin
-	$(RR)$< ./$(TXTD)/$@_times.txt $(SIZES)
+borradoDuplicadosIterativo: $(BIND)/borradoDuplicadosIterativo
+	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
+	
+borradoDuplicadosIterativoOrdenado: $(BIND)/borradoDuplicadosIterativoOrdenado
+	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 
 heapsort: $(BIND)/heapsort.bin
 	$(RR)$< $(SEED) $(MAX_VALUE) $(SIZES) > ./$(TXTD)/$@_times.txt
