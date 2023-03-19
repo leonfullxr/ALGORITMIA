@@ -52,6 +52,7 @@ clean:
 	-rm -fv ./$(BIND)/* ./$(TXTD)/*
 
 $(BIND)/%.bin: $(SRCD)/%.cpp
+	mkdir $(BIND)
 	@echo "\n$(LGFG)Compiling $@...$(EC)"
 	$(CC) $< $(CFLAGS) -o $@
 
@@ -115,18 +116,23 @@ han: hanoi
 
 
 burbuja: $(BIND)/burbuja.bin
+	mkdir $(TXTD)
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 
 borradoDuplicadosIterativo: $(BIND)/borradoDuplicadosIterativo.bin
+	mkdir $(TXTD)
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 	
 borradoDuplicadosIterativoOrdenado: $(BIND)/borradoDuplicadosIterativoOrdenado.bin
+	mkdir $(TXTD)
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 
 heapsort: $(BIND)/heapsort.bin
+	mkdir $(TXTD)
 	$(RR)$< $(SEED) $(MAX_VALUE) $(SIZES) > ./$(TXTD)/$@_times.txt
 
 mergesort: $(BIND)/mergesort.bin
+	mkdir $(TXTD)
 	$(RR)$< $(SEED) $(SIZES) > ./$(TXTD)/$@_times.txt
 
 hanoi: $(BIND)/hanoi.bin

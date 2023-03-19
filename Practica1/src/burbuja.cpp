@@ -80,18 +80,18 @@ void OrdenaBurbuja(int *v, int n) {
 	i= 0;
 	while (haycambios) {
 		
-	 haycambios=false; // Suponemos vector ya ordenado
-	 for (j= n-1; j>i; j--) { // Recorremos vector de final a i
-		 
-		 if (v[j-1]>v[j]) { // Dos elementos consecutivos mal ordenados
-		  aux= v[j]; // Los intercambiamos
-		  v[j]= v[j-1];
-		  v[j-1]= aux;
-		  haycambios= true; // Al intercambiar, hay cambio
+		 haycambios=false; // Suponemos vector ya ordenado
+		 for (j= n-1; j>i; j--) { // Recorremos vector de final a i
+			 
+			if (v[j-1]>v[j]) { // Dos elementos consecutivos mal ordenados
+				aux= v[j]; // Los intercambiamos
+				v[j]= v[j-1];
+				v[j-1]= aux;
+				haycambios= true; // Al intercambiar, hay cambio
+			}
 		 }
-	 }
-	 i++;
-	}
+		 i++;
+		}
 }
 
 
