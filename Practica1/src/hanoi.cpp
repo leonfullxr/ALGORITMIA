@@ -46,7 +46,7 @@ private:
         move_n++;
         
         if(had_on_top) {
-            move(pair(top_stick, row_top_moved), to);
+            move(pair<int, int>(top_stick, row_top_moved), to);
         }
         
         return row_moved;
@@ -126,7 +126,7 @@ public:
             this_thread::sleep_for(chrono::milliseconds(500));
         }
         
-        move(pair(0, n_discs-1), 2);
+        move(pair<int, int>(0, n_discs-1), 2);
         
         if(animating){
             system("clear");
