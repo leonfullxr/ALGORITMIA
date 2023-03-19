@@ -71,11 +71,17 @@ preamble:
 
 indexes:
 	@echo "\n$(IFG)Execution indexes (type make <index> to execute):$(EC)"
+	@echo
 	@echo "$(IFG) - rb:$(EC) $(BIND)/burbuja.bin $(TXTD)/burbuja_times.txt $(SIZES)"
+	@echo
 	@echo "$(IFG) - rh:$(EC) $(BIND)/heapsort.bin <RANDOM_INT> $(SIZES) > $(TXTD)/heapsort_times.txt"
+	@echo
 	@echo "$(IFG) - rm:$(EC) $(BIND)/mergesort.bin <RANDOM_INT> $(SIZES) > $(TXTD)/mergesort_times.txt"
+	@echo
 	@echo "$(IFG) - han:$(EC) $(BIND)/hanoi.bin $(ARG_HANOI)"
+	@echo
 	@echo "$(IFG) - rd:$(EC) $(BIND)/borradoDuplicadosIterativo.bin $(TXTD)/borradoDuplicadosIterativo_times.txt $(SIZES)"
+	@echo
 	@echo "$(IFG) - rdo:$(EC) $(BIND)/borradoDuplicadosIterativoOrdenado.bin $(TXTD)/borradoDuplicadosIterativoOrdenado_times.txt $(SIZES)"
 
 rd: borradoDuplicadosIterativo
