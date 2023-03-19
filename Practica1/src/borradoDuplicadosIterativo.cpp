@@ -7,9 +7,9 @@
 using namespace std;
 
 void eliminaDuplicados(unsigned int & numElementos, int *& elementos){
-	set<int> contenedor; //Contenedor set donde guardaré los valores no repetidos
+	set<int> contenedor;
 	
-	for(unsigned int i = 0; i < numElementos; i++)           /* Se repite n veces */
+	for(unsigned int i = 0; i < numElementos; i++) /* Se repite n veces */
 		contenedor.insert(elementos[i]);           /* O(log(n)) */
 	
 	if(numElementos == contenedor.size()) {
@@ -17,13 +17,13 @@ void eliminaDuplicados(unsigned int & numElementos, int *& elementos){
 	}
 	
 	delete [] elementos;
-	elementos = new int[contenedor.size()];        //Reservo la cantidad de elementos que hay en el set
+	elementos = new int[contenedor.size()];
 	numElementos = contenedor.size();
 	int i = 0;
-	for(auto it = contenedor.begin(); it != contenedor.end(); it++){ /* O(n) */
-	    elementos[i] = *it;                 //Inserto los valores no duplicados del set al Array
-        i++;
-    }
+	for(auto it = contenedor.begin(); it != contenedor.end(); it++){ /* O(m) */
+		elementos[i] = *it;
+		i++;
+	}
 }
 
 int main(int argc, char **argv){

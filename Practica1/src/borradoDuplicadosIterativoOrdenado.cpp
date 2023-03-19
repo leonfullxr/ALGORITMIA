@@ -7,18 +7,15 @@
 using namespace std;
 
 void eliminaDuplicadosOrdenados(int & numElementos, int *& elementos){
-	int *auxiliar = new int[numElementos];
-	int j = 0;  // Indice donde insertar los elementos no duplicados al Array auxiliar
+	int *auxiliar = new int[numElementos];  // Guardará los elementos no repetidos
+	int j = 0;                              // Tam de auxiliar
 	
-	if(numElementos > j)
-	auxiliar[j] = elementos[j];
+	if (numElementos > 0) 
+		auxiliar[j++] = elementos[0];
 	
-	for(int i = 1; i < numElementos; i++){   /* O(n) */
-		if(elementos[i] != elementos[i-1]){
-			j++;
-			auxiliar[j] = elementos[i];
-		}
-	}
+	for(int i = 0; i < numElementos - 1; i++)   /* se repite n veces */
+		if(elementos[i] != elementos[i+1])
+			auxiliar[j++] = elementos[i+1];
 	
 	if (j == numElementos) {
 		delete [] auxiliar;
@@ -27,10 +24,11 @@ void eliminaDuplicadosOrdenados(int & numElementos, int *& elementos){
 	
 	delete [] elementos;
 	numElementos = j;
-	elementos = new int[numElementos];        //Reservo la cantidad de elementos que hay en el Array auxiliar
+	elementos = new int[numElementos];
 	
-	for(int i = 0; i < numElementos; i++)              /* O(n) */
-	    elementos[i] = auxiliar[i];                 //Inserto los valores no duplicados del set al Array
+	for(int i = 0; i < numElementos; i++)   /* se repite n veces */
+		elementos[i] = auxiliar[i];
+	
 	delete [] auxiliar;
 }
 
