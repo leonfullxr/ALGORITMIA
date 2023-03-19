@@ -12,6 +12,8 @@ TXTD := data
 SRCF := $(wildcard $(SRCD)/*.cpp)
 BINF := $(SRCF:$(SRCD)/%.cpp=$(BIND)/%.bin)
 
+ARG_HANOI := 6 Y
+
 CC := g++
 CFLAGS := -Wall -Wextra -Wpedantic
 
@@ -72,7 +74,7 @@ indexes:
 	@echo "$(IFG) - rb:$(EC) $(BIND)/burbuja.bin $(TXTD)/burbuja_times.txt $(SIZES)"
 	@echo "$(IFG) - rh:$(EC) $(BIND)/heapsort.bin <RANDOM_INT> $(SIZES) > $(TXTD)/heapsort_times.txt"
 	@echo "$(IFG) - rm:$(EC) $(BIND)/mergesort.bin <RANDOM_INT> $(SIZES) > $(TXTD)/mergesort_times.txt"
-	@echo "$(IFG) - han:$(EC) $(BIND)/hanoi.bin 6 Y"
+	@echo "$(IFG) - han:$(EC) $(BIND)/hanoi.bin $(ARG_HANOI)"
 
 rb: burbuja
 	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
@@ -98,6 +100,6 @@ mergesort: $(BIND)/mergesort.bin
 	$(RR)$< $(SEED) $(SIZES) > ./$(TXTD)/$@_times.txt
 
 hanoi: $(BIND)/hanoi.bin
-	$(RR)$< 6 Y
+	$(RR)$< $(ARG_HANOI)
 
 .PHONY: all clean
