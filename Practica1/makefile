@@ -84,10 +84,14 @@ indexes:
 	@echo
 	@echo "$(IFG) - rdo:$(EC) $(BIND)/borradoDuplicadosIterativoOrdenado.bin $(TXTD)/borradoDuplicadosIterativoOrdenado_times.txt $(SIZES)"
 
+rb: burbuja
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
+	@cat ./$(TXTD)/$<_times.txt
+
 rd: borradoDuplicadosIterativo
 	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
-	
+
 rdo: borradoDuplicadosIterativoOrdenado
 	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
@@ -101,6 +105,11 @@ rm: mergesort
 	@cat ./$(TXTD)/$<_times.txt
 
 han: hanoi
+
+
+
+burbuja: $(BIND)/burbuja.bin
+	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 
 borradoDuplicadosIterativo: $(BIND)/borradoDuplicadosIterativo.bin
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
