@@ -13,7 +13,7 @@ void eliminaDuplicadosOrdenados(int & numElementos, int *& elementos){
     auxiliar[j] = elementos[j];
 	
 	for(int i = 1; i < numElementos; i++){   /* O(n) */
-		if(elementos[i] > elementos[i-1]){
+		if(elementos[i] != elementos[i-1]){
             j++;    
             auxiliar[j] = elementos[i];
         }
@@ -21,7 +21,7 @@ void eliminaDuplicadosOrdenados(int & numElementos, int *& elementos){
 	
 	delete [] elementos;
 	numElementos = j;
-	elementos = new int[numElementos];        //Reservo la cantidad de elementos que hay en el Array auxiliar
+	elementos = auxiliar;        //Reservo la cantidad de elementos que hay en el Array auxiliar
 	
 	for(int i = 0; i < numElementos; i++)              /* O(n) */
 	    elementos[i] = auxiliar[i];                 //Inserto los valores no duplicados del set al Array
