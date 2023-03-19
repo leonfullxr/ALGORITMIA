@@ -62,7 +62,7 @@ preamble:
 	@echo "$(PBG)*$(EC)            Cálculo de eficiencia              $(PBG)*$(EC)"
 	@echo "$(PBG)*-----------------------------------------------*$(EC)"
 	@echo "$(PBG)*$(EC) Trabajo realizado por:                        $(PBG)*$(EC)"
-	@echo "$(PBG)*$(EC) - Toni (Rellena nombre xd)                    $(PBG)*$(EC)"
+	@echo "$(PBG)*$(EC) - Toni Marti Albons                           $(PBG)*$(EC)"
 	@echo "$(PBG)*$(EC) - León (Rellena nombre xd)                    $(PBG)*$(EC)"
 	@echo "$(PBG)*$(EC) - Alejandro Madueño Buciegas                  $(PBG)*$(EC)"
 	@echo "$(PBG)*************************************************$(EC)"
@@ -72,6 +72,7 @@ indexes:
 	@echo "$(IFG) - rb:$(EC) $(BIND)/burbuja.bin $(TXTD)/burbuja_times.txt $(SIZES)"
 	@echo "$(IFG) - rh:$(EC) $(BIND)/heapsort.bin <RANDOM_INT> $(SIZES) > $(TXTD)/heapsort_times.txt"
 	@echo "$(IFG) - rm:$(EC) $(BIND)/mergesort.bin <RANDOM_INT> $(SIZES) > $(TXTD)/mergesort_times.txt"
+	@echo "$(IFG) - han:$(EC) $(BIND)/hanoi.bin 6 Y"
 
 rb: burbuja
 	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
@@ -85,6 +86,8 @@ rm: mergesort
 	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
 
+han: hanoi
+
 burbuja: $(BIND)/burbuja.bin
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SIZES)
 
@@ -93,5 +96,8 @@ heapsort: $(BIND)/heapsort.bin
 
 mergesort: $(BIND)/mergesort.bin
 	$(RR)$< $(SEED) $(SIZES) > ./$(TXTD)/$@_times.txt
+
+hanoi: $(BIND)/hanoi.bin
+	$(RR)$< 6 Y
 
 .PHONY: all clean
