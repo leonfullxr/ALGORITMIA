@@ -28,7 +28,7 @@ private:
         
         if(disc_pos.second != 0 and sticks[disc_pos.first][disc_pos.second -1] != -1) {
             top_stick = 3 - (disc_pos.first + to);
-            row_top_moved = move(pair(disc_pos.first, disc_pos.second - 1), top_stick);
+            row_top_moved = move(pair<int, int>(disc_pos.first, disc_pos.second - 1), top_stick);
             had_on_top = true;
         }
         
