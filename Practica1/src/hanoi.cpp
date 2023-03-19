@@ -28,7 +28,8 @@ private:
         
         if(disc_pos.second != 0 and sticks[disc_pos.first][disc_pos.second -1] != -1) {
             top_stick = 3 - (disc_pos.first + to);
-            row_top_moved = move(pair(disc_pos.first, disc_pos.second - 1), top_stick);
+            pair <int, int> aux_pair(disc_pos.first, disc_pos.second-1);
+            row_top_moved = move(aux_pair, top_stick);
             had_on_top = true;
         }
         
@@ -46,7 +47,8 @@ private:
         move_n++;
         
         if(had_on_top) {
-            move(pair(top_stick, row_top_moved), to);
+            pair<int, int> aux_pair(top_stick, row_top_moved);
+            move(aux_pair, to);
         }
         
         return row_moved;
@@ -126,7 +128,8 @@ public:
             this_thread::sleep_for(chrono::milliseconds(500));
         }
         
-        move(pair(0, n_discs-1), 2);
+        pair<int, int> aux_pair(0, n_discs-1);
+        move(aux_pair, 2);
         
         if(animating){
             system("clear");
