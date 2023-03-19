@@ -102,10 +102,10 @@ rm: mergesort
 
 han: hanoi
 
-borradoDuplicadosIterativo: $(BIND)/borradoDuplicadosIterativo
+borradoDuplicadosIterativo: $(BIND)/borradoDuplicadosIterativo.bin
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 	
-borradoDuplicadosIterativoOrdenado: $(BIND)/borradoDuplicadosIterativoOrdenado
+borradoDuplicadosIterativoOrdenado: $(BIND)/borradoDuplicadosIterativoOrdenado.bin
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 
 heapsort: $(BIND)/heapsort.bin

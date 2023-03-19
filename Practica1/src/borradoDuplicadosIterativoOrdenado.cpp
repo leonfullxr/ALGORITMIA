@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <algorithm>
 #include <fstream>
 #include <cstdlib> // Para usar srand y rand
 
@@ -35,9 +36,8 @@ void eliminaDuplicadosOrdenados(int & numElementos, int *& elementos){
 
 int main(int argc, char **argv){
 	int *v;
-	int n, i, argumento;
+	int n, i, argumento, orig_size;
     	chrono::time_point<std::chrono::high_resolution_clock> t0, tf; // Para medir el tiempo de ejecución
-	double tejecucion; // tiempo de ejecucion del algoritmo en ms
 	unsigned long int semilla;
 	ofstream fsalida;
 	
@@ -63,6 +63,7 @@ int main(int argc, char **argv){
 		
 		// Cogemos el tamanio del caso
 		n= atoi(argv[argumento]);
+		orig_size = n;
 		
 		// Reservamos memoria para el vector
 		v= new int[n];
@@ -72,17 +73,9 @@ int main(int argc, char **argv){
 			v[i]= rand()%n;
 	    
 	    //Ordeno los valores
-	    for (int i = 0; i < n-1; i++) {
-            for (int j = 0; j < n-i-1; j++) {
-                if (v[j] > v[j+1]) {
-                    int temp = v[j];
-                    v[j] = v[j+1];
-                    v[j+1] = temp;
-                }
-            }
-        }
+	    sort(v, v+n);
 		
-		cerr << "Ejecutando eliminaDuplicadosOrdenados para tam. caso: " << n << endl;
+		cerr << "Ejecutando eliminaDuplicadosOrdenados para tam. caso: " << orig_size << endl;
 		
 		t0= std::chrono::high_resolution_clock::now(); // Cogemos el tiempo en que comienza la ejecución del algoritmo
 		eliminaDuplicadosOrdenados(n, v); // Ejecutamos el algoritmo para tamaÒo de caso tam
@@ -90,10 +83,10 @@ int main(int argc, char **argv){
 		
 		unsigned long tejecucion= std::chrono::duration_cast<std::chrono::microseconds>(tf - t0).count();
 		
-		cerr << "\tTiempo de ejec. (us): " << tejecucion << " para tam. caso "<< n<<endl;
+		cerr << "\tTiempo de ejec. (us): " << tejecucion << " para tam. caso "<< orig_size<<endl;
 		
 		// Guardamos tam. de caso y t_ejecucion a fichero de salida
-		fsalida<<n<<"\t"<<tejecucion<<"\n";
+		fsalida<<orig_size<<"\t"<<tejecucion<<"\n";
 		
 		delete [] v;
 	}
