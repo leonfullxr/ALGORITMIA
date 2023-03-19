@@ -22,7 +22,7 @@ CFLAGS := -Wall -Wextra -Wpedantic
 RANDOM_INT := $(shell bash -c "awk 'BEGIN{srand();print( int(65536*rand()) )}'")
 
 RR := ./
-SIZES := $(shell seq 0 1000 100000)
+SIZES := $(shell seq 1000 1000 100000)
 MAX_VALUE := $(RANDOM_INT)
 SEED := 123456
 
@@ -78,11 +78,15 @@ indexes:
 	@echo
 	@echo "$(IFG) - rm:$(EC) $(BIND)/mergesort.bin $(SEED) $(SIZES) > $(TXTD)/mergesort_times.txt"
 	@echo
-	@echo "$(IFG) - han:$(EC) $(BIND)/hanoi.bin $(ARG_HANOI)"
-	@echo
 	@echo "$(IFG) - rd:$(EC) $(BIND)/borradoDuplicadosIterativo.bin $(TXTD)/borradoDuplicadosIterativo_times.txt $(SIZES)"
 	@echo
 	@echo "$(IFG) - rdo:$(EC) $(BIND)/borradoDuplicadosIterativoOrdenado.bin $(TXTD)/borradoDuplicadosIterativoOrdenado_times.txt $(SIZES)"
+	@echo
+	@echo "$(IFG) - han:$(EC) $(BIND)/hanoi.bin $(ARG_HANOI)"
+
+
+
+
 
 rb: burbuja
 	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
@@ -105,6 +109,8 @@ rm: mergesort
 	@cat ./$(TXTD)/$<_times.txt
 
 han: hanoi
+
+
 
 
 
