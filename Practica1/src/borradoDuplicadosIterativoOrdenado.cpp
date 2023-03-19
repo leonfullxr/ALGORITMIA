@@ -90,6 +90,11 @@ int main(int argc, char **argv){
 		fsalida<<n<<"\t"<<tejecucion<<"\n";
 	}
 	
+	// Liberamos memoria del vector
+	//Importante liberar la memoria fuera del for porque los punteros de la posicion de memoria
+	//no son los mismos del main a la funcion void
+		delete [] v;
+	
 	// Cerramos fichero de salida
 	fsalida.close();
 	

@@ -72,10 +72,12 @@ int main(int argc, char **argv){
 		// Guardamos tam. de caso y t_ejecucion a fichero de salida
 		fsalida<<n<<"\t"<<tejecucion<<"\n";
 		
-		
-		// Liberamos memoria del vector
-		delete [] v;
 	}
+	
+	// Liberamos memoria del vector
+	//Importante liberar la memoria fuera del for porque los punteros de la posicion de memoria
+	//no son los mismos del main a la funcion void
+		delete [] v;
 	
 	// Cerramos fichero de salida
 	fsalida.close();
