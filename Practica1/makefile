@@ -9,6 +9,8 @@ SRCD := src
 BIND := bin
 TXTD := data
 
+DIRSTRUCT := $(BIND) $(TXTD)
+
 SRCF := $(wildcard $(SRCD)/*.cpp)
 BINF := $(SRCF:$(SRCD)/%.cpp=$(BIND)/%.bin)
 
@@ -46,14 +48,16 @@ EC := \e[0m
 
 ################################################
 
-all: preamble $(BINF) indexes
+all: preamble $(DIRSTRUCT) $(BINF) indexes 
 
 clean:
 	@echo "\n$(LRFG)Deleting $(BIN)...$(EC)\n"
 	-rm -fv ./$(BIND)/* ./$(TXTD)/*
 
+$(DIRSTRUCT):
+	@mkdir -p $@
+
 $(BIND)/%.bin: $(SRCD)/%.cpp
-	@mkdir $(BIND)
 	@echo "\n$(LGFG)Compiling $@...$(EC)"
 	$(CC) $< $(CFLAGS) -o $@
 
