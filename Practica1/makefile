@@ -71,7 +71,7 @@ preamble:
 	@echo "$(PBG)*-----------------------------------------------*$(EC)"
 	@echo "$(PBG)*$(EC) Trabajo realizado por:                        $(PBG)*$(EC)"
 	@echo "$(PBG)*$(EC) - Toni Marti Albons                           $(PBG)*$(EC)"
-	@echo "$(PBG)*$(EC) - León Elliott Fuller                      $(PBG)*$(EC)"
+	@echo "$(PBG)*$(EC) - León Elliott Fuller                         $(PBG)*$(EC)"
 	@echo "$(PBG)*$(EC) - Alejandro Madueño Buciegas                  $(PBG)*$(EC)"
 	@echo "$(PBG)*************************************************$(EC)"
 
