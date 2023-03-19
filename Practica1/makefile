@@ -73,6 +73,8 @@ preamble:
 indexes:
 	@echo "\n$(IFG)Execution indexes (type make <index> to execute):$(EC)"
 	@echo
+	@echo "$(IFG) - <no arguments>:$(EC) compiles all missing executables."
+	@echo
 	@echo "$(IFG) - rb:$(EC) $(BIND)/burbuja.bin $(TXTD)/burbuja_times.txt $(SIZES)"
 	@echo
 	@echo "$(IFG) - rh:$(EC) $(BIND)/heapsort.bin $(SEED) $(SIZES) > $(TXTD)/heapsort_times.txt"
