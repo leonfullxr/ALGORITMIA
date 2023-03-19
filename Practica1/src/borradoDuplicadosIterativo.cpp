@@ -6,14 +6,15 @@
 
 using namespace std;
 
-void eliminaDuplicados(int numElementos, int *elementos){
-	set<int> contenedor; //Contenedor unordered_set donde guardaré los valores no repetidos
+void eliminaDuplicados(int & numElementos, int *& elementos){
+	set<int> contenedor; //Contenedor set donde guardaré los valores no repetidos
 	
-	for(int i = 0; i < numElementos; i++)           /* O(n) */
+	for(int i = 0; i < numElementos; i++)           /* Se repite n veces */
 		contenedor.insert(elementos[i]);           /* O(log(n)) */
 	
 	delete [] elementos;                   //Borro los datos del set
 	elementos = new int[contenedor.size()];        //Reservo la cantidad de elementos que hay en el set
+	numElementos = contenedor.size();
 	int i = 0;
 	for(auto it = contenedor.begin(); it != contenedor.end(); it++){ /* O(n) */
 	    elementos[i] = *it;                 //Inserto los valores no duplicados del set al Array
@@ -72,12 +73,9 @@ int main(int argc, char **argv){
 		// Guardamos tam. de caso y t_ejecucion a fichero de salida
 		fsalida<<n<<"\t"<<tejecucion<<"\n";
 		
+		delete [] v;
 	}
 	
-	// Liberamos memoria del vector
-	//Importante liberar la memoria fuera del for porque los punteros de la posicion de memoria
-	//no son los mismos del main a la funcion void
-		delete [] v;
 	
 	// Cerramos fichero de salida
 	fsalida.close();

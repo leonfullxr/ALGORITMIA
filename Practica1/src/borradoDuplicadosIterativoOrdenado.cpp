@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void eliminaDuplicadosOrdenados(int numElementos, int *elementos){
+void eliminaDuplicadosOrdenados(int & numElementos, int *& elementos){
   int *auxiliar = new int[numElementos];
   int j = 0;  //Indice donde insertar los elementos no duplicados al Array auxiliar
   
@@ -20,6 +20,7 @@ void eliminaDuplicadosOrdenados(int numElementos, int *elementos){
     }
 	
 	delete [] elementos;                   //Borro los datos del set
+	numElementos = j;
 	elementos = new int[j];        //Reservo la cantidad de elementos que hay en el Array auxiliar
 	
 	for(int i = 0; i < j; i++)              /* O(n) */
@@ -88,12 +89,9 @@ int main(int argc, char **argv){
 		
 		// Guardamos tam. de caso y t_ejecucion a fichero de salida
 		fsalida<<n<<"\t"<<tejecucion<<"\n";
-	}
-	
-	// Liberamos memoria del vector
-	//Importante liberar la memoria fuera del for porque los punteros de la posicion de memoria
-	//no son los mismos del main a la funcion void
+		
 		delete [] v;
+	}
 	
 	// Cerramos fichero de salida
 	fsalida.close();
