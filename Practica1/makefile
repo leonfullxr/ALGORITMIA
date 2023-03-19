@@ -85,19 +85,19 @@ indexes:
 	@echo "$(IFG) - rdo:$(EC) $(BIND)/borradoDuplicadosIterativoOrdenado.bin $(TXTD)/borradoDuplicadosIterativoOrdenado_times.txt $(SIZES)"
 
 rd: borradoDuplicadosIterativo
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
 	
 rdo: borradoDuplicadosIterativoOrdenado
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
 
 rh: heapsort
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
 
 rm: mergesort
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt!:$(END)$(PFG)"
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
 
 han: hanoi

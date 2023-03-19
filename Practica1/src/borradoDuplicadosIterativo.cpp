@@ -12,7 +12,7 @@ void eliminaDuplicados(int & numElementos, int *& elementos){
 	for(int i = 0; i < numElementos; i++)           /* Se repite n veces */
 		contenedor.insert(elementos[i]);           /* O(log(n)) */
 	
-	delete [] elementos;                   //Borro los datos del set
+	delete [] elementos;
 	elementos = new int[contenedor.size()];        //Reservo la cantidad de elementos que hay en el set
 	numElementos = contenedor.size();
 	int i = 0;

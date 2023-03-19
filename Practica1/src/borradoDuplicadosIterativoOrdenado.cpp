@@ -7,7 +7,7 @@ using namespace std;
 
 void eliminaDuplicadosOrdenados(int & numElementos, int *& elementos){
   int *auxiliar = new int[numElementos];
-  int j = 0;  //Indice donde insertar los elementos no duplicados al Array auxiliar
+  int j = 0;  // Indice donde insertar los elementos no duplicados al Array auxiliar
   
   if(numElementos > j)
     auxiliar[j] = elementos[j];
@@ -19,11 +19,11 @@ void eliminaDuplicadosOrdenados(int & numElementos, int *& elementos){
         }
     }
 	
-	delete [] elementos;                   //Borro los datos del set
+	delete [] elementos;
 	numElementos = j;
-	elementos = new int[j];        //Reservo la cantidad de elementos que hay en el Array auxiliar
+	elementos = new int[numElementos];        //Reservo la cantidad de elementos que hay en el Array auxiliar
 	
-	for(int i = 0; i < j; i++)              /* O(n) */
+	for(int i = 0; i < numElementos; i++)              /* O(n) */
 	    elementos[i] = auxiliar[i];                 //Inserto los valores no duplicados del set al Array
 	delete [] auxiliar;
 }
@@ -79,7 +79,7 @@ int main(int argc, char **argv){
 		
 		cerr << "Ejecutando eliminaDuplicadosOrdenados para tam. caso: " << n << endl;
 		
-		t0= std::chrono::high_resolution_clock::now(); // Cogemos el tiempo en que comienza la ejecuciÛn del algoritmo
+		t0= std::chrono::high_resolution_clock::now(); // Cogemos el tiempo en que comienza la ejecución del algoritmo
 		eliminaDuplicadosOrdenados(n, v); // Ejecutamos el algoritmo para tamaÒo de caso tam
 		tf= std::chrono::high_resolution_clock::now(); // Cogemos el tiempo en que finaliza la ejecuciÛn del algoritmo
 		
