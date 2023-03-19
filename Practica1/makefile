@@ -52,7 +52,7 @@ clean:
 	-rm -fv ./$(BIND)/* ./$(TXTD)/*
 
 $(BIND)/%.bin: $(SRCD)/%.cpp
-	mkdir $(BIND)
+	@mkdir $(BIND)
 	@echo "\n$(LGFG)Compiling $@...$(EC)"
 	$(CC) $< $(CFLAGS) -o $@
 
@@ -90,24 +90,28 @@ indexes:
 
 
 rb: burbuja
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
+	@echo "$(EC)"
 
 rd: borradoDuplicadosIterativo
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
+	@echo "$(EC)"
 
 rdo: borradoDuplicadosIterativoOrdenado
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
+	@echo "$(EC)"
 
 rh: heapsort
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
+	@echo "$(EC)"
 
 rm: mergesort
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(END)$(PFG)"
+	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(PFG)"
 	@cat ./$(TXTD)/$<_times.txt
+	@echo "$(EC)"
 
 han: hanoi
 
@@ -116,23 +120,28 @@ han: hanoi
 
 
 burbuja: $(BIND)/burbuja.bin
-	mkdir $(TXTD)
+	@mkdir $(TXTD)
+	
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 
 borradoDuplicadosIterativo: $(BIND)/borradoDuplicadosIterativo.bin
-	mkdir $(TXTD)
+	@mkdir $(TXTD)
+	
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 	
 borradoDuplicadosIterativoOrdenado: $(BIND)/borradoDuplicadosIterativoOrdenado.bin
-	mkdir $(TXTD)
+	@mkdir $(TXTD)
+	
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 
 heapsort: $(BIND)/heapsort.bin
-	mkdir $(TXTD)
+	@mkdir $(TXTD)
+	
 	$(RR)$< $(SEED) $(MAX_VALUE) $(SIZES) > ./$(TXTD)/$@_times.txt
 
 mergesort: $(BIND)/mergesort.bin
-	mkdir $(TXTD)
+	@mkdir $(TXTD)
+	
 	$(RR)$< $(SEED) $(SIZES) > ./$(TXTD)/$@_times.txt
 
 hanoi: $(BIND)/hanoi.bin
