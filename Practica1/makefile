@@ -78,8 +78,6 @@ preamble:
 indexes:
 	@echo "\n$(IFG)Execution indexes (type make <index> to execute):$(EC)"
 	@echo
-	@echo "$(IFG) - rb:$(EC) $(BIND)/burbuja.bin $(TXTD)/burbuja_times.txt $(SIZES)"
-	@echo
 	@echo "$(IFG) - rh:$(EC) $(BIND)/heapsort.bin $(SEED) $(MAX_VALUE) $(SIZES) > $(TXTD)/heapsort_times.txt"
 	@echo
 	@echo "$(IFG) - rm:$(EC) $(BIND)/mergesort.bin $(SEED) $(SIZES) > $(TXTD)/mergesort_times.txt"
@@ -89,11 +87,6 @@ indexes:
 	@echo "$(IFG) - rdo:$(EC) $(BIND)/borradoDuplicadosIterativoOrdenado.bin $(TXTD)/borradoDuplicadosIterativoOrdenado_times.txt $(SIZES)"
 	@echo
 	@echo "$(IFG) - rt:$(EC) $(BIND)/hanoi.bin $(DISCS) $(ANIMATION)"
-
-rb: burbuja
-	@echo "\n$(IFG)Data times in file ./$(TXTD)/$<_times.txt:$(PFG)"
-	@cat ./$(TXTD)/$<_times.txt
-	@echo "$(EC)"
 
 rd: borradoDuplicadosIterativo
 	@cat ./$(TXTD)/$<_times.txt
@@ -116,9 +109,6 @@ rm: mergesort
 
 rt: hanoi
 	@echo "\n$(PFG)"
-
-burbuja: $(BIND)/burbuja.bin
-	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
 
 borradoDuplicadosIterativo: $(BIND)/borradoDuplicadosIterativo.bin
 	$(RR)$< ./$(TXTD)/$@_times.txt $(SEED) $(SIZES)
