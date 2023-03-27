@@ -8,6 +8,7 @@
 SRCD := src
 BIND := bin
 TXTD := data
+LIBD := lib
 
 DIRSTRUCT := $(BIND) $(TXTD)
 
@@ -19,8 +20,10 @@ CFLAGS := -Wall -Wextra -Wpedantic
 
 ######################### Execution (por rellenar según el programa)
 
-RANDOM := $(shell bash -c "awk 'BEGIN{srand();print( int(100000*rand()) )}'")
 RANDOM_SEED := $(shell bash -c "awk 'BEGIN{srand();print( int(65536*rand()) )}'")
+
+K := 10
+C_SIZE := 10
 
 RR := ./
 SEED := $(RANDOM_SEED)
@@ -55,7 +58,7 @@ $(DIRSTRUCT):
 
 $(BIND)/%.bin: $(SRCD)/%.cpp
 	@echo "\n$(LGFG)Compiling $@...$(EC)"
-	$(CC) $< $(CFLAGS) -o $@
+	$(CC) $(CFLAGS) -I$(LIBD) $< -o $@
 
 preamble:
 	@echo "$(PBG)*************************************************$(EC)"
@@ -74,13 +77,14 @@ preamble:
 indexes:
 	@echo "\n$(IFG)Execution indexes (type make <index> to execute):$(EC)"
 	@echo
-	@echo "$(IFG) - rdX:$(EC) $(BIND)/X.bin ARGUMENTOS"
+	@echo "$(IFG) - hp_sec:$(EC) $(BIND)/hyperplane_SEC.bin $(SEED) $(K) $(C_SIZE)"
+	@echo "$(IFG) - hp_dyv:$(EC) $(BIND)/hyperplane_DyV.bin $(SEED) $(K) $(C_SIZE)"
 
-#rX: X
+hp_sec: hyperplane_SEC
 #	@cat ./$(TXTD)/$<_times.txt
 #	@echo "$(EC)"
 
-#X: $(BIND)/X.bin
-#	$(RR)$< > ./$(TXTD)/$@_times.txt
+hyperplane_SEC: $(BIND)/hyperplane_SEC.bin
+	$(RR)$< $(SEED) $(K) $(C_SIZE)
 
 .PHONY: all clean
