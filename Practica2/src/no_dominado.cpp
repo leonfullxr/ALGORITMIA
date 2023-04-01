@@ -125,10 +125,10 @@ int main() {
             p[i] = (double)rand() / RAND_MAX;
         }
     }
-    auto non_dominated1 = basic_algorithm(points);
-    auto non_dominated2 = divide_and_conquer(points);
-    cout << "Basic algorithm found " << non_dominated1.size() << " non-dominated points." << endl;
-    cout << "Divide and conquer algorithm found " << non_dominated2.size() << " non-dominated points." << endl;
+    auto no_dominado1 = basic_algorithm(points);
+    auto no_dominado2 = divide_and_conquer(points);
+    cout << "El algoritmo básico ha encontrado " << non_dominated1.size() << " puntos no dominados." << endl;
+    cout << "El algoritmo divide y venceras " << non_dominated2.size() << " puntos no dominados." << endl;
     return 0;
 }
 
