@@ -52,17 +52,24 @@ bool is_dominated(const Punto& p1, const Punto& p2, int K) {
     return estrictamente_mayor;
 }
 
+/**
+ * @brief Encuentra los puntos no dominados en un conjunto de puntos.
+ * 
+ * @param C Conjunto de puntos.
+ * @param K Dimensión del espacio en el que están los puntos.
+ * @return Vector con los puntos no dominados en el conjunto.
+ */
 vector<Punto> encontrar_no_dominados(const vector<Punto>& C, int K) {
-    vector<Punto> no_dominados;
-    for (const Punto& pi : C) {
+    vector<Punto> no_dominados; // Vector para almacenar los puntos no dominados
+    for (const Punto& pi : C) { // Recorremos todos los puntos del conjunto
         bool dominado = false;
-        for (const Punto& pj : C) {
-            if (&pi != &pj && domina(pj, pi, K)) {
+        for (const Punto& pj : C) { // Comparamos el punto con todos los demás puntos del conjunto
+            if (&pi != &pj && domina(pj, pi, K)) { // Si un punto domina al punto actual, lo marcamos como dominado y salimos del ciclo
                 dominado = true;
                 break;
             }
         }
-        if (!dominado) {
+        if (!dominado) { // Si el punto no ha sido dominado por ningún otro, lo agregamos al vector de puntos no dominados
             no_dominados.push_back(pi);
         }
     }
@@ -94,37 +101,45 @@ vector<Punto> basic_algorithm(const vector<Punto>& C, int K) {
     return no_dominados;
 }
 
+/**
+ * @brief Fusiona dos listas de puntos no dominados.
+ * 
+ * @param A Lista de puntos no dominados.
+ * @param B Lista de puntos no dominados.
+ * @param K Dimensión del espacio en el que están los puntos.
+ * @return Lista con los puntos no dominados de ambas listas.
+ */
 vector<Punto> fusionar(const vector<Punto>& A, const vector<Punto>& B, int K) {
-    vector<Punto> no_dominados;
-
+    vector<Punto> no_dominados; // Vector para almacenar los puntos no dominados
+    // Comparamos cada punto de A con los puntos de B para determinar si es dominado por algún punto de B
     for (const Punto& pi : A) {
         bool dominado = false;
         for (const Punto& pj : B) {
-            if (domina(pj, pi, K)) {
+            if (domina(pj, pi, K)) { // Si un punto de B domina al punto de A, lo marcamos como dominado y salimos del ciclo
                 dominado = true;
                 break;
             }
         }
-        if (!dominado) {
+        if (!dominado) { // Si el punto de A no ha sido dominado por ningún punto de B, lo agregamos al vector de puntos no dominados
             no_dominados.push_back(pi);
         }
     }
-
+    // Comparamos cada punto de B con los puntos de A para determinar si es dominado por algún punto de A
     for (const Punto& pi : B) {
         bool dominado = false;
         for (const Punto& pj : A) {
-            if (domina(pj, pi, K)) {
+            if (domina(pj, pi, K)) { // Si un punto de A domina al punto de B, lo marcamos como dominado y salimos del ciclo
                 dominado = true;
                 break;
             }
         }
-        if (!dominado) {
+        if (!dominado) { // Si el punto de B no ha sido dominado por ningún punto de A, lo agregamos al vector de puntos no dominados
             no_dominados.push_back(pi);
         }
     }
-
     return no_dominados;
 }
+
 
 /**
  * @brief Algoritmo Divide y Vencerás para encontrar los puntos no dominados en un conjunto de puntos.
