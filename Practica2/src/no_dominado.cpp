@@ -116,34 +116,10 @@ vector<Punto> divide_venceras(const vector<Punto>& C, int K) {
     return fusionar(no_dominados_izquierda, no_dominados_derecha, K);
 }
 
-/**
- * @brief Encuentra los puntos no dominados en un conjunto de puntos.
- * 
- * @param C Conjunto de puntos.
- * @param K Dimensión del espacio en el que están los puntos.
- * @return Vector con los puntos no dominados en el conjunto.
- */
-vector<Punto> encontrar_no_dominados(const vector<Punto>& C, int K) {
-    vector<Punto> no_dominados; // Vector para almacenar los puntos no dominados
-    for (const Punto& pi : C) { // Recorremos todos los puntos del conjunto
-        bool dominado = false;
-        for (const Punto& pj : C) { // Comparamos el punto con todos los demás puntos del conjunto
-            if (&pi != &pj && domina(pj, pi, K)) { // Si un punto domina al punto actual, lo marcamos como dominado y salimos del ciclo
-                dominado = true;
-                break;
-            }
-        }
-        if (!dominado) { // Si el punto no ha sido dominado por ningún otro, lo agregamos al vector de puntos no dominados
-            no_dominados.push_back(pi);
-        }
-    }
-    return no_dominados;
-}
-
 int main(int argc, char **argv) {
-    /*
+    
     if (argc != 5) {
-        cout << "Usage: ./non_dominated <seed> <N> <K> <trials>" << endl;
+        cout << "Usage: ./no_dominado <seed> <N> <K> <trials>" << endl;
         return 1;
     }
     int seed = atoi(argv[1]);
@@ -153,13 +129,12 @@ int main(int argc, char **argv) {
 
     srand(seed);
 
-    Tests tester;
-
-    cout << "Ejecutado pruebas para N=" << N << ", K=" << K << ", pruebas=" << pruebas << endl;
-    tester.test(N, pruebas);
-    */
     Tests tests;
-    tests.test_algorithm(100, 10, dividir_y_vencer); // Prueba el algoritmo Divide y Vencerás
+    cout << "Algoritmo basico." << endl;
+    cout << "Ejecutado pruebas para N=" << N << ", K=" << K << ", pruebas=" << pruebas << endl;
+    tests.test_algorithm(N, pruebas, K, seed, divide_venceras);
+    tests.test_algorithm(N, pruebas, K, seed, divide_venceras);
+    tests.test_algorithm(N, pruebas, K, seed, divide_venceras);
     
     return 0;
 }
