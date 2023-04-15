@@ -25,6 +25,10 @@ using namespace std;
 
 const int K = 10; /**< Dimensión del espacio de características. */
 
+struct Punto {    /**< Numero de coordenadas del punto. */
+    vector<int> coordenadas;
+};
+
 /**
  * @brief Verifica si un punto domina a otro.
  * 
@@ -32,28 +36,37 @@ const int K = 10; /**< Dimensión del espacio de características. */
  * 
  * @param p1 Punto que se evalúa.
  * @param p2 Punto de referencia.
+ * @param K Numero de dimensiones del espacio
  * @return Verdadero si el punto p1 domina al punto p2, falso en caso contrario.
  */
-bool is_dominated(array<double, K> p1, array<double, K> p2) {
-    // Verificamos si todas las coordenadas del punto p1 son mayores o iguales que las coordenadas correspondientes del punto p2
-    bool all_ge = true; // suponemos que todas las coordenadas de p1 son mayores o iguales que las de p2
-    for (int i = 0; i < K; i++) {
-        if (p1[i] < p2[i]) { // si encontramos alguna coordenada de p1 que es menor que la correspondiente coordenada de p2
-            all_ge = false; // entonces p1 no domina a p2
-            break; // podemos salir del ciclo porque ya sabemos que p1 no domina a p2
+bool is_dominated(const Punto& p1, const Punto& p2, int K) {
+    bool estrictamente_mayor = false;
+    for (int i = 0; i < K; ++i) {
+        if (p1.coordenadas[i] < p2.coordenadas[i]) {
+            return false;
+        }
+        if (p1.coordenadas[i] > p2.coordenadas[i]) {
+            estrictamente_mayor = true;
         }
     }
-    if (all_ge) { // si todas las coordenadas de p1 son mayores o iguales que las de p2
-        // Verificamos si al menos una coordenada del punto p1 es mayor que la correspondiente coordenada del punto p2
-        for (int i = 0; i < K; i++) {
-            if (p1[i] > p2[i]) { // si encontramos alguna coordenada de p1 que es mayor que la correspondiente coordenada de p2
-                return true; // entonces p1 domina a p2
+    return estrictamente_mayor;
+}
+
+vector<Punto> encontrar_no_dominados(const vector<Punto>& C, int K) {
+    vector<Punto> no_dominados;
+    for (const Punto& pi : C) {
+        bool dominado = false;
+        for (const Punto& pj : C) {
+            if (&pi != &pj && domina(pj, pi, K)) {
+                dominado = true;
+                break;
             }
         }
-        return false; // si no encontramos ninguna coordenada de p1 mayor que la correspondiente coordenada de p2, entonces p1 no domina a p2
-    } else { // si al menos una coordenada de p1 es menor que la correspondiente coordenada de p2
-        return false; // entonces p1 no domina a p2
+        if (!dominado) {
+            no_dominados.push_back(pi);
+        }
     }
+    return no_dominados;
 }
 
 /**
@@ -64,21 +77,53 @@ bool is_dominated(array<double, K> p1, array<double, K> p2) {
  * @param points Conjunto de puntos de entrada.
  * @return Lista de puntos no dominados.
  */
-vector<array<double, K>> basic_algorithm(vector<array<double, K>> points) {
-    vector<array<double, K>> non_dominated;
-    for (int i = 0; i < points.size(); i++) {
-        bool dominated = false;
-        for (int j = 0; j < points.size(); j++) {
-            if (i != j && is_dominated(points[j], points[i])) {
-                dominated = true;
+vector<Punto> basic_algorithm(const vector<Punto>& C, int K) {
+    vector<Punto> no_dominados;
+    for (const Punto& pi : C) {
+        bool dominado = false;
+        for (const Punto& pj : C) {
+            if (&pi != &pj && domina(pj, pi, K)) {
+                dominado = true;
                 break;
             }
         }
-        if (!dominated) {
-            non_dominated.push_back(points[i]);
+        if (!dominado) {
+            no_dominados.push_back(pi);
         }
     }
-    return non_dominated;
+    return no_dominados;
+}
+
+vector<Punto> fusionar(const vector<Punto>& A, const vector<Punto>& B, int K) {
+    vector<Punto> no_dominados;
+
+    for (const Punto& pi : A) {
+        bool dominado = false;
+        for (const Punto& pj : B) {
+            if (domina(pj, pi, K)) {
+                dominado = true;
+                break;
+            }
+        }
+        if (!dominado) {
+            no_dominados.push_back(pi);
+        }
+    }
+
+    for (const Punto& pi : B) {
+        bool dominado = false;
+        for (const Punto& pj : A) {
+            if (domina(pj, pi, K)) {
+                dominado = true;
+                break;
+            }
+        }
+        if (!dominado) {
+            no_dominados.push_back(pi);
+        }
+    }
+
+    return no_dominados;
 }
 
 /**
@@ -89,26 +134,19 @@ vector<array<double, K>> basic_algorithm(vector<array<double, K>> points) {
  * @param points Conjunto de puntos de entrada.
  * @return Lista de puntos no dominados.
  */
-vector<array<double, K>> divide_venceras(vector<array<double, K>> points) {
-    if (points.size() == 1) {
-        return points;
+vector<Punto> divide_venceras(const vector<Punto>& C, int K) {
+    if (C.size() <= 1) {
+        return C;
     }
-    
-    int midpoint = points.size() / 2;
-    
-    auto left = divide_venceras(vector<array<double, K>>(points.begin(), points.begin() + midpoint));
-    auto right = divide_venceras(vector<array<double, K>>(points.begin() + midpoint, points.end()));
-    
-    vector<array<double, K>> merged(left.size() + right.size());
-    merge(left.begin(), left.end(), right.begin(), right.end(), merged.begin());
-    vector<array<double, K>> non_dominated{merged[0]};
-    
-    for (int i = 1; i < merged.size(); i++) {
-        if (none_of(non_dominated.begin(), non_dominated.end(), [&](array<double, K> p){return is_dominated(merged[i], p);})) {
-            non_dominated.push_back(merged[i]);
-        }
-    }
-    return non_dominated;
+
+    int medio = C.size() / 2;
+    vector<Punto> izquierda(C.begin(), C.begin() + medio);
+    vector<Punto> derecha(C.begin() + medio, C.end());
+
+    vector<Punto> no_dominados_izquierda = dividir_y_vencer(izquierda, K);
+    vector<Punto> no_dominados_derecha = dividir_y_vencer(derecha, K);
+
+    return fusionar(no_dominados_izquierda, no_dominados_derecha, K);
 }
 
 /**
@@ -244,19 +282,40 @@ La función crea un conjunto de puntos aleatorios y encuentra los puntos no domi
 @return Código de salida del programa.
 */
 int main() {
-    const int N = 100; /**< Número de puntos en el conjunto de entrada. */
-    vector<array<double, K>> points(N);
-    for (auto& p : points) {
-        for (int i = 0; i < K; i++) {
-            p[i] = (double)rand() / RAND_MAX;
+    srand(time(0));
+    const int N = 1000;
+    const int K = 10;
+
+    vector<Punto> puntos(N);
+    for (int i = 0; i < N; ++i) {
+        puntos[i].coordenadas.resize(K);
+        for (int j = 0; j < K; ++j) {
+            puntos[i].coordenadas[j] = rand() % 100;
         }
     }
-    auto no_dominado1 = basic_algorithm(points);
-    auto no_dominado2 = divide_and_conquer(points);
-    cout << "El algoritmo básico ha encontrado " << non_dominated1.size() << " puntos no dominados." << endl;
-    cout << "El algoritmo divide y venceras " << non_dominated2.size() << " puntos no dominados." << endl;
+
+    clock_t inicio, fin;
+    double tiempo;
+
+    inicio = clock();
+    vector<Punto> no_dominados_basic = encontrar_no_dominados(puntos, K);
+    fin = clock();
+    tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
+    cout << "Algoritmo básico:" << endl;
+    cout << "Tiempo de ejecución: " << tiempo << " segundos" << endl;
+    cout << "Número de puntos no dominados: " << no_dominados_basic.size() << endl;
+    inicio = clock();
+    vector<Punto> no_dominados_divyv = dividir_y_vencer(puntos, K);
+    fin = clock();
+    tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
+    cout << "Algoritmo Divide y Vencerás:" << endl;
+    cout << "Tiempo de ejecución: " << tiempo << " segundos" << endl;
+    cout << "Número de puntos no dominados: " << no_dominados_divyv.size() << endl;
+
+    return 0;
     
     // Parte que usa la clase para hacer las pruebas del programa
+    /*
     if (argc != 5) {
         cout << "Usage: ./non_dominated <seed> <N> <K> <trials>" << endl;
         return 1;
@@ -274,5 +333,6 @@ int main() {
     tester.test(N, pruebas);
     
     return 0;
+    */
 }
 
