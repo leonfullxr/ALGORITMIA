@@ -1,14 +1,13 @@
 #include <iostream>
 #include <cstdlib>
-#include "tests.h"
+#include <vector>
+#include <array>
+#include "../lib/tests.h"
 
 using namespace std;
 
 const int K = 10; /**< Dimensión del espacio de características. */
 
-struct Punto {    /**< Numero de coordenadas del punto. */
-    vector<int> coordenadas;
-};
 
 /**
  * @brief Verifica si un punto domina a otro.
@@ -58,7 +57,7 @@ vector<Punto> encontrar_no_dominados(const vector<Punto>& C, int K) {
 }
 
 int main(int argc, char **argv) {
-    if (argc != 5) {
+    /*if (argc != 5) {
         cout << "Usage: ./algoritmo_basico <seed> <N> <K> <trials>" << endl;
         return 1;
     }
@@ -69,10 +68,15 @@ int main(int argc, char **argv) {
 
     srand(seed);
 
-    NonDominatedTester tester;
+    Tests tester;
     cout << "Algoritmo basico." << endl;
     cout << "Ejecutado pruebas para N=" << N << ", K=" << K << ", pruebas=" << pruebas << endl;
     tester.test(N, pruebas);
+    */
+    Tests tests;
+    tests.test_algorithm(100, 10, encontrar_no_dominados); // Prueba el algoritmo básico
+    // tests.test_algorithm(100, 10, dividir_y_vencer); // Prueba el algoritmo Divide y Vencerás
+    return 0;
     
     return 0;
 }

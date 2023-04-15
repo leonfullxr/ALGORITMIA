@@ -20,14 +20,14 @@ La función main() crea un conjunto de puntos aleatorios y encuentra los puntos 
 #include <vector>
 #include <array>
 #include <algorithm>
-#include "tests.h"
+#include <ctime>
 
 using namespace std;
 
 const int K = 10; /**< Dimensión del espacio de características. */
 
 struct Punto {    /**< Numero de coordenadas del punto. */
-    vector<int> coordenadas;
+    vector<double> coordenadas;
 };
 
 /**
@@ -110,52 +110,37 @@ vector<Punto> divide_venceras(const vector<Punto>& C, int K) {
     vector<Punto> izquierda(C.begin(), C.begin() + medio);
     vector<Punto> derecha(C.begin() + medio, C.end());
 
-    vector<Punto> no_dominados_izquierda = dividir_y_vencer(izquierda, K);
-    vector<Punto> no_dominados_derecha = dividir_y_vencer(derecha, K);
+    vector<Punto> no_dominados_izquierda = divide_venceras(izquierda, K);
+    vector<Punto> no_dominados_derecha = divide_venceras(derecha, K);
 
     return fusionar(no_dominados_izquierda, no_dominados_derecha, K);
 }
 
 /**
-
-@brief Función principal del programa.
-La función crea un conjunto de puntos aleatorios y encuentra los puntos no dominados usando los algoritmos básico y Divide y Vencerás.
-@return Código de salida del programa.
-*/
-int main(int argc, char **argv) {
-    srand(time(0));
-    const int N = 1000;
-    const int K = 10;
-
-    vector<Punto> puntos(N);
-    for (int i = 0; i < N; ++i) {
-        puntos[i].coordenadas.resize(K);
-        for (int j = 0; j < K; ++j) {
-            puntos[i].coordenadas[j] = rand() % 100;
+ * @brief Encuentra los puntos no dominados en un conjunto de puntos.
+ * 
+ * @param C Conjunto de puntos.
+ * @param K Dimensión del espacio en el que están los puntos.
+ * @return Vector con los puntos no dominados en el conjunto.
+ */
+vector<Punto> encontrar_no_dominados(const vector<Punto>& C, int K) {
+    vector<Punto> no_dominados; // Vector para almacenar los puntos no dominados
+    for (const Punto& pi : C) { // Recorremos todos los puntos del conjunto
+        bool dominado = false;
+        for (const Punto& pj : C) { // Comparamos el punto con todos los demás puntos del conjunto
+            if (&pi != &pj && domina(pj, pi, K)) { // Si un punto domina al punto actual, lo marcamos como dominado y salimos del ciclo
+                dominado = true;
+                break;
+            }
+        }
+        if (!dominado) { // Si el punto no ha sido dominado por ningún otro, lo agregamos al vector de puntos no dominados
+            no_dominados.push_back(pi);
         }
     }
+    return no_dominados;
+}
 
-    clock_t inicio, fin;
-    double tiempo;
-
-    inicio = clock();
-    vector<Punto> no_dominados_basic = encontrar_no_dominados(puntos, K);
-    fin = clock();
-    tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
-    cout << "Algoritmo básico:" << endl;
-    cout << "Tiempo de ejecución: " << tiempo << " segundos" << endl;
-    cout << "Número de puntos no dominados: " << no_dominados_basic.size() << endl;
-    inicio = clock();
-    vector<Punto> no_dominados_divyv = dividir_y_vencer(puntos, K);
-    fin = clock();
-    tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
-    cout << "Algoritmo Divide y Vencerás:" << endl;
-    cout << "Tiempo de ejecución: " << tiempo << " segundos" << endl;
-    cout << "Número de puntos no dominados: " << no_dominados_divyv.size() << endl;
-
-    return 0;
-    
-    // Parte que usa la clase para hacer las pruebas del programa
+int main(int argc, char **argv) {
     /*
     if (argc != 5) {
         cout << "Usage: ./non_dominated <seed> <N> <K> <trials>" << endl;
@@ -168,12 +153,14 @@ int main(int argc, char **argv) {
 
     srand(seed);
 
-    NonDominatedTester tester;
+    Tests tester;
 
     cout << "Ejecutado pruebas para N=" << N << ", K=" << K << ", pruebas=" << pruebas << endl;
     tester.test(N, pruebas);
+    */
+    Tests tests;
+    tests.test_algorithm(100, 10, dividir_y_vencer); // Prueba el algoritmo Divide y Vencerás
     
     return 0;
-    */
 }
 
