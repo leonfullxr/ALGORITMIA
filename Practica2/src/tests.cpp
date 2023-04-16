@@ -1,4 +1,6 @@
-// compilar desde la raiz del proyecto con g++ ./src/tests.cpp ./lib/*.h -o ./bin/tests.bin
+// Compilar desde la raiz del proyecto con g++ ./src/tests.cpp ./lib/*.h -o ./bin/tests.bin
+// Ejecutar desde la raiz del proyecto con ./bin/tests.bin <repeticiones por muestra> <provar con alg sencillo (S/N)> <provar con alg DyV (S/N)> <paso> <maximo> <dimension>
+// todos los argumentos son opcionales
 
 #include <iostream>
 #include <fstream>
@@ -16,8 +18,8 @@ const string test_results_dir = "./data/";
 int main(int argc, char * argv[]) {
     const string ARGUMETNOS = "<repeticiones por muestra> <provar con alg sencillo (S/N)> <provar con alg DyV (S/N)> <paso> <maximo> <dimension>";
     int REP_POR_MUESTRA = 1;
-    char PROBAR_SECILLO_C = "S";
-    char PROBAR_DyV_C = "S";
+    char PROBAR_SECILLO_C = 'S';
+    char PROBAR_DyV_C = 'S';
     int PASO = 500;
     int MAXIMO = 50000;
     int DIMENSION = 10;
@@ -38,16 +40,16 @@ int main(int argc, char * argv[]) {
     case 5:
         PASO = stoi(argv[4]);
     case 4:
-        PROBAR_DyV = toupper(argv[3]);
+        PROBAR_DyV_C = toupper(argv[3][0]);
     case 3:
-        PROBAR_SECILLO = toupper(argv[2]);
+        PROBAR_SECILLO_C = toupper(argv[2][0]);
     case 2:
         REP_POR_MUESTRA = stoi(argv[1]);
     break;
     }
     
-    bool probar_sencillo = PROBAR_SECILLO_C != "N";
-    bool probar_DyV = PROBAR_DyV_C != "N";
+    bool probar_sencillo = PROBAR_SECILLO_C != 'S';
+    bool probar_DyV = PROBAR_DyV_C != 'S';
     
     if((not probar_sencillo) and (not probar_DyV)) {
         cout << "Selecciona al menos un algoritmo que probar" << endl;
@@ -68,7 +70,7 @@ int main(int argc, char * argv[]) {
     
     auto ahora = chrono::system_clock::to_time_t(chrono::system_clock::now());
     string fecha = ctime(&ahora);
-    string fecha,pop_back();
+    fecha.pop_back();
     resutlados.open(test_results_dir + "resultados - " + fecha + ".csv");
     
     if (not resutlados.is_open()) {
@@ -97,11 +99,11 @@ int main(int argc, char * argv[]) {
         duracion_DyV /= REP_POR_MUESTRA;
         
         resutlados << num_puntos << ";";
-        if (probar_sencillo) resutlados << duracion_sencillo; else resultados << "no provado";
+        if (probar_sencillo) resutlados << duracion_sencillo; else resutlados << "no provado";
         cout << ";";
-        if (probar_DyV) resutlados << duracion_DyV; else resultados << "no provado";
+        if (probar_DyV) resutlados << duracion_DyV; else resutlados << "no provado";
         cout << ";";
-        resultados << endl;
+        resutlados << endl;
     }
     
     resutlados.close();
