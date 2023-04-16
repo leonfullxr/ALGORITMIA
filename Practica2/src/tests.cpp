@@ -48,8 +48,8 @@ int main(int argc, char * argv[]) {
     break;
     }
     
-    bool probar_sencillo = PROBAR_SECILLO_C != 'S';
-    bool probar_DyV = PROBAR_DyV_C != 'S';
+    bool probar_sencillo = PROBAR_SECILLO_C != 'N';
+    bool probar_DyV = PROBAR_DyV_C != 'N';
     
     if((not probar_sencillo) and (not probar_DyV)) {
         cout << "Selecciona al menos un algoritmo que probar" << endl;
@@ -99,10 +99,10 @@ int main(int argc, char * argv[]) {
         duracion_DyV /= REP_POR_MUESTRA;
         
         resutlados << num_puntos << ";";
-        if (probar_sencillo) resutlados << duracion_sencillo; else resutlados << "no provado;";
-        cout << ";";
-        if (probar_DyV) resutlados << duracion_DyV; else resutlados << "no provado;";
-        cout << ";";
+        if (probar_sencillo) resutlados << duracion_sencillo; else resutlados << "no provado";
+        resutlados << ";";
+        if (probar_DyV) resutlados << duracion_DyV; else resutlados << "no provado";
+        resutlados << ";";
         resutlados << endl;
     }
     
