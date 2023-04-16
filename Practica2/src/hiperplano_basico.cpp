@@ -10,38 +10,21 @@ typedef unsigned int ui;
 using namespace std;
 
 int main(int argc, char **argv) {
-  if(argc != 6) {
-    cerr << "ERROR: Use ./hiperplano_basico.cpp <seed> <N> <K> <trials> <repetitions>" << endl;
+  if(argc < 4) {
+    cerr << "ERROR: Use ./hiperplano_basico.cpp <seed> <trials> <K> <N>" << endl;
     return 1;
   }
 
-  ui seed = atoi(argv[1]);
-  ui N = atoi(argv[2]);
-  ui K = atoi(argv[3]);
-  ui pruebas = atoi(argv[4]);
-  ui repeticiones = atoi(argv[5]);
-
-  double T = 0;
-
+  int seed = atoi(argv[1]);
+  int K = atoi(argv[3]);
+  int pruebas = atoi(argv[2]);
   srand(seed);
-
   Tests tests;
-  cout << "Algoritmo basico:" << endl;
-  cout << "Ejecutado pruebas para N = " << N << ", K = " << K << ", Pruebas = " << pruebas << endl;
-  
-  for(ui r = 0; r < repeticiones; ++r) {
-    chrono::time_point<chrono::high_resolution_clock> t_begin, t_end;
-
-    t_begin = chrono::high_resolution_clock::now();
-    tests.test_algorithm(N, pruebas, K, seed, encontrar_no_dominados);
-    t_end = chrono::high_resolution_clock::now();
-
-    T += chrono::duration_cast<chrono::microseconds>(t_end-t_begin).count();
+ 
+  for(int arg = 4; arg < argc; ++arg) {
+    int N = atoi(argv[4]);
+    tests.test_algorithm(N, pruebas, K, seed, divide_venceras);
   }
-
-  T /= (double)repeticiones;
-
-  cout << "\n\n\tTiempo: " << T << "µs" << endl;
     
   return 0;
 }
