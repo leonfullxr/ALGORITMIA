@@ -13,6 +13,7 @@ using namespace std;
 const string test_results_dir = "./test_results/";
 
 int main(int argc, char * argv[]) {
+    const string ARGUMETNOS = "<repeticiones por muestra> <paso> <maximo> <dimension>";
     int REP_POR_MUESTRA = 1;
     int PASO = 500;
     int MAXIMO = 50000;
@@ -20,7 +21,7 @@ int main(int argc, char * argv[]) {
     
     if (argc > 5) {
         cerr << "ERROR - Los argumentos del programa son:" << endl;
-        cerr << "<repeticiones por muestra> <paso> <maximo> <dimension>" << endl;
+        cerr << ARGUMETNOS << endl;
         cerr << "y sus valores por defecto:" << endl;
         cerr << REP_POR_MUESTRA << " " << PASO << " " << MAXIMO << " " << DIMENSION << endl;
         exit(-1);
@@ -43,6 +44,8 @@ int main(int argc, char * argv[]) {
     cout << "La primera será con " << PASO << " número de puntos, y se irá incrementadno en " 
          << PASO << " puntos cada vez hasta llegar a " << MAXIMO << "." <<  endl;
     cout << "Para cada numero de puntos se harán " << REP_POR_MUESTRA << " pruebas y se tomará el tiempo como su media." << endl;
+    cout << "Para cambiar estos parametros llamar al ejecutable con los siguentes argumentos:" << endl;
+    cout << ARGUMETNOS << endl;
     
     ofstream resutlados;
     
