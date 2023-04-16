@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
   Tests tests;
  
   for(int arg = 4; arg < argc; ++arg) {
-    int N = atoi(argv[4]);
+    int N = atoi(argv[arg]);
     tests.test_algorithm(N, pruebas, K, seed, divide_venceras);
   }
   

@@ -56,7 +56,7 @@ public:
             // Calcula el tiempo transcurrido
             auto duration = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
 
-            cout << non_dominated.size() << "\t" << duration << endl;
+            cout << N << "\t" << duration << endl;
         }
     }
 

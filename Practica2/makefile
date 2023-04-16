@@ -24,7 +24,7 @@ RANDOM_SEED := $(shell bash -c "awk 'BEGIN{srand();print( int(65536*rand()) )}'"
 
 K := 10
 TRIALS := 1
-SIZES := $(shell seq 1000 1000 100000)
+SIZES := $(shell seq 1000 1000 50000)
 RR := ./
 SEED := $(RANDOM_SEED)
 
