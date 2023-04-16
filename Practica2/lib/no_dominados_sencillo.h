@@ -7,10 +7,11 @@
 namespace nd_sencillo {
     /**
      * @brief Encuentra los puntos no dominados en un conjunto de puntos.
-     * @return std::vector con los puntos no dominados en el conjunto.
+     * @return vector con los puntos no dominados en el conjunto.
      */
     std::vector<Punto> noDominados(const std::vector<Punto>& puntos) {
         std::vector<Punto> no_dominados;
+        no_dominados.reserve(puntos.size());
         for (const Punto & candidato : puntos) {
             bool dominado = false;
             

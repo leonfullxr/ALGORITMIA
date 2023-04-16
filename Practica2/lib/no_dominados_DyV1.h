@@ -1,12 +1,13 @@
-#ifndef ND_DYV
-#define ND_DYV
+#ifndef ND_DYV1
+#define ND_DYV1
 
 #include <vector>
 #include "punto.h"
 
-namespace nd_DyV {
+namespace nd_DyV1 {
     std::vector<Punto> fusiona_no_dominados(const std::vector<Punto> & izquierda, const std::vector<Punto> & derecha) {
         std::vector<Punto> fusion;
+        fusion.reserve(izquierda.size() + derecha.size());
         std::vector<Punto> fusion_tras_primera_iter;
         std::pair<const std::vector<Punto> *, const std::vector<Punto> *> candiadtos_posibles_dominantes[2];
         candiadtos_posibles_dominantes[0] = std::pair<const std::vector<Punto> *, const std::vector<Punto> *>(&izquierda, &derecha);
@@ -39,7 +40,7 @@ namespace nd_DyV {
     
     /**
      * @brief Encuentra los puntos no dominados en un conjunto de puntos.
-     * @return std::vector con los puntos no dominados en el conjunto.
+     * @return vector con los puntos no dominados en el conjunto.
      */
     std::vector<Punto> noDominados(const std::vector<Punto> & puntos) {
         if(puntos.size() == 1) return puntos;
@@ -56,4 +57,4 @@ namespace nd_DyV {
     }
 }
 
-#endif /* DN_DYV */
+#endif /* DN_DYV1 */
