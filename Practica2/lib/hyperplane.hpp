@@ -138,4 +138,28 @@ vector<point> divide_venceras(const vector<point>& C, int K) {
 
 }
 
+vector<point> skyline(const vector<point>& points) {
+    vector<point> skylines;
+    
+    for (const point& p : points) {
+        bool no_dominado = true;
+
+        for (int i = 0; i < skylines.size(); i++) {
+            if (domina(skylines[i], p)) {
+                no_dominado = false;
+                break;
+            } else if (domina(p, skylines[i])) {
+                skylines.erase(skylines.begin() + i);
+                i--;
+            }
+        }
+
+        if (no_dominado) {
+            skylines.push_back(p);
+        }
+    }
+
+    return skylines;
+}
+
 #endif /*__HYPERPLANE__*/
