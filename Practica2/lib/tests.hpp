@@ -2,6 +2,7 @@
 #define __TESTS__
 
 #include "hyperplane.hpp"
+#include <chrono>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ using namespace std;
  */
 class Tests {
 public:
-    static const int K = 2; /**< Dimensión del espacio de características. */
+    static const int K = 10; /**< Dimensión del espacio de características. */
 
     vector<point> generate_random_points(int N, int dim) {
         vector<point> points(N);
@@ -43,10 +44,19 @@ public:
         srand(seed);
         for (int i = 0; i < trials; i++) {
             vector<point> points = generate_random_points(N, dim);
+
+            // Registra el tiempo antes de ejecutar el algoritmo
+            auto start_time = chrono::high_resolution_clock::now();
+
             vector<point> non_dominated = algorithm(points, dim);
 
-            cout << "\nTest " << i << " - Dimension: " << dim << endl;
-            print_non_dominated(non_dominated);
+            // Registra el tiempo después de ejecutar el algoritmo
+            auto end_time = chrono::high_resolution_clock::now();
+
+            // Calcula el tiempo transcurrido
+            auto duration = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+
+            cout << non_dominated.size() << "\t" << duration << endl;
         }
     }
 

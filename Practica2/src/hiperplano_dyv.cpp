@@ -11,12 +11,9 @@ La función main() crea un conjunto de puntos aleatorios y encuentra los puntos 
 */
 
 #include <iostream>
-#include <vector>
-#include <array>
-#include <algorithm>
-#include <chrono>
+#include <ctime>
 #include "tests.hpp"
-
+#include "hyperplane.hpp"
 typedef unsigned int ui;
 
 using namespace std;
