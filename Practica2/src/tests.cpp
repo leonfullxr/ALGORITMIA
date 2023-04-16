@@ -12,12 +12,37 @@ using namespace std;
 
 const string test_results_dir = "./test_results/";
 
-int main() {
-    const int DIMENSION = 10;
-    const int PASO = 50;
-    const int MAXIMO = 500;
-    const int REP_POR_MUESTRA = 1;
+int main(int argc, char * argv[]) {
+    int REP_POR_MUESTRA = 1;
+    int PASO = 500;
+    int MAXIMO = 50000;
+    int DIMENSION = 10;
     
+    if (argc > 5) {
+        cerr << "ERROR - Los argumentos del programa son:" << endl;
+        cerr << "<repeticiones por muestra> <paso> <maximo> <dimension>" << endl;
+        cerr << "y sus valores por defecto:" << endl;
+        cerr << REP_POR_MUESTRA << " " << PASO << " " << MAXIMO << " " << DIMENSION << endl;
+        exit(-1);
+    }
+    
+    switch(argc) {
+    case 5:
+        DIMENSION = stoi(argv[4]);
+    case 4:
+        MAXIMO = stoi(argv[3]);
+    case 3:
+        PASO = stoi(argv[2]);
+    case 2:
+        REP_POR_MUESTRA = stoi(argv[1]);
+    break;
+    }
+    
+    cout << "Iniciando pruebas." << endl;
+    cout << "Se harán " << MAXIMO/PASO << " pruebas para ambos algoritmos." << endl;
+    cout << "La primera será con " << PASO << " número de puntos, y se irá incrementadno en " 
+         << PASO << " puntos cada vez hasta llegar a " << MAXIMO << "." <<  endl;
+    cout << "Para cada numero de puntos se harán " << REP_POR_MUESTRA << " pruebas y se tomará el tiempo como su media." << endl;
     
     ofstream resutlados;
     
@@ -33,6 +58,8 @@ int main() {
     resutlados << "Numero de puntos; Tiempo en ms del algoritmo sencillo:; Tiempo en ms del algiritmo DyV:;" << endl;
     
     for(int num_puntos = PASO; num_puntos <= MAXIMO; num_puntos += PASO) {
+        cout << "Probando con " << num_puntos << " puntos." << endl;
+        
         float duracion_sencillo = 0;
         float duracion_DyV = 0;
         
@@ -49,4 +76,6 @@ int main() {
     }
     
     resutlados.close();
+    
+    cout << "Fin de las pruebas." << endl;
 }
