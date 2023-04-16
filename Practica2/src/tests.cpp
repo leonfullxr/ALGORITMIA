@@ -85,7 +85,7 @@ int main(int argc, char * argv[]) {
         exit(-1);
     }
     
-    resutlados << "Numero de puntos;Tiempo en ms del algoritmo sencillo:;Tiempo en ms del algiritmo DyV1:;Tiempo en ms del algiritmo DyV1:;" << endl;
+    resutlados << "Numero de puntos;Tiempo en ms del algoritmo sencillo:;Tiempo en ms del algiritmo DyV1:;Tiempo en ms del algiritmo DyV2:;" << endl;
     
     for(int num_puntos = PASO; num_puntos <= MAXIMO; num_puntos += PASO) {
         cout << "Probando con " << num_puntos << " puntos." << endl;
