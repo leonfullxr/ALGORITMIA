@@ -22,8 +22,9 @@ CFLAGS := -Wall -Wextra -Wpedantic
 
 RANDOM_SEED := $(shell bash -c "awk 'BEGIN{srand();print( int(65536*rand()) )}'")
 
+N := 2
 K := 10
-C_SIZE := 10
+TRIALS := 1
 
 RR := ./
 SEED := $(RANDOM_SEED)
@@ -51,7 +52,7 @@ all: preamble $(DIRSTRUCT) $(BINF) indexes
 
 clean:
 	@echo "\n$(LRFG)Deleting $(BIN)...$(EC)\n"
-	-rm -fv ./$(BIND)/* ./$(TXTD)/*
+	-rm -rfv ./$(BIND) ./$(TXTD)
 
 $(DIRSTRUCT):
 	@mkdir -p $@
@@ -75,16 +76,14 @@ preamble:
 	@echo "$(PBG)*************************************************$(EC)"
 
 indexes:
-	@echo "\n$(IFG)Execution indexes (type make <index> to execute):$(EC)"
-	@echo
-	@echo "$(IFG) - hp_sec:$(EC) $(BIND)/hyperplane_SEC.bin $(SEED) $(K) $(C_SIZE)"
-	@echo "$(IFG) - hp_dyv:$(EC) $(BIND)/hyperplane_DyV.bin $(SEED) $(K) $(C_SIZE)"
+	@echo "\n$(IFG)Execution indexes (type make <index> to execute):$(EC)\n"
+	@echo "$(IFG) - basic:$(EC) $(BIND)/hiperplano_basico.bin $(SEED) $(N) $(K) $(TRIALS)"
+	@echo "$(IFG) - dyv:$(EC) $(BIND)/hiperplano_dyv.bin $(SEED) $(N) $(K) $(TRIALS)"
 
-hp_sec: hyperplane_SEC
-#	@cat ./$(TXTD)/$<_times.txt
-#	@echo "$(EC)"
+basic: $(BIND)/hiperplano_basico.bin
+	$(RR)$< $(SEED) $(N) $(K) $(TRIALS)
 
-hyperplane_SEC: $(BIND)/hyperplane_SEC.bin
-	$(RR)$< $(SEED) $(K) $(C_SIZE)
+dyv: $(BIND)/hiperplano_dyv.bin
+	$(RR)$< $(SEED) $(N) $(K) $(TRIALS)
 
 .PHONY: all clean
