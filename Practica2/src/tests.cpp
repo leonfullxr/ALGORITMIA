@@ -99,9 +99,9 @@ int main(int argc, char * argv[]) {
         duracion_DyV /= REP_POR_MUESTRA;
         
         resutlados << num_puntos << ";";
-        if (probar_sencillo) resutlados << duracion_sencillo; else resutlados << "no provado";
+        if (probar_sencillo) resutlados << duracion_sencillo; else resutlados << "no provado;";
         cout << ";";
-        if (probar_DyV) resutlados << duracion_DyV; else resutlados << "no provado";
+        if (probar_DyV) resutlados << duracion_DyV; else resutlados << "no provado;";
         cout << ";";
         resutlados << endl;
     }
