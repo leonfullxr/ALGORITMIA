@@ -1,0 +1,17 @@
+Number of nodes: 3
+
+Tag: 1
+Number of edges: 5
+Has edges to nodes:
+1 1 1 1 10 
+
+Tag: 3
+Number of edges: 0
+Has edges to nodes:
+
+
+Tag: 10
+Number of edges: 1
+Has edges to nodes:
+1 
+

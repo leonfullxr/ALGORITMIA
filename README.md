@@ -11,6 +11,7 @@ El funcionamiento será una carpeta root (el main) y a raíz de ello añadiremos
                                        
 - Haremos un makefile para ejecutar los programas .cpp
 - En cada carpeta de la practica correspondiente tendremos una carpeta src para los archivos ejecutables .cpp y una carpeta bin para los ejecutables
-- **/src** estarán todos los archivos y programas **.cpp**
-- **/data** estarán todos los archivos **.txt** y las salidas de los programas ejecutables para las gráficas, comparación de tiempos, etc.
-- **/bin** estarán todos los binarios **.bin**
+- **/src** estarán todos los archivos  **.cpp**
+- **/include** estarán los archivos **.h**
+- **/data** estarán todos los archivos y las salidas de los programas ejecutables para las gráficas, comparación de tiempos, etc.
+- **/bin** estarán los ejecutables **.bin**
