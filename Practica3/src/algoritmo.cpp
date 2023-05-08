@@ -130,7 +130,6 @@ std::list<Node<T>*> findEulerCircuit(Graph<T>& graph, T startNodeValue) {
 
         // Si se encuentra un nodo siguiente válido
         if (nextNode != nullptr) {
-            std::cout << "Nodo actual: " << currentNode->operator*() << std::endl;
             // Añade la arista al conjunto de aristas visitadas
             visitedEdges.insert(std::minmax(currentNode->operator*(), nextNode->operator*()));
             // Establece el nodo siguiente como el nodo actual
@@ -148,7 +147,6 @@ std::list<Node<T>*> findEulerCircuit(Graph<T>& graph, T startNodeValue) {
     }
 
     // Devuelve el circuito de Euler
-    std::cout << circuit.size() << std::endl;
     return circuit;
 }
 
