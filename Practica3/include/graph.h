@@ -10,6 +10,8 @@
 #include <sstream>
 #include <string>
 #include <cmath>
+#include <random>
+#include <algorithm>
 #include <chrono>
 #include "node.h"
 
@@ -97,7 +99,7 @@ public:
      * edges.
      * @param seed seed for the random number generation
      */
-    void initializeAsEulerGraph(const std::set<T> & tags, float density_of_edges, int seed) {
+    void initializeAsEulerGraph(const std::set<T> & tags, float density_of_edges) {
         clear();
         if(tags.size() == 0) return;
         
@@ -116,24 +118,32 @@ public:
         (*(inserted.front())).createEdgeTo(*(inserted.back()));
         
         
-        int edges_left = std::round(density_of_edges * inserted.size());
-        int num_of_cycles = (rand() % edges_left) + 1;
-        for(int cycle=1; cycle<=num_of_cycles; cycle++) {
-            int max_cycle_length = edges_left - (num_of_cycles - cycle);
-            int cycle_length = (rand() % max_cycle_length) + 1;
+        const int EDGES_TO_POSITION = std::round(density_of_edges * inserted.size());
+        const float AVARAGE_LENGTH_OF_CYCLE = node_n() * 0.6;
+        float expected_num_of_cycles = EDGES_TO_POSITION / AVARAGE_LENGTH_OF_CYCLE;
+        std::poisson_distribution<> cycles_poiss(expected_num_of_cycles - 1);
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        int num_of_cycles = std::min(EDGES_TO_POSITION, cycles_poiss(gen) + 1);
+        
+        int edges_left = EDGES_TO_POSITION;
+        std::normal_distribution<> cycle_length_normal;
+        for(int cycle=1; cycle<=num_of_cycles - 1; cycle++) {
+            int cycles_left = num_of_cycles - cycle; // without counting this one
+            double next_expected_length = ((double)edges_left) / cycles_left;
+            std::normal_distribution<double>::param_type new_params(
+                    (double)next_expected_length, next_expected_length * 0.4);
+            cycle_length_normal.param(new_params);
+            int max_cycle_length = edges_left - cycles_left;
+            int cycle_length = std::round(std::clamp(cycle_length_normal(gen), 
+                                                     1.0, (double)max_cycle_length));
+            
             addCycle(cycle_length);
+            
             edges_left -= cycle_length;
         }
-    }
-    /**
-     * @return the seed used
-     */
-    int initializeAsEulerGraph(const std::set<T> & tags, float density_of_edges) {
-        int seed = std::chrono::duration_cast<std::chrono::nanoseconds>(
-            std::chrono::high_resolution_clock::now().time_since_epoch())
-            .count();
-        this->initializeAsEulerGraph(tags, density_of_edges, seed);
-        return seed;
+        addCycle(edges_left);
     }
     
     /**
@@ -242,9 +252,10 @@ private:
             last_node = &next_node;
         }
         if(length > 0) (*last_node).createEdgeTo(first_node);
-        
     }
 };
+
+
 
 /*
     Outputs the graph a graph with N nodes with the following format:
