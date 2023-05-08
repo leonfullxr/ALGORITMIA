@@ -33,29 +33,59 @@ como un algoritmo Greedy. Para ello:
 	1.1. Compruebe si se puede resolver mediante Greedy.
 	1.2. Diseñe las componentes greedy del algoritmo.
 	1.3. Adapte la plantilla de diseño Greedy a las componentes propuestas.
-2. Implemente el algoritmo en una función C/C++.
+2. Implemente el algoritmo en una función C++.
 3. Calcule la eficiencia en el caso peor del algoritmo
 
 /** DISEÑO PROPUESTO **/
 
-S = -
-A = -
-G = {1,2,3,4,5,6}
-v pertenece G
+Inicializar S, A y G como vacíos.
+Asumir que G es un grafo conexo de Euler con nodos {1, 2, 3, 4, 5, 6} y aristas A.G.
+Elegir un nodo inicial v que pertenezca a G.
+Si |G| > 1:
+	4.1. Insertar v en S.
+	4.2. Mientras |A| no sea igual a |A.G|:
+		4.2.1. Para todas las aristas incidentes en v que no pertenezcan a A, seleccionar una arista a que no desconecte el grafo y tenga un nodo w con la menor cantidad de incidencias.
+		4.2.2. Insertar a en A.
+		4.2.3. Establecer v = w.
+	4.3. Devolver S como el circuito de Euler encontrado.
+Si |G| = 1, informar que no es un grafo válido (solo tiene un vértice).
 
-si |G| != 1
-	S = S U v	// insertamos v en el conjunto solucion
-	mientras que |A| != |A.G|	// mientras que el numero de aristas recorridas no sea igual al de G para toda arista que incida en v comprobamos cual es a, dandose que a no pertenece A y |w| != 0:
-	// si a no es recorrida y w tiene aristas por recorrer
-	A = A U a	// insertamos a en las aristas recorridas
-	v = w
-	Devolvemos S
-si |G| = 1
-	Error no es un grafo, solo tiene un vertice
-	
 Notas:
--v: Corresponde al nodo actual en la iteracion
--w: Es el nodo con menos incidencias
--| |: indica el tamaño, ya sea vertices o aristas segun el contexto
--A la hora de seleccionar una arista a, si para todas las posibles su nodo w tienen las mismas incidencias, se elegira una de forma arbitraria, puede ser la primera o una aleatoria por que haya variacion en los caminos
+v: Corresponde al nodo actual en la iteración.
+w: Es el nodo con menos incidencias.
+| |: Indica el tamaño, ya sea de vértices o aristas según el contexto.
+Al seleccionar una arista a, si para todas las posibles, su nodo w tiene las mismas incidencias, se elegirá una de forma arbitraria, puede ser la primera o una aleatoria para que haya variación en los caminos.
+
+/** MIS NOTAS **/
+Formalización del algoritmo de Fleury como un algoritmo Greedy:
+1.1. Compruebe si se puede resolver mediante Greedy:
+
+Sí, el algoritmo de Fleury puede ser resuelto utilizando un enfoque Greedy, ya que se seleccionan aristas de forma local y óptima, considerando las aristas que no desconecten el grafo.
+
+1.2. Diseñe las componentes greedy del algoritmo:
+
+Función de selección: En cada paso, elegir una arista 'a' incidente en el nodo actual 'v' que no desconecte el grafo al ser removida. Si todas las aristas restantes desconectan el grafo, seleccionar la arista que tenga el nodo 'w' con menos incidencias.
+
+Función de factibilidad: Asegurar que al quitar la arista 'a' del grafo, este siga siendo conexo. Si todas las aristas restantes desconectan el grafo, seleccionar la arista que tenga el nodo 'w' con menos incidencias.
+
+Función objetivo: Encontrar un circuito de Euler que recorra todas las aristas del grafo.
+
+Función de solución: El algoritmo termina cuando todas las aristas del grafo han sido recorridas.
+
+1.3. Adapte la plantilla de diseño Greedy a las componentes propuestas:
+
+Inicializar el conjunto de soluciones S y el conjunto de aristas recorridas A como vacíos.
+Elegir un nodo inicial 'v' perteneciente al grafo G.
+Mientras que no se hayan recorrido todas las aristas del grafo G:
+1. Seleccionar una arista 'a' incidente en 'v' que no desconecte el grafo al ser removida, utilizando la función de selección.
+2. Verificar la factibilidad de la arista 'a' seleccionada con la función de factibilidad.
+3. Actualizar el conjunto de soluciones S y el conjunto de aristas recorridas A.
+4. Cambiar el nodo actual 'v' por el nodo 'w'.
+Devolver S como la solución al problema.
+
+Implementación del algoritmo en una función C++:
+
+
+Eficiencia en el caso peor del algoritmo:
+En el peor de los casos, el algoritmo podría tener que recorrer todas las aristas del grafo, y en cada paso, verificar la conectividad del grafo al eliminar una arista. La verificación de la conectividad en un grafo de n nodos puede realizarse en O(n^2) utilizando el algoritmo de búsqueda en profundidad (DFS) o búsqueda en amplitud (BFS). Entonces, en el peor de los casos, la eficiencia del algoritmo sería O(m * n^2), donde m es el número de aristas del grafo.
 						
