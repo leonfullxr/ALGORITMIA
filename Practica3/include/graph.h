@@ -131,7 +131,7 @@ public:
         std::normal_distribution<> cycle_length_normal;
         for(int cycle=1; cycle<=num_of_cycles - 1; cycle++) {
             int cycles_left = num_of_cycles - cycle; // without counting this one
-            double next_expected_length = ((double)edges_left) / cycles_left;
+            double next_expected_length = ((double)edges_left) / (cycles_left + 1);
             std::normal_distribution<double>::param_type new_params(
                     (double)next_expected_length, next_expected_length * 0.4);
             cycle_length_normal.param(new_params);
