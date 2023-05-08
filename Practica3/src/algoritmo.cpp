@@ -88,11 +88,11 @@ Implementación del algoritmo:
 #include "../include/node.h"
 
 template <typename T>
-std::list<Node<T>*> findEulerCircuit(Graph<T>& graph, T startNodeValue) {
+std::list<Node<int>*> findEulerCircuit(Graph<int>& graph) {
     // Inicializa la lista de circuito que almacenará el camino de Euler
-    std::list<Node<T>*> circuit;
+    std::list<Node<int>*> circuit;
     // Inicializa el conjunto de aristas visitadas
-    std::set<std::pair<T, T>> visitedEdges;
+    std::set<std::pair<int, int>> visitedEdges;
 
     // Verifica si el grafo tiene solo un vértice y, en ese caso, devuelve un error
     if (graph.node_n() == 1) {
@@ -100,25 +100,25 @@ std::list<Node<T>*> findEulerCircuit(Graph<T>& graph, T startNodeValue) {
         return circuit;
     }
 
-    // Selecciona un nodo inicial arbitrario
-    Node<T>* currentNode = &graph.node(startNodeValue);
+    // Selecciona un nodo inicial arbitrario, en este caso, el nodo con valor 1
+    Node<int>* currentNode = &graph.node(1);
     // Añade el nodo inicial al circuito
     circuit.push_back(currentNode);
 
-    // Continúa recorriendo el grafo mientras no se visiten todas las aristas y el grafo sigue siendo conexo
-    while (visitedEdges.size() != graph.edge_n() && !circuit.empty()) {
+    // Continúa recorriendo el grafo mientras no se visiten todas las aristas
+    while (visitedEdges.size() != graph.edge_n()) {
         // Obtiene las conexiones (aristas) del nodo actual
-        std::list<Node<T>*> connections = currentNode->getConnections();
+        std::list<Node<int>*> connections = currentNode->getConnections();
         // Inicializa el nodo siguiente y el grado mínimo para la selección de nodos
-        Node<T>* nextNode = nullptr;
+        Node<int>* nextNode = nullptr;
         int minDegree = std::numeric_limits<int>::max();
 
         // Recorre todas las conexiones del nodo actual
-        for (Node<T>* connection : connections) {
+        for (Node<int>* connection : connections) {
             // Obtiene el grado del nodo de conexión
             int currentDegree = connection->degree();
             // Crea un par ordenado que representa la arista entre el nodo actual y el nodo de conexión
-            std::pair<T, T> edge = std::minmax(currentNode->operator*(), connection->operator*());
+            std::pair<int, int> edge = std::minmax(currentNode->operator*(), connection->operator*());
 
             // Si la arista no ha sido visitada y el grado del nodo de conexión es menor que el grado mínimo
             if (visitedEdges.count(edge) == 0 && currentDegree < minDegree) {
@@ -128,8 +128,8 @@ std::list<Node<T>*> findEulerCircuit(Graph<T>& graph, T startNodeValue) {
             }
         }
 
-        // Si se encuentra un nodo siguiente válido
-        if (nextNode != nullptr) {
+        // Si se encuentra un nodo siguiente
+        if (nextNode) {
             // Añade la arista al conjunto de aristas visitadas
             visitedEdges.insert(std::minmax(currentNode->operator*(), nextNode->operator*()));
             // Establece el nodo siguiente como el nodo actual
@@ -137,18 +137,15 @@ std::list<Node<T>*> findEulerCircuit(Graph<T>& graph, T startNodeValue) {
             // Añade el nodo siguiente al circuito
             circuit.push_back(currentNode);
         } else {
-            // No se encontró un nodo siguiente válido, por lo que se elimina el último nodo del circuito
-            circuit.pop_back();
-            // Si el circuito no está vacío, actualiza el nodo actual
-            if (!circuit.empty()) {
-                currentNode = circuit.back();
-            }
+            // Si no se encuentra un nodo siguiente, rompe el bucle
+            break;
         }
     }
 
     // Devuelve el circuito de Euler
     return circuit;
 }
+
 
 /*
 Eficiencia en el caso peor del algoritmo:

@@ -30,7 +30,7 @@ int main() {
     graph.load("./data/example_euler_graph.txt");
 
     // Encontrar el circuito de Euler
-    std::list<Node<int>*> euler_circuit = findEulerCircuit<int>(graph,1);
+    std::list<Node<int>*> euler_circuit = findEulerCircuit<int>(graph);
 
     // Imprimir el circuito de Euler
     printEulerCircuit(euler_circuit);
@@ -45,7 +45,7 @@ int main() {
     graph2.node(3).createEdgeTo(4);
     graph2.node(1).createEdgeTo(4);
 
-    std::list<Node<int>*> euler_circuit2 = findEulerCircuit<int>(graph2,3);
+    std::list<Node<int>*> euler_circuit2 = findEulerCircuit<int>(graph2);
     printEulerCircuit(euler_circuit2);
 
     return 0;
