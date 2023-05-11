@@ -43,7 +43,7 @@ Implementación del algoritmo:
 #include "../include/node.h"
 
 template <typename T>
-bool esConexo(Graph<T>& graph, Node<T>& nodoInicial, Node<T>& nodoAComprobar) {
+bool esConexo(Graph<T>& graph, Node<T>* nodoInicial, Node<T>* nodoAComprobar) {
 /*
 iniciamos la lista con el nodo
 
@@ -102,8 +102,12 @@ std::list<Node<int>*> findEulerCircuit(Graph<int>& graph) {
             int maxDegree = -1;
             for (Node<int>* connection : v->getConnections()) {
                 if (connection->degree() > maxDegree) {
-                    w = connection;
-                    maxDegree = connection->degree();
+                    v->removeEdgeTo(*connection);
+                    if (esConexo<int>(graph,v,connection)) {
+		                w = connection;
+		                maxDegree = connection->degree();
+		            }
+		            v->createEdgeTo(*connection);
                 }
             }
             stack.push(w);
@@ -117,10 +121,11 @@ std::list<Node<int>*> findEulerCircuit(Graph<int>& graph) {
 }
 
 /*
+// TODO: incluir la eficiencia de esConexo
 Eficiencia en el caso peor del algoritmo:
 En el peor de los casos, si cada nodo está conectado a todos los demás (es decir, 
 el grafo es completamente conexo), entonces esta operación adicional podría hacer que 
-la eficiencia del algoritmo sea O(E^2), ya que para cada arista, puede necesitar revisar 
+la eficiencia del algoritmo sea O(E^2*), ya que para cada arista, puede necesitar revisar 
 todas las demás aristas para encontrar el nodo con más aristas incidentes no visitadas.
 
 En la práctica, la eficiencia del algoritmo dependerá del grado medio de los nodos en el grafo. 
