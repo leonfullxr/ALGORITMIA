@@ -41,9 +41,7 @@ int main() {
     Graph<int> graph2;
 
     graph2.node(1).createEdgeTo(2);
-    graph2.node(1).createEdgeTo(3);
     graph2.node(2).createEdgeTo(3);
-    graph2.node(2).createEdgeTo(4);
     graph2.node(3).createEdgeTo(4);
     graph2.node(1).createEdgeTo(4);
 

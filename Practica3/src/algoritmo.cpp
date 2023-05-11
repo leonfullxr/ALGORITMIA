@@ -1,32 +1,3 @@
-/** PROBLEMA A RESOLVER **/
-/*
-Euler definió un tipo particular de grafo, denominado grafo de Euler, como aquel tipo de
-grafo que contiene un circuito de Euler. La definición formal de circuito de Euler es:
-
-Sea G un grafo conexo. Un camino de Euler sobre el grafo es un camino que no repite
-aristas y en el que aparecen todas las aristas del grafo. Un circuito de Euler es un ciclo
-(comienza y termina en el mismo nodo/vértice) y que, además, es un camino de Euler.
-
-Como ejemplo, el grafo de la siguiente figura es un grafo de Euler, donde el recorrido por
-los nodos (1, 2, 4, 6, 5, 3, 2, 5, 4, 3, 1) proporciona un circuito de Euler.
-
-Se cumple que un grafo no dirigido conexo es también un grafo de Euler si, y sólo si,
-todos los nodos del grafo tiene grado par; es decir, si en todos los nodos del grafo inciden
-un número par de aristas. Existe un algoritmo (algoritmo de Fleury) que permite
-encontrar un camino de Euler sobre un grafo de Euler, cuya descripción de
-funcionamiento es la siguiente:
-	1. Se parte de un nodo dado v del grafo G.
-	2. Si G contiene sólo un nodo v, el algoritmo termina.
-	3. Si hay una única arista a que incide en v, entonces llamamos w al otro vértice que
-conecta la arista a, y la quitamos del grafo. Vamos después al paso 5. En otro caso,
-seguimos en el paso 4.
-	4. Como hay más de un lado que incide en v, elegimos uno de estos (lo llamamos w)
-de modo que al quitarlo del grafo G, el grafo siga siendo conexo. Cogemos la arista
-que une v con w y la quitamos del grafo.
-	5. Cambiamos el nodo v por el nodo w y volvemos al paso 3 hasta que terminemos de
-hacer el circuito de Euler.
-
-
 /** DISEÑO PROPUESTO **/
 /*
 Inicializar S, A y G como vacíos.
@@ -75,76 +46,101 @@ Mientras que no se hayan recorrido todas las aristas del grafo G:
 4. Cambiar el nodo actual 'v' por el nodo 'w'.
 Devolver S como la solución al problema.
 
+Inicialización:
+
+Crear un conjunto de soluciones S y un conjunto de aristas recorridas A, ambos inicialmente vacíos.
+Elegir un nodo inicial v del grafo G.
+Mientras no se hayan recorrido todas las aristas del grafo G:
+
+Selección: Buscar todas las aristas incidentes en v que no se encuentren en A. Seleccionar una arista a de ese conjunto que no desconecte el grafo G al ser removida. Si existen varias aristas que cumplen con este criterio, seleccionar la que tenga un nodo w con la menor cantidad de incidencias.
+Factibilidad: Verificar si la arista a seleccionada puede ser añadida a A sin violar la restricción de que no se pueden recorrer las aristas más de una vez. Esto se puede hacer simplemente verificando si a ya está en A.
+Actualización de la solución: Si la arista a es factible, añadirla a A y añadir el nodo w a S. Luego, cambiar el nodo actual v por el nodo w.
+Función objetivo: La función objetivo en este caso podría ser simplemente el número de aristas en A, ya que queremos maximizar la cantidad de aristas recorridas. No necesitamos calcular explícitamente esta función en cada paso, ya que la condición del bucle garantiza que continuaremos hasta que hayamos recorrido todas las aristas.
+Solución: Devolver S como la solución al problema. S representará el circuito de Euler en el grafo G
+
 Implementación del algoritmo:
 /** ASUMO EN TODA REGLA QUE TRABAJAMOS CON NODOS DE GRADO PAR Y CONEXOS **/
 
 #include <iostream>
-#include <list>
-#include <map>
-#include <vector>
-#include <algorithm>
-#include <stdexcept>
+#include <stack>
 #include "../include/graph.h"
 #include "../include/node.h"
 
 template <typename T>
-std::list<Node<int>*> findEulerCircuit(Graph<int>& graph) {
-    // Inicializa la lista de circuito que almacenará el camino de Euler
-    std::list<Node<int>*> circuit;
-    // Inicializa el conjunto de aristas visitadas
-    std::set<std::pair<int, int>> visitedEdges;
+bool esConexo(Graph<T>& graph, Node<T>& nodoInicial, Node<T>& nodoAComprobar) {
+/*
+iniciamos la lista con el nodo
 
-    // Verifica si el grafo tiene solo un vértice y, en ese caso, devuelve un error
-    if (graph.node_n() == 1) {
-        std::cout << "Error: no es un grafo válido (solo tiene un vértice)." << std::endl;
-        return circuit;
-    }
+mientras familiares != comprobados: SE ALTERA ENTRE LAS LISTAS DE LOS DOS NODOS INICIALES
+    cojemos uno en familiares que no este en comprobados
+    para cada vecino de este nodo:
+        comprobamos que no este en familiares del otro nodo inicial -> SI LO ESTA ES CONEXO
+        lo metemos en familiares
 
-    // Selecciona un nodo inicial arbitrario, en este caso, el nodo con valor 1
-    Node<int>* currentNode = &graph.node(1);
-    // Añade el nodo inicial al circuito
-    circuit.push_back(currentNode);
-
-    // Continúa recorriendo el grafo mientras no se visiten todas las aristas
-    while (visitedEdges.size() != graph.edge_n()) {
-        // Obtiene las conexiones (aristas) del nodo actual
-        std::list<Node<int>*> connections = currentNode->getConnections();
-        // Inicializa el nodo siguiente y el grado mínimo para la selección de nodos
-        Node<int>* nextNode = nullptr;
-        int minDegree = std::numeric_limits<int>::max();
-
-        // Recorre todas las conexiones del nodo actual
-        for (Node<int>* connection : connections) {
-            // Obtiene el grado del nodo de conexión
-            int currentDegree = connection->degree();
-            // Crea un par ordenado que representa la arista entre el nodo actual y el nodo de conexión
-            std::pair<int, int> edge = std::minmax(currentNode->operator*(), connection->operator*());
-
-            // Si la arista no ha sido visitada y el grado del nodo de conexión es menor que el grado mínimo
-            if (visitedEdges.count(edge) == 0 && currentDegree < minDegree) {
-                // Actualiza el grado mínimo y el nodo siguiente
-                minDegree = currentDegree;
-                nextNode = connection;
+SI FAMILIARES == COMPROBADOS Y NO TIENE TANTOS NODOS COMO EL GRAFO, NO ES CONEXO
+*/
+	std::set<Node<T>*> lista1, lista2, lista_comprobados1, lista_comprobados2;
+	lista1.insert(nodoInicial);
+    auto iterador_lista1 = lista1.begin();
+    auto iterador_lista2 = lista2.begin();
+    Node<T>* nodoActual;
+	
+	while(lista1.size() != lista_comprobados1.size()) {
+        // Para cada nodo saco los familiares
+        nodoActual = *iterador_lista1;
+        lista_comprobados1.insert(nodoActual);
+        for (Node<T>* vecino : nodoActual->getConnections()) {
+            lista1.insert(vecino);
+        }
+        for (Node<T>* vecino : nodoAComprobar->getConnections()) {
+            lista2.insert(vecino);
+        }
+        // Cojemos uno en familiares que no este en comprobados
+        for (auto it = lista1.begin(); it != lista1.end(); ++it) {
+            if (lista2.find(*it) != lista_comprobados1.end()) {
+                return true;
             }
         }
+        iterador_lista1++;
+        iterador_lista2++;
+	}
+	
+	return false;
+}
 
-        // Si se encuentra un nodo siguiente
-        if (nextNode) {
-            // Añade la arista al conjunto de aristas visitadas
-            visitedEdges.insert(std::minmax(currentNode->operator*(), nextNode->operator*()));
-            // Establece el nodo siguiente como el nodo actual
-            currentNode = nextNode;
-            // Añade el nodo siguiente al circuito
-            circuit.push_back(currentNode);
-        } else {
-            // Si no se encuentra un nodo siguiente, rompe el bucle
-            break;
+template <typename T>
+std::list<Node<int>*> findEulerCircuit(Graph<int>& graph) {
+    std::list<Node<int>*> circuit; 
+    if (graph.node_n() == 0)
+        return circuit; 
+
+    std::stack<Node<int>*> stack;
+    Node<int>* v = &graph.node(1); 
+
+    stack.push(v);
+    while (!stack.empty()) { 
+        v = stack.top();
+        if (v->degree() > 0) {
+            // Encontrar el nodo no visitado con más aristas incidentes no visitadas
+            Node<int>* w = nullptr;
+            int maxDegree = -1;
+            for (Node<int>* connection : v->getConnections()) {
+                if (connection->degree() > maxDegree) {
+                    w = connection;
+                    maxDegree = connection->degree();
+                }
+            }
+            stack.push(w);
+            v->removeEdgeTo(*w); 
+        } else { 
+            stack.pop();
+            circuit.push_back(v);
         }
     }
-
-    // Devuelve el circuito de Euler
     return circuit;
 }
+
+
 
 
 /*
