@@ -1,16 +1,19 @@
-/** DISEÑO PROPUESTO **/
+/** DISEÑO PROPUESTO DEL ALGORITMO **/
 /*
-Inicializar S, A y G como vacíos.
-Asumir que G es un grafo conexo de Euler con nodos {1, 2, 3, 4, 5, 6} y aristas A.G.
+Inicializar S (una lista para almacenar el circuito de Euler) y Stack (una pila para almacenar los nodos a visitar) como vacíos.
+Asumir que G es un grafo conexo de Euler con nodos y aristas.
 Elegir un nodo inicial v que pertenezca a G.
-Si |G| > 1:
-	4.1. Insertar v en S.
-	4.2. Mientras |A| no sea igual a |A.G|:
-		4.2.1. Para todas las aristas incidentes en v que no pertenezcan a A, seleccionar una arista a que no desconecte el grafo y tenga un nodo w con la menor cantidad de incidencias.
-		4.2.2. Insertar a en A.
-		4.2.3. Establecer v = w.
-	4.3. Devolver S como el circuito de Euler encontrado.
-Si |G| = 1, informar que no es un grafo válido (solo tiene un vértice).
+Si el número de nodos en G (|G|) es mayor que 1:
+    Insertar v en Stack.
+    Mientras Stack no esté vacía:
+        Establecer v como el nodo en la cima de Stack.
+        Si v tiene aristas no visitadas:
+            Para todas las aristas incidentes en v que no hayan sido visitadas, seleccionar una arista a que tenga un nodo w con el mayor número de aristas incidentes no visitadas.
+            Insertar w en Stack.
+            Marcar a como visitada.
+        Si v no tiene más aristas no visitadas, sacarlo de Stack e insertarlo en S.
+    Devolver S como el circuito de Euler encontrado.
+Si |G| es igual a 1, informar que no es un grafo válido (solo tiene un vértice).
 
 Notas:
 v: Corresponde al nodo actual en la iteración.
@@ -20,43 +23,16 @@ Al seleccionar una arista a, si para todas las posibles, su nodo w tiene las mis
 
 /** MIS NOTAS **/
 /*
-Formalización del algoritmo de Fleury como un algoritmo Greedy:
-1.1. Compruebe si se puede resolver mediante Greedy:
-
-Sí, el algoritmo de Fleury puede ser resuelto utilizando un enfoque Greedy, ya que se seleccionan aristas de forma local y óptima, considerando las aristas que no desconecten el grafo.
-
 1.2. Diseñe las componentes greedy del algoritmo:
+Inicialización: Se selecciona un nodo inicial arbitrariamente y se inicializan las estructuras de datos necesarias para almacenar el circuito de Euler (la lista de nodos visitados) y la pila de nodos a visitar.
 
-Función de selección: En cada paso, elegir una arista 'a' incidente en el nodo actual 'v' que no desconecte el grafo al ser removida. Si todas las aristas restantes desconectan el grafo, seleccionar la arista que tenga el nodo 'w' con menos incidencias.
+Función de selección: En cada paso, se selecciona el siguiente nodo a visitar como el nodo adyacente al nodo actual que tiene el mayor número de aristas incidentes no visitadas. Si hay varios nodos que cumplen este criterio, se selecciona uno arbitrariamente. Si el nodo actual no tiene nodos adyacentes no visitados, se retrocede al nodo anterior en la pila.
 
-Función de factibilidad: Asegurar que al quitar la arista 'a' del grafo, este siga siendo conexo. Si todas las aristas restantes desconectan el grafo, seleccionar la arista que tenga el nodo 'w' con menos incidencias.
+Función de factibilidad: Se verifica que el nodo seleccionado sea adyacente al nodo actual y que la arista que los conecta no haya sido visitada antes. Si el nodo seleccionado no cumple estos criterios, se selecciona un nodo diferente.
 
-Función objetivo: Encontrar un circuito de Euler que recorra todas las aristas del grafo.
+Función de solución: Se verifica si se han visitado todas las aristas del grafo. Si es así, se ha encontrado un circuito de Euler y se devuelve la lista de nodos visitados.
 
-Función de solución: El algoritmo termina cuando todas las aristas del grafo han sido recorridas.
-
-1.3. Adapte la plantilla de diseño Greedy a las componentes propuestas:
-
-Inicializar el conjunto de soluciones S y el conjunto de aristas recorridas A como vacíos.
-Elegir un nodo inicial 'v' perteneciente al grafo G.
-Mientras que no se hayan recorrido todas las aristas del grafo G:
-1. Seleccionar una arista 'a' incidente en 'v' que no desconecte el grafo al ser removida, utilizando la función de selección.
-2. Verificar la factibilidad de la arista 'a' seleccionada con la función de factibilidad.
-3. Actualizar el conjunto de soluciones S y el conjunto de aristas recorridas A.
-4. Cambiar el nodo actual 'v' por el nodo 'w'.
-Devolver S como la solución al problema.
-
-Inicialización:
-
-Crear un conjunto de soluciones S y un conjunto de aristas recorridas A, ambos inicialmente vacíos.
-Elegir un nodo inicial v del grafo G.
-Mientras no se hayan recorrido todas las aristas del grafo G:
-
-Selección: Buscar todas las aristas incidentes en v que no se encuentren en A. Seleccionar una arista a de ese conjunto que no desconecte el grafo G al ser removida. Si existen varias aristas que cumplen con este criterio, seleccionar la que tenga un nodo w con la menor cantidad de incidencias.
-Factibilidad: Verificar si la arista a seleccionada puede ser añadida a A sin violar la restricción de que no se pueden recorrer las aristas más de una vez. Esto se puede hacer simplemente verificando si a ya está en A.
-Actualización de la solución: Si la arista a es factible, añadirla a A y añadir el nodo w a S. Luego, cambiar el nodo actual v por el nodo w.
-Función objetivo: La función objetivo en este caso podría ser simplemente el número de aristas en A, ya que queremos maximizar la cantidad de aristas recorridas. No necesitamos calcular explícitamente esta función en cada paso, ya que la condición del bucle garantiza que continuaremos hasta que hayamos recorrido todas las aristas.
-Solución: Devolver S como la solución al problema. S representará el circuito de Euler en el grafo G
+Función de objetivo: No es necesario establecer una función de objetivo para este problema, ya que el objetivo es simplemente encontrar un circuito de Euler, si existe. No hay una "mejor" solución en el sentido de que algunas soluciones tengan un valor objetivo más alto que otras. Sin embargo, el enfoque greedy de seleccionar el nodo con el mayor número de aristas incidentes no visitadas en cada paso tiene como objetivo maximizar la probabilidad de encontrar un circuito de Euler, si existe.
 
 Implementación del algoritmo:
 /** ASUMO EN TODA REGLA QUE TRABAJAMOS CON NODOS DE GRADO PAR Y CONEXOS **/
@@ -139,9 +115,6 @@ std::list<Node<int>*> findEulerCircuit(Graph<int>& graph) {
     }
     return circuit;
 }
-
-
-
 
 /*
 Eficiencia en el caso peor del algoritmo:
