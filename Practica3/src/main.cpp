@@ -2,17 +2,17 @@
 
 /*
 Compile from the project's root folder with:
-g++ ./include/* ./src/graph_use_example.cpp -o ./bin/graph_use_example.bin
+g++ ./include/* ./src/main.cpp -o ./bin/main.bin
 
 Execute it from the project's root folder with:
-./bin/graph_use_example.bin
+./bin/main.bin
 */
 
 #include <iostream>
 #include <fstream>
 #include "../include/graph.h"
 #include "../include/node.h"
-#include "./algoritmo.cpp"
+#include "../include/algoritmo.cpp"
 
 using namespace std;
 

@@ -138,7 +138,12 @@ public:
         return *graph;
     }
     
+    bool operator < (const Node<T> &other) {
+        return tag < other.tag;
+    }
+    
     Node<T> & operator = (const Node<T> &other) = delete;
+    
 private:
     
     /**

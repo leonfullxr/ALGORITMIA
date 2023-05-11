@@ -33,90 +33,121 @@ Función de factibilidad: Se verifica que el nodo seleccionado sea adyacente al 
 Función de solución: Se verifica si se han visitado todas las aristas del grafo. Si es así, se ha encontrado un circuito de Euler y se devuelve la lista de nodos visitados.
 
 Función de objetivo: No es necesario establecer una función de objetivo para este problema, ya que el objetivo es simplemente encontrar un circuito de Euler, si existe. No hay una "mejor" solución en el sentido de que algunas soluciones tengan un valor objetivo más alto que otras. Sin embargo, el enfoque greedy de seleccionar el nodo con el mayor número de aristas incidentes no visitadas en cada paso tiene como objetivo maximizar la probabilidad de encontrar un circuito de Euler, si existe.
-
-Implementación del algoritmo:
-/** ASUMO EN TODA REGLA QUE TRABAJAMOS CON NODOS DE GRADO PAR Y CONEXOS **/
-
-#include <iostream>
-#include <stack>
-#include "../include/graph.h"
-#include "../include/node.h"
-
-template <typename T>
-bool esConexo(Graph<T>& graph, Node<T>* nodoInicial, Node<T>* nodoAComprobar) {
-/*
-iniciamos la lista con el nodo
-
-mientras familiares != comprobados: SE ALTERA ENTRE LAS LISTAS DE LOS DOS NODOS INICIALES
-    cojemos uno en familiares que no este en comprobados
-    para cada vecino de este nodo:
-        comprobamos que no este en familiares del otro nodo inicial -> SI LO ESTA ES CONEXO
-        lo metemos en familiares
-
-SI FAMILIARES == COMPROBADOS Y NO TIENE TANTOS NODOS COMO EL GRAFO, NO ES CONEXO
 */
-	std::set<Node<T>*> lista1, lista2, lista_comprobados1, lista_comprobados2;
-	lista1.insert(nodoInicial);
-    auto iterador_lista1 = lista1.begin();
-    auto iterador_lista2 = lista2.begin();
-    Node<T>* nodoActual;
-	
-	while(lista1.size() != lista_comprobados1.size()) {
-        // Para cada nodo saco los familiares
-        nodoActual = *iterador_lista1;
-        lista_comprobados1.insert(nodoActual);
-        for (Node<T>* vecino : nodoActual->getConnections()) {
-            lista1.insert(vecino);
-        }
-        for (Node<T>* vecino : nodoAComprobar->getConnections()) {
-            lista2.insert(vecino);
-        }
-        // Cojemos uno en familiares que no este en comprobados
-        for (auto it = lista1.begin(); it != lista1.end(); ++it) {
-            if (lista2.find(*it) != lista_comprobados1.end()) {
-                return true;
-            }
-        }
-        iterador_lista1++;
-        iterador_lista2++;
-	}
-	
-	return false;
-}
 
+#include <queue>
+#include <set>
+#include <stack>
+#include "./graph.h"
+#include "./node.h"
+
+/**
+ * @brief Determina si dos elementos en un grafo estarien en la misma componente conexa de eleiminar un eje entre ellos
+ * nodo1 y nodo2
+ * @pre Existe un eje entre nodo1 y nodo2
+ */
 template <typename T>
-std::list<Node<int>*> findEulerCircuit(Graph<int>& graph) {
-    std::list<Node<int>*> circuit; 
-    if (graph.node_n() == 0)
-        return circuit; 
+bool mismaComponenteConexaAlDesconectar(const Graph<T>& graph, Node<T>& nodo1, Node<T>& nodo2) {
+    /*
+    iniciamos la lista con el nodo
 
-    std::stack<Node<int>*> stack;
-    Node<int>* v = &graph.node(1); 
+    mientras familiares != comprobados: SE ALTERA ENTRE LAS LISTAS DE LOS DOS NODOS INICIALES
+        cojemos uno en familiares que no este en comprobados
+        para cada vecino de este nodo:
+            comprobamos que no este en familiares del otro nodo inicial -> SI LO ESTA ES CONEXO
+            lo metemos en familiares
 
-    stack.push(v);
-    while (!stack.empty()) { 
-        v = stack.top();
-        if (v->degree() > 0) {
-            // Encontrar el nodo no visitado con más aristas incidentes no visitadas
-            Node<int>* w = nullptr;
-            int maxDegree = -1;
-            for (Node<int>* connection : v->getConnections()) {
-                if (connection->degree() > maxDegree) {
-                    v->removeEdgeTo(*connection);
-                    if (esConexo<int>(graph,v,connection)) {
-		                w = connection;
-		                maxDegree = connection->degree();
-		            }
-		            v->createEdgeTo(*connection);
+    SI FAMILIARES == COMPROBADOS Y NO TIENE TANTOS NODOS COMO EL GRAFO, NO ES CONEXO
+    */
+    if (graph.node_n() <= 1 or &nodo1 == &nodo2) return true;
+
+    nodo1.removeEdgeTo(nodo2);
+
+    std::set<Node<T>*> familiares1, familiares2;
+    std::queue<Node<T>*> siguiente_a_comprobar1, siguiente_a_comprobar2;
+    familiares1.insert(&nodo1);
+    siguiente_a_comprobar1.push(&nodo1);
+    familiares2.insert(&nodo2);
+    siguiente_a_comprobar2.push(&nodo2);
+    
+    while( (not siguiente_a_comprobar1.empty()) and 
+           (not siguiente_a_comprobar2.empty()) ) {
+        
+        Node<T> &comprobando1 = *(siguiente_a_comprobar1.front());
+        siguiente_a_comprobar1.pop();
+        std::list<Node<T>*> vecinos1 = comprobando1.getConnections();
+        Node<T> * vecino_anterior1_ptr = nullptr;
+        for(Node<T>* vecino1_ptr : vecinos1) {
+            if (vecino1_ptr == vecino_anterior1_ptr) continue;
+            
+            if(familiares1.insert(vecino1_ptr).second) {
+                if(familiares2.find(vecino1_ptr) != familiares2.end()) {
+                    nodo1.createEdgeTo(nodo2);
+                    return true;
                 }
+                
+                siguiente_a_comprobar1.push(vecino1_ptr);
             }
-            stack.push(w);
-            v->removeEdgeTo(*w); 
-        } else { 
-            stack.pop();
-            circuit.push_back(v);
+            
+            vecino_anterior1_ptr = vecino1_ptr;
+        }
+
+        Node<T> &comprobando2 = *(siguiente_a_comprobar2.front());
+        siguiente_a_comprobar2.pop();
+        std::list<Node<T>*> vecinos2 = comprobando2.getConnections();
+        Node<T> * vecino_anterior2_ptr = nullptr;
+        for(Node<T>* vecino2_ptr : vecinos2) {
+            if (vecino2_ptr == vecino_anterior2_ptr) continue;
+            
+            if(familiares2.insert(vecino2_ptr).second) {
+                if(familiares1.find(vecino2_ptr) != familiares1.end()) {
+                    nodo2.createEdgeTo(nodo1);
+                    return true;
+                }
+                
+                siguiente_a_comprobar2.push(vecino2_ptr);
+            }
+            
+            vecino_anterior2_ptr = vecino2_ptr;
         }
     }
+    
+    nodo1.createEdgeTo(nodo2);
+    return false;
+}
+
+/**
+ * @pre graph es un grafo de Euler
+ * @post elimina todos los ejes del grafo
+ */
+template <typename T>
+std::list<Node<T>*> findEulerCircuit(Graph<T>& graph) {
+    std::list<Node<T> *> circuit; 
+    if (graph.node_n() == 0)
+        return circuit;
+
+    Node<T>* actual = &graph.getNode();
+    circuit.push_back(actual);
+
+    while(actual->degree() > 0) {
+        std::list<Node<T> *> connections = actual->getConnections(); 
+        auto connection_candidate = connections.begin();
+        
+        if (actual->degree() == 1) {
+            actual->removeEdgeTo(**connection_candidate);
+            circuit.push_back(*connection_candidate);
+            actual = *connection_candidate;
+            continue;
+        }
+
+        while(not mismaComponenteConexaAlDesconectar(graph, *actual, **connection_candidate)) {
+            connection_candidate++;
+        }
+        actual->removeEdgeTo(**connection_candidate);
+        circuit.push_back(*connection_candidate);
+        actual = *connection_candidate;
+    }
+
     return circuit;
 }
 

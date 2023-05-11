@@ -35,6 +35,14 @@ public:
         auto insertion_res = nodes.insert({value, inserting});
         return (*(insertion_res.first)).second;
     }
+
+    /**
+     * @pre There must be a node in the graph
+     * @return Returns the node with smaller tag
+     */
+    Node<T> & getNode() {
+        return (*(nodes.begin())).second;
+    }
     
     /**
      * @return true if the graph contains a node with value val
@@ -173,14 +181,14 @@ public:
         nodes.clear();
     }
     
-    Graph<T> & operator=(const Graph<T> &other) {
+    Graph<T> & operator=(const Graph<T> &other) const {
         std::stringstream in_out;
         in_out << other;
         in_out >> *this;
         return *this;
     }
     
-    bool operator==(Graph &other) {
+    bool operator==(Graph &other) const {
         std::stringstream me_str;
         std::stringstream other_str;
         me_str << *this;
