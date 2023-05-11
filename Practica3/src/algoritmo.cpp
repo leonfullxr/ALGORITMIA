@@ -145,9 +145,14 @@ std::list<Node<int>*> findEulerCircuit(Graph<int>& graph) {
 
 /*
 Eficiencia en el caso peor del algoritmo:
-La eficiencia de este algoritmo se ve afectada principalmente por dos bucles. El bucle while que se ejecuta hasta que se visitan todas las aristas del grafo, y el bucle for que itera sobre las conexiones (aristas) del nodo actual en cada iteración del bucle while.
+En el peor de los casos, si cada nodo está conectado a todos los demás (es decir, 
+el grafo es completamente conexo), entonces esta operación adicional podría hacer que 
+la eficiencia del algoritmo sea O(E^2), ya que para cada arista, puede necesitar revisar 
+todas las demás aristas para encontrar el nodo con más aristas incidentes no visitadas.
 
-El bucle while se ejecuta una vez por cada arista del grafo, es decir, |E| veces (donde |E| es el número de aristas). Dentro de este bucle, el bucle for itera sobre las conexiones de cada nodo. En el peor de los casos, un nodo podría estar conectado a todos los demás nodos del grafo, lo que llevaría a un grado máximo de |V|-1 (donde |V| es el número de nodos).
+En la práctica, la eficiencia del algoritmo dependerá del grado medio de los nodos en el grafo. 
+Si la mayoría de los nodos tienen un grado relativamente bajo (es decir, están conectados solo a 
+unos pocos otros nodos), entonces la eficiencia del algoritmo todavía estará cerca de O(E). 
+Sin embargo, si muchos nodos tienen un grado alto, entonces la eficiencia del algoritmo podría acercarse más a O(E^2).
 
-En general, este algoritmo tiene una complejidad en tiempo de O(|E| * (|V|-1)), o simplemente O(|E| * |V|) en términos asintóticos.	
 */				
