@@ -37,13 +37,13 @@ Función de objetivo: No es necesario establecer una función de objetivo para e
 
 #include <queue>
 #include <set>
-#include <stack>
+#include <list>
 #include "./graph.h"
 #include "./node.h"
 
 /**
- * @brief Determina si dos elementos en un grafo estarien en la misma componente conexa de eleiminar un eje entre ellos
- * nodo1 y nodo2
+ * @brief Determina si dos elementos en un grafo estarian en la misma componente 
+ * conexa tras eleiminar un eje entre ellos nodo1 y nodo2
  * @pre Existe un eje entre nodo1 y nodo2
  */
 template <typename T>
