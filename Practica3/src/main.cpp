@@ -1,5 +1,3 @@
-
-
 /*
 Compile from the project's root folder with:
 g++ ./include/* ./src/main.cpp -o ./bin/main.bin
@@ -12,7 +10,7 @@ Execute it from the project's root folder with:
 #include <fstream>
 #include "../include/graph.h"
 #include "../include/node.h"
-#include "../include/algoritmo.cpp"
+#include "../include/camino_de_euler.h"
 
 using namespace std;
 
