@@ -368,28 +368,256 @@ La idea básica de Quicksort, para ordenar un vector v de tamaño n es la siguie
 * Ordenar los dos subvectores generados.
 * Combinar las dos soluciones para obtener v ordenado.
 
-## 5.2 Diseño
-### 5.2.1 Diseño: 1. Division del problema en subproblemas
+### 5.2 Diseño
+#### 5.2.1 Diseño: 1. Division del problema en subproblemas
 La división del problema consiste en:
 * Podrı́amos dividir el vector en dos de tamaño parecido (n/2) independientes y que pueden resolverse por separado.
 * Para dividir el vector, seleccionaremos un elemento al que llamaremos pivote, de modo que los elementos menores que el pivote queden a la izquierda del vector, y os mayores o iguales a la derecha.
 * En un caso óptimo, el pivote dividirá al vector en dos mitades iguales. En el peor caso, dejará un subvecgtor con 1 elemento y otro subvector con n−1 elementos.
 
-### 5.2.2 Diseño: 2. Resolucion de cada problema y combinacion
+#### 5.2.2 Diseño: 2. Resolucion de cada problema y combinacion
 La resolución de los subproblemas y su combinación consiste en:
 * Se reordenarán los dos subvectores. Al llegar a un caso base de 1 elemento, el vector estará ordenado.
 * La penúltima llamada recursiva (vector de 2 elementos) también hará que el vector resultante esté ordenada, poruqe hemos pivotado y el elemento mayor estará en la segunda posición, mientras que el elemento menor estará en la primera.
 * En las llamadas recursivas aneriores, pasará lo mismo gracias a que se va pivotando cada vez que se ejecuta la función.
 * Por tanto, no se requiere combinación adicional para Quicksort: los métodos de pivotaje y las llamadas recursivas lo aplican inherentemente.
 
-### 5.2.3 Diseño: 3. Caso base
+#### 5.2.3 Diseño: 3. Caso base
 Se pasará cuando el vector a ordenar tengo tamaño 1.
 
-### 5.2.4 Diseño: 4. Adaptacion a la plantilla DyV
+#### 5.2.4 Diseño: 4. Adaptacion a la plantilla DyV
 Su adaptación será:
+```c++
+    Funcion S = QS(V, ini, fin)
+        SI ini >= fin DEVOLVER S = vacio;
 
+        En otro caso, hacer:
+            [PosPivote, V] = Pivotar(V, ini, fin);
+            V = QS(V, ini, PosPivote);
+            V = QS(V, PosPivote + 1, fin);
+        
+        Fin-En otro caso
+        DEVOLVER V
 
+La adaptacion del metodo Pivotar es:
+    Funcion [PosPivote, V] = Pivotar(V, ini, fin)
+        Pivote = V[ini];
+        i = ini + 1;
+        j = fin;
+        Mientras (i <= j) Hacer:
+            Intercambiar(V[i], V[j]);
+            Mientras (V[i] < Pivote && i <= j) Hacer:
+                i = i + 1;
+            Mientras (V[j] >= Pivote && i <= j) Hacer:
+                j = j - 1;
+        Fin - Mientras;
 
+        Si (ini < j)
+            Intercambiar(V[ini], V[j]);
+
+        Devolver [j, V];
+```
+### 5.3 Implementacion en C++
+>**Implementación QuickSort**
+```c++
+void QuickSort(double *v, const int ini, const int fin){
+    if (ini < fin){
+        int posPivote = pivotar(v, ini, fin);
+        QuickSort(v, ini, posPivote);
+        QuickSort(v, posPivote + 1, fin);
+    }
+}
+```
+>**Implementacion Pivotar**
+```c++
+int pivotar(double *v, const int ini, const int fin){
+    double pivote = v[ini];
+    double aux;
+
+    while (i <= j){
+        while (v[i] < pivote && i <= j) i++;
+        while (v[j] >= pivote && i <= j) j--;
+
+        if (i < j){
+            aux = v[i];
+            v[i] = v[j];
+            v[j] = aux;
+        }
+    }
+
+    if (j > ini){
+        v[ini] = v[j];
+        v[j] = pivote;
+    }
+    return j;
+}
+```
+## 5.4 Eficiencia QuickSort
+La eficiencia:
+* `En el peor de los casos:` T (n) = T (n − 1) + n → Eficiencia `O(n²)`.
+* `En el mejor de los casos:` T (n) = 2 · T (n/2) + n → Eficiencia `Ω(n · log(n))`
+En caso promedio, Quicksort, se comporta mejor que los demás algoritmos de ordenación (incluyendo MergeSort), debido a que la probabilidad de que ocurra el peor caso es muy baja.
+
+# 6. El problema de seleccion O(n²) O(n)
+## 6.1 Definicion del problema
+Sea un vector v de n componentes. Se desea conocer qué elemento se situarı́a ne la i-ésima posición del vector en caso de que este estuviese ordenado.
+
+## 6.2 Metodo basico
+Bastarı́a con ordenar el vector y devolver el elemento que hubiese en la i-ésima posición. La complejidad del método es O(n · log(n)), dado que la ordenación tiene esa eficiencia y es la operación más compleja que se realiza.
+
+## 6.3 La idea general
+No necesitamos que el vector esté ordenado completamente. Basta con que el elemento de la i-ésima posición esté ordenado.
+
+Podemos reutilizar la **función pivotar de QuickSort** para resolver el problema dado que, al terminar su ejecución, en la j-ésima posición del vector se encuentra el pivote y todos los elementos a su izquierda son menores que él, por lo que se encuentra en su posición ordenada.
+
+## 6.4 Diseño: 2. Division del problema en subproblemas
+La división en subproblemas consiste en:
+* Para encontrar el elemento en la i-ésima posición del vector, colocaremos todos los elementos menores que un pivote a la izquierda del vector, y los elemenots mayores o iguales en la parte derecha. La posición del pivote, posPivote, estará ordenada por tanto.
+* Si la posición i que buscamos es la posición del pivote, hemos terminado.
+* Si la posición i que buscamos es inferior a posPivote, entonces dividimos el problema en 1 subproblema (vector v desde la primera posición hasta posPivote).
+* Si la posición i que buscamos es superior a posPivote, entonces dividimos el problema en 1 subproblema (vector v desde posPivote+1 hasta la última componente).
+
+## 6.5 Diseño: 3. Resolucion de cada subproblema y combinacion
+* Se volverá a calcular el pivote para el subvector generado, aplicando recursivamente el procedimiento hasta que se encuentre la i-ésima posición.
+* Como la función de pivotar deja en posPivote el elemento que estamos buscando, y sólo dividimos el problema en 1 subproblema, no es necesario realizar combinación ni operaciones adicionales.
+
+## 6.6 Diseño: 4. Metodo Pivotar
+```c++
+Funcion [PosPivote, V] = Pivotar(V, ini, fin)
+    Pivote = V[ini];
+    i = ini + 1;
+    j = fin;
+
+    Mientras (i <= j) Hacer:
+        Intercambiar(V[i], V[j]);
+        Mientras (V[i] < Pivote && i <= j) Hacer:
+            i = i + 1;
+        Mientras (V[j] >= Pivote && i <= j) Hacer:
+            j = j - 1;
+    Fin - Mientras;
+
+    Si (ini < j)
+        Intercambiar(V[ini], V[j]);
+
+    Devolver [j, V];
+```
+## 6.7 Diseño: 5. Caso base
+Se pasará cuando posPivote sea la componente i deseada.
+
+## 6.8 Diseño: 6. Adaptacion de la plantilla DyV
+```c++
+Funcion S = Seleccion(V, ini, fin, i)
+    SI ini == fin DEVOLVER S = V[ini];
+
+    EN OTRO CASO, HACER:
+            [posPivote, V] = Pivotar(V, ini, fin)
+            SI (posPivote == i) DEVOLVER V[posPivote]:
+            EN OTRO CASO
+                SI (posPivote > i) DEVOLVER Seleccion(V, ini,posPivote-1);
+        EN OTRO CASO
+        SI (posPivote < i) DEVOLVER Seleccion(V, posPivote, +1, fin, i);
+        FIN - EN OTRO CASO
+```
+
+## 6.9 Implementacion en c++
+```c++
+double Seleccion(double *v, const int ini, const int fin, const int i){
+    if (ini == fin) return v[ini];
+
+    int posPivote = pivotar(v, ini, fin);
+
+    if (posPivote == i) return v[posPivote];
+    if (posPivote > i) return Seleccion(v, ini, posPivote-1, i);
+
+    return Seleccion(v, posPivote+1, fin, i);
+}
+
+int pivotar(double *v, const int ini, const int fin){
+    double pivote = v[ini];
+    double aux;
+
+    while (i <= j){
+        while (v[i] < pivote && i <= j) i++;
+        while (v[j] >= pivote && i <= j) j--;
+
+        if (i < j){
+            aux = v[i];
+            v[i] = v[j];
+            v[j] = aux;
+        }
+    }
+
+    if (j > ini){
+        v[ini] = v[j];
+        v[j] = pivote;
+    }
+    return j;
+}
+```
+## 6.10 Eficiencia de Seleccion
+La efiencia en distintos casos:
+* `En el peor de los casos:` Selección divide al vector en dos partes, de tamaño 1 y n−1 respectivamente. Por tanto su eficiencia será: T (n) = T (n−1)+n → `O(n²)`
+* `En el mejor caso:` Selección divide al vector en dos partes de igual tamaño n/2. Por tanto su efiencia será: T (n) = T (n/2) + n → `Ω(n).`
+* Al igual que ocurre con QuickSort, es muy improbable que se dé el peor caso, por lo que en promedio se comporta como Ω(n).
+
+# 7. Multiplicacion rapida de enteros largos O(n^log2³)
+## 7.1 Definicion del problema
+Sean dos números positivos A y B con n dı́gitos cada uno. Se desea calcular la multiplicación C = A · B.
+
+## 7.2 Metodo basico
+Existen multitud de métodos de multiplicación. El método más básico tiene una eficiencia de O(n²).
+
+## 7.3 La idea general
+Haciendo una descomposición de cada entero en sumas de coeficientes por potencias de 10, intentar dividir el problema en varios subproblemas más pequeños:
+> A = a0 + 10a1 + 102 a2 + ... + 10n an
+> B = b0 + 10b1 + 102 b2 + ... + 10n bn
+
+## 7.4 Diseño: 1. Division del problema en subproblemas
+Dividiremos cada entero A y B, de tamaño n, en dos enteros de tamaño n/2 cada uno:
+> A = a0 + 10^n/2 * a1
+> B = b0 + 10^n/2 * b1
+
+Dividimos el problema en 3 subproblemas:
+* P 1 = (a0 + a1 ) · (b0 + b1 )
+* P 2 = a1 · b1
+* P 3 = a0 · b0
+
+## 7.5 Diseño: 2. Resolucion de cada subproblema y combinacion
+Los subproblemas P 1, P 2, P 3 son independientes y se resolverán por separado. Llamemos S1, S2, S3 a la subsoluciones de cada uno de los subproblemas.
+
+Combinaremos las subsoluciones de la siguiente forma para llegar a la solución global S:
+* Parcial: S1 − S2 − S3 (el cálculo de (a1 b0 + a0 b1 )).
+* S = 10^n * S2 + 10^n/2 · Parcial + S3.
+
+## 7.6 Diseño: 3. Caso base
+Se parará cuando n = 1, es decir, multiplicación de números de 1 dı́gito.
+
+## 7.7 Eficiencia
+La eficiencia de la función:
+* Reescribir los números A = (a0 , a1 ), B = (b0 , b1 ) es O(1)
+* El algoritmo tiene 3 llamadas recursivas para resolver el problema de tamaño n/2.
+* Suponemos que las sumas y restas podrı́an ser implementadas como O(n).
+Por tanto, la ecuación de recurrencias es:
+> T (n) = 3T (n/2) + n
+Resolviendo la ecuación, obtenemos que la eficiencia es `O(nlog_2(3))`
+
+## 7.8 Diseño: 4. Adaptacion a la plantilla DyV
+```c++
+Funcion S = Multiplica(A, B)
+    SI n = 1, ENTONCES S = A * B;
+
+    EN OTRO CASO, HACER:
+        Reescribir A = (a0, a1), B = (b0, b1)
+        S3 = Multiplica(a0, b0)
+        S2 = Multiplica(a1, b1)
+        S1 = Multiplica(a0+a1, b0+b1)
+        Parcial = S1-S2-S3
+        S = 10^n * S2 + 10^(n/2) * Parcial + S3
+    FIN - EN OTRO CASO
+    DEVOLVER S
+```
+
+##7.9 Ejemplo
 
 
 
