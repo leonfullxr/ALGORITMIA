@@ -617,8 +617,462 @@ Funcion S = Multiplica(A, B)
     DEVOLVER S
 ```
 
-##7.9 Ejemplo
+## 7.9 Ejemplo
+> A = 1234 = a0 + 10^n/2·a1 → 34 + 12 · 10²
+> B = 5678 = b0 + 10^n/2·b1 → 78 + 56 · 10²
+> S1 = (12 + 34) · (56 + 78)
+> S2 = 12 · 56 = 672
+> S3 = 34 · 78 = 2652
+Por tanto:
+* Parcial = 2840
+* S = 10^4·S2 + 10²Parcial + S3 = 7006652
+
+# 8. Multiplicacion rápida de matrices O(n^log2(7))
+## 8.1. La idea general
+Haciendo una descomposición de cada matriz en submatrices que se puedan multiplicar entre sı́, intentar dividir el problema en varios subproblemas más pequeños.
+
+## 8.2. Diseño: 1. Division del problema en subproblemas
+Dividiremos cada matriz A y B en 4 submatrices de tamaño equivalente.
+An,n = ({A11, A12},{A21, A22})
+Bn,n = ({B11, B12},{B21, B22})
+Cn,n = ({C11, C12},{C21, C22})
+
+Se divide el problema en 7 subproblemas:
+* M = (A11 + A22 ) · (B11 + B22 )
+* N = (A21 + A22 ) · B11
+* O = (B12 − B22 ) · A11
+* P = (B21 − B11 ) · A22
+* Q = (A11 + A12 ) · B22
+* R = (A21 − A11 ) · (B11 + B12 )
+* S = (A12 − A22 ) · (B21 + B22 )
+
+## 8.3. Diseño: 2. Resolucion de cada subproblema y combinacion
+Los 7 subproblemas son independientes y se resolverán por separado. Llamaremos M , N , O, P , Q, R, S a las subsoluciones de cada uno de los subproblemas.
+Combinaremos las subsoluciones de la siguiente forma para llegar a la solución global C:
+* C11 = M + P − Q + S
+* C12 = O + Q
+* C21 = N + P
+* C22 = M + O − N + R
+
+## 8.4. Diseño: 3. Caso base
+Se pasará cuando n = 1, es decir, multiplicación de números.
+
+## 8.5. Adaptacion de la plantilla DyV
+```c++
+Funcion C = MultiplicaMat(A, B)
+    SI n = 1, ENTONCES C = A * B;
+    EN OTRO CASO, HACER:
+        Dividir A = [A11, A12; A21, A22] y B = [B11, B12; B21, B22]
+        M = MultiplicaMat(A11 + A22, B11 + B22);
+        N = MultiplicaMat(A21 + A22, B11);
+        O = Multiplica(A11, B12 - B22);
+        P = MultiplicaMat(A22, B21 - B11);
+        Q = MultiplicaMat(A11 - A11, B11 + B12);
+        S = MultiplicaMat(A12 - A22, B21 + B22);
+        Calcular C11 = M + P - Q + S;
+        Calcular C21 = O + Q;
+        Calcular C21 = N + P;
+        Calcular C22 = M + O - N + R;
+        Combinar C = [C11, C12; C21, C22]
+    FIN - EN OTRO CASO
+DEVOLVER C
+```
+## 8.6. Eficiencia
+Se calculan 7 multiplicaciones y k sumas y restas:
+> T (n) = 7T (n/2) + kn²
+Resolviendo la ecuación, obtenemos una eficiencia O(n^log2 (7) )
+
+# 9. La linea del horizonte O(n)
+## 9.1. Enunciado
+Se dispone como entrada de la silueta de n edificios, dada como ternas (x0 , xf , h) donde x0 es la posición inicial del edifcio, xf es la posición inicial y h la altura del mismo.
+
+Se desea obtener una lı́nea del horizonte, o silueta, de los mismos, con la representación de pares (x, h), indicando que .a partir de la coordenada x, se tiene una altura h”.
+
+![Image](./Imagenes/Imagen1-Tema9.png)
+
+## 9.2. Idea del algoritmo basico
+La idea básica consiste en:
+* Una posible solución al problema es comenzar con el horizonte inicializado a 0,
+con el par (0, 0). Seguidamente, irı́amos añadiendo edificios y comprobando, para
+cada edificio, las siluetas superpuestas.
+* Si no hay siluetas superpuestas, el nuevo edificio agrega su propia silueta.
+* Si se encuentra una silueta superpuesta, entonces la altutra de lal ı́nea del horizonte actual puede aumentar si el edificio es de mayor altura a las consideradas en sus coordenadas.
+
+## 9.3. Diseño: Algoritmo Basico
+```c++
+Funcion S = Basico (E: Conjunto de ternas (x0, xf, h))
+    S[0] = 0
+
+    PARA CADA edificio e = (x0, xf, h) en E, HACER:
+        PARA CADA posicion x ENTRE x0 y xf inclusive, HACER:
+            SI S[x] < h, HACER:
+                S[x] = h
+Este algortimo tiene una eficiencia de O(n²)
+```
+## 9.4. Diseño DyV: Idea general
+Se podrı́a dividir el conjunto de edificios en dos mitades, posteriormente fusionar los dos horizontes obtenidos.
+
+### 9.4.1. Division del problema en subproblemas
+1. Se diseñarán dos subproblmeas del problema original P de tamaño n: P 1 y P 2, conteniendo los edificios de la parte izquierda y la parte derecha, respectivamente. Se tratará de que el tamaño n1 y n2 sean lo más similares posible.
+2. La divisón se puede conseguir ne O(1) si se asume que los edificios se proporcionarán ordenados por componente x0 .
+
+### 9.4.2. Combinacion de soluciones
+Hay que combinar dos skylines S1 solución de P 1 y S2 solución de P 2, para dar lugar a la solución S del problema P original. La combinación se realizarı́a de la siguiente forma:
+1. Se analiza punto a punto cada skyline desde la izquierda a la derecha, y en cada punto se guarda el mayor valor de los dos skylines.
+2. El valor de altura en el punto seleccionado de S1 y S2 se guarda en S.
+
+## 9.5. Caso base
+El caso base indivisible se dará cuando el conjunto de edificios contenga un único edificio. En este caso, se aplica el método básico para resolver el problema.
+
+## 9.6. Diseño DyV: Estructura del algoritmo
+```c++
+Funcion S = Skyline(E: Conjunto de ternas(x0, xf, h))
+    SI |E| = 1, HACER:
+        DEVOLVER S = Basico(E)
+    EN OTRO CASO, HACER:
+        Partir E en dos subconjuntos E1, E2, con E1 los edifcios
+        ֒→ cuya componente x0 sea menor que la componente x0 de
+        ֒→ los edificios en E1
+        S1 = Skyline(E1)
+        S2 = Skyline(E2)
+        S = Combinar(S1, S2)
+        DEVOLVER S
+```
+La ecuación de recurrencias es:
+> T (n) = 2T (n/2) + n
+dando como resultado una eficiencia de **O(n · log(n))**
+
+## 9.7. Diseño DyV: Estructura de la combinacion
+```c++
+Funcion S = Combina(S1, S2)
+    Izquierda = minima componente x0 de S1 y S2
+    Derecha = maxima componente x0 de S1 y S2
+    S[0] = 0
+
+    PARA CADA valor 0 desde Izquierda a Derecha, HACER:
+        S[x] = maximo(S1[x], S2[x])
+
+    DEVOLVER S
+```
+El método Combina tiene una eficiencia de **O(n)**
 
 
+# Tema 3: Algoritmos Greedy
+## Indice
+1. [Algoritmos Voraces](#algoritmos-voraces)
+    1. [Diseño de algoritmos voraces](#diseño-voraces)
+    2. [Plantilla de algoritmos Greedy](#plantilla-greedy)
+2. [Problemas: enunciados y soluciones](#problemas-enunciados-soluciones)
+    1. [Problema del cambio de la moneda](#cambio-moneda)
+    2. [Plantilla Greedy](#plantilla-greedy-moneda)
+3. [El árbol generador minimal](#árbol-generador-minimal)
+    1. [Enunciado del problema](#enunciado-árbol)
+    2. [Algoritmo de Kruskal](#kruskal)
+        1. [Idea general](#kruskal-general)
+        2. [Diseño de componentes Greedy](#kruskal-greedy)
+        3. [Optimalidad](#kruskal-optimalidad)
+        4. [Diseño del algoritmo Greedy](#kruskal-algoritmo)
+        5. [Ejemplo de funcionamiento](#kruskal-ejemplo)
+    3. [Algoritmo de Prim](#prim)
+        1. [Idea general](#prim-general)
+        2. [Diseño de componentes Greedy](#prim-greedy)
+        3. [Optimalidad](#prim-optimalidad)
+        4. [Diseño del algoritmo Greedy](#prim-algoritmo)
+        5. [Ejemplo de funcionamiento](#prim-ejemplo)
+4. [Caminos mínimos](#caminos-minimos)
+    1. [Enunciado del problema](#enunciado-caminos)
+        1. [Entender el problema](#entender-caminos)
+    2. [Algoritmo de Dijsktra](#dijkstra)
+        1. [Idea general](#dijkstra-general)
+        2. [Diseño de componentes Greedy](#dijkstra-greedy)
+        3. [Optimalidad](#dijkstra-optimalidad)
+        4. [Demostración. Caso base](#dijkstra-caso-base)
+        5. [Diseño del algoritmo Greedy](#dijkstra-algoritmo)
+5. [El coloreo de un grafo](#coloreo-grafo)
+    1. [Enunciado del problema](#enunciado-coloreo)
+    2. [Complejidad del problema del coloreo de un grafo](#complejidad-coloreo)
+    3. [Heurísticas](#heurísticas-coloreo)
+    4. [Idea general](#idea-general-coloreo)
+    5. [Algoritmo de coloreo de un grafo: Diseño Greedy](#algoritmo-coloreo)
+    6. [Algoritmo del coloreo de un grafo: Diseño del algoritmo](#diseño-algoritmo-coloreo)
+6. [El problema de la mochila](#problema-mochila)
+    1. [Enunciado del problema](#enunciado-mochila)
+    2. [Problemas de la mochila](#problemas-mochila)
+    3. [Problema de la mochila continuo](#mochila-continuo)
+        1. [Posibles heurísticas](#mochila-heurísticas)
+        2. [Idea general](#mochila-general)
+        3. [Diseño Greedy](#mochila-greedy)
+        4. [Optimalidad](#mochila-optimalidad)
+        5. [Diseño del algoritmo](#mochila-algoritmo)
+        6. [Ejemplo](#mochila-ejemplo)
+7. [El viajante de comercio](#viajante-comercio)
+    1. [Enunciado del problema](#enunciado-viajante)
+    2. [Idea general](#viajante-general)
+    3. [Diseño Greedy](#viajante-greedy)
+    4. [Diseño del algoritmo](#viajante-algoritmo)
+    5. [Ejemplo](#viajante-ejemplo)
+    6. [Contraejemplo](#viajante-contraejemplo)
+8. [Planificación de tareas en el sistema](#planificación-tareas)
+    1. [Enunciado del problema](#enunciado-tareas)
+    2. [Idea general](#tareas-general)
+    3. [Diseño Greedy](#tareas-greedy)
+    4. [Optimalidad](#tareas-optimalidad)
+    5. [Algoritmo Greedy](#tareas-algoritmo)
+9. [Asignación de tareas](#asignación-tareas)
+    1. [Enunciado del problema](#enunciado-asignación)
+    2. [Heurísticas](#heurísticas-asignación)
+    3. [Diseño Greedy](#asignación-greedy)
+    4. [Heurística 1](#heurística-1)
+    5. [Heurística 2](#heurística-2)
+    6. [Diseño del algoritmo](#asignación-algoritmo)
 
+# 1. Algoritmos Voraces
+Los algoritmos voraces se caracterizan por:
+* Construir la solución paso a paso, por etapas.
+* En cada momento selecciona un movimiento de acuerdo con un criterio de selección (voracidad).
+* No vuelve a considerar los movimientos ya seleccionados ni los modifica en posteriores etapas (miopı́a).
+* Se necesita una función objetivo o criterio de optimalidad.
+Sus **ventajas** son: eficientes, fáciles de diseñar, fáciles de implementar.
+Sus **incovenientes** son:
+* Pueden no alcanzar la solución óptima.
+* Pueden no encontrar la solución aunque exista.
+* Es un enfoque poco elegante, si no se puede demostrar la optimalidad.
+Si un algoritmo puede no dar la solución óptima, basta con proporcionar dicha solución frente a la óptima para demostrarlo, lo que se llama un contraejemplo. Si es óptimo, normalmente se puede demostrar por la técnica de inducción y/o por reducción a lo absurdo.
 
+## 1.1. Diseño de algoritmos voraces
+Un algoritmo voraz podrá aplicarse siempre que se pueda:
+* Diseñar una lista de candidatos para formar una solución.
+* Identificar una lista de candidatos a utilizados.
+* Diseñar una función solución para saber cuándo un cojunto de candidatos es solucón al problema.
+* Diseñar un criterio de factibilidad (cuándo un conjunto de candidatos puede ampliarse para formar la solución final).
+* Diseñar una función de selección del candidato más prometedor para formar parte de la solución.
+* Existe una una función objetivo de minimización/maximización.
+
+## 1.2. Plantilla de algoritmos Greedy
+```c++
+Algoritmo S = Voraz(vector candiatos C)
+    S=∅
+    Mientras (C != ∅) y (S no es solución)
+        x = Selección de candidato C
+        C = C /{x}
+        Si es factible(S ∪ {x}) entonces
+            S = S ∪ {x}
+    Fin Mientras
+
+    Si S es solucion entonces
+        Devolver S
+    En otro caso
+        Devolver ”No hay solución”
+Fin Algoritmo
+```
+# 2. Problemas: enunciados y soluciones
+## 2.1. Problema del cambio de la moneda
+Supongamos que compramos un refresco en una máquina y, tras pagar, esta tiene que devolver un cambio n con el mı́nimo número de pagar, esta tiene que devolver un cambio n con el mı́nimo número de monedas.
+
+Supongamos en un primer momento que la máquina tiene puede dispensar un número infinito de cualquier tipo de moneda (1ctmo., 2 dispensar un número infinito de cualquier tipo de moneda (1ctmo., 2ctmos, etc.)
+* Lista de candidatos: las monedas posibles a utilizar.
+* Lista de candidatos utilizados: las monedas que se han ido seleccionando para ser devueltas.
+* Función solución: la suma de las monedas seleccionadas es la cantidad exacta que se debe devolver.
+* Función de selección: la moneda de mayor valor que, sumada a las seleccionadas, no supere la cantidad a devolver.
+* Criterio de factibilidad: la suma de las monedas atualmente seleccionadas no supera la cantidad que hay que devolver
+
+## 2.2. Plantilla Greedy
+El algoritmo del cambio de monedas serı́a:
+```java
+Algoritmo S = VorazMonedas(vector candiatos C)
+    S=∅
+    s=0
+    Mientras s != n)
+        x = el mayor elemento de C tal que s + x ≤ n
+        Si no existe ese elemento entonces
+            Devolver ”no encuentro solución”
+        S = S ∪ {una moneda de valor x}
+        C = C / {x}
+        s=s+x
+    Fin Mientras
+    Devolver S
+Fin Algoritmo
+```
+# 3. El arbol generador minimal
+## 3.1. Enunciado del problema
+Seas G = (V, A) un grafo no dirigido, conexo, ponderado con pesos no negativos, con V el conjunto de vertices del grafo y A el conjunot de aristas del grafo. El problema consiste en: Obtener un grafo parcial, conexo y acı́clico, tal que la suma de sus aristas sea mı́nima”
+
+Para comprender el problema, debemos entender que primero tenemos un grafo no dirigido, conexo y ponderado:
+> Queremos un grafo parcial (mismos nodos, subconjunto de aristas), que no tenga ciclos y que una todos los nodos. Requisito: suma del peso de las aristas sea mı́nimo.
+![Image](https://static.docsity.com/documents_first_pages/apuntes/2014/09/01/419026ac6017a38742d7d916c9b11ca2.png)
+
+## 3.2. Algoritmo de Kruskal
+### 3.2.1. Algoritmo de Kruskal: La idea general
+Inicialmente, la solución será un conjunto de aristas vacı́o. En cada paso, iremos construyendo la solución final seleccionand ola arista de menor coste de entre las aristas que forman la lista de candidatos.
+
+Si dicha arista no forma ciclos con las ya escogidas, será añadida a la solución. En caso contrario, será descartada. Como en cada paso vamos seleccionando la arista de menor coste, conviene tenerlas ordenadas previamente, para mejorar la eficiencia.
+
+**Ejemplo**:
+![Image](https://static.javatpoint.com/core/images/kruskal-algorithm-java.png)
+
+### 3.2.2. Algoritmo de Kruskal: Diseño de componentes Greedy
+Los componentes del algoritmo de Kruskal son:
+* Lista de candidatos: las aristas del grafo.
+* Lista de candidatos utilizados: las rasitas que se ha nido seleccionando desde el grafo original, haya sido añadidas a la solución o no.
+* Función solución: las aristas seleccionadas unen todos los nodos del grafo, sin formar ciclos.
+* Función de selección: se selecciona la a arista de menor coste.
+* Criterio de factibilidad: el conjunto de aristas seleccionado no forma ciclos.
+* Función objetivo: minimizar la suma de los pesos de las aristas que forman la solución.
+
+### 3.2.3. Algoritmo de Kruskal: Optimalidad
+Se hará una demostración de la optimalidad por reducción al absurdo:
+
+En un caso trivial dodne existe un grafo completo compuesto por 2 nodos, la única arista que une ambos nodos es elegida por el algoritmo, dando la solución óptima.
+
+En un caso base de dos subgragos donde uno contiene 2 nodos unidos por una arista previamente escogida, se deberá escoger otra arista (A or B) que una los dos subgrafos:
+
+El algoritmo escogerá la arista de menor peso (B), y se comprueba que la solución es óptima. Supongamos que el algoritmo sigue ejecutándose, y que en un momento tenemos dos subgrafos que se deben unir para fomrar el AGM, y que hay 2 potenicales aristas para unirlos, C, y D:
+
+El algoritmo escogerá la arista de menor peso (C):
+
+Sabemos que se trata de la solución óptima ya que en caso de no serlo, deberı́a de existir otra arista (A1, A2 o D) que hiciese que la suma de los pesos de las aristas seleccionadas fuese menor que la suma actual.
+
+Cualquiera que fuse esta arista, tendrái un peso menor que C, y el algoritmo la habrı́a seleccionado con antelación.
+
+Como esto no ha sido aı́, entonces esa arista no existe, y C es la arista de menor peso que hace que la suma sea mı́nima.
+
+### 3.2.4. Algoritmo de Kruskal: Diseño del algoritmo Greedy
+```java
+Algoritmo T = Kruskal(grafo G=(V,A))
+    Ordenar A por orden creciente de pesos
+    N = Número de vértices en V
+    T = ∅ // T es la Solución a construir
+    Mientras Nº aristas en T = N − 1
+        a = Repetir de A más corta no considerada A = A / {x}
+        Si T∪ {a} entonces
+            T = T ∪ {a}
+    Fin Mientras
+    Devolver S
+Fin Algoritmo
+```
+Eficiencia del algoritmo de Kruskal: **O(|A| · log(|V |)).**
+
+## 3.3. Algoritmo de Prim
+### 3.3.1. Algoritmo de Prim: Idea general
+La solución es un conjunto de aristas. La idea general de Prim es seleccionar nodos. Inicialmente, la solución será un conjunto de aristas vacı́o y tendremos un nodo inicial como candidato utilizado.
+
+En cada paso, iremos construyendo la solución final seleccionando un nodo para unirlo con los que ya tenemos seleccionados, bajo el criterio de que la arista que une ese nodo con alguno de los ya seleccionados tenga coste mı́nimo.
+
+### 3.3.2. Algoritmo de Prim: Diseño de componentes Greedy
+Los componentes del algoritmo son:
+* Lista de candidatos: los nodos del grafo original.
+* Lista de candidatos utilizados: los nodos usados para obtener las aristas que forman la solución.
+* Función solución: el número de nodos seleccionados es igual al número de nodos del grafo.
+* Función de selección: se selecciona el nodo no utilizado tal que la arista que une el nodo con uno ya utilizado tiene coste mı́nimo.
+* Criterio de factibilidad: no debe existir ciclos en los nodos seleccionados. Co- mo siempre cogemos un nodo nuevo con la función de selección, el criterio de factibilidad siempre se cumple.
+* Función objetivo: minimizar la suma de los pesos de las aristas que forman la solución.
+
+### 3.3.3. Algoritmo de Prim: Optimalidad
+El algoritmo de Prim también devuelve la solución óptima. Su demostración es análoga a Kruskal.
+
+### 3.3.4. Algoritmo de Prim: Diseño del algoritmo de Greedy
+```java
+Algoritmo T = Prim(grafo G=(V,A))
+    B = {elemento cualquiera de V} // Candidatos usados
+    T = ∅ // Solución a crear
+    Mientras |B| != |V |
+        Seleccoinar un nodo v tal que existe una arista a = (b, v) de peso
+        --> mı́nimo, que una un nodo b en B y otro nodo v en V /B
+        T = T ∪ {a}
+        B = B ∪ {v} 
+    Fin Mientras
+    Devolver S
+Fin Algoritmo
+```
+Eficiencia del algoritmo dde Prim: **O(|V|²).**
+
+### 3.3.5 Algortimo de Prim: Ejemplo de funcionamiento
+![Image](https://static.javatpoint.com/core/images/prims-algorithm-java.png)
+
+# 4. Caminos minimos
+## 4.1. Enunciado del problema
+Sea G = (V, A) un grafo dirigido, ponderado con pesos no negativos, con V el con- junto de vértices del grafo y A el conjunto de aristas del grafo. El problema consiste en:
+
+Obtener un conjunto de secuencias de nodos/aristas que definan un camino mı́nimo entre nodo origen y todso los demás nodos del grafo’.
+
+## 4.2. Algoritmo de Dijkstra
+## 4.3. Algoritmo de Dijkstra: Idea general
+El algoritmo de Dijsktra consiste en:
+* Supondremos que los nodos están enumerados entre 0 y n − 1.
+* La solución serán dos vectores P y D.
+    * P [i] contiene el elemento anterior por el que hay que pasar en el camino mı́nimo entre el nodo inicial S dado y el nodo i.
+    * D[i] contiene la distancia existente para el camino mı́nimo entre el nodo inicial a S dado y el nodo i.
+* Existe una matriz L, donde cada componente L[i][j] indica el coste de vaijar desde el nodo i al nodo j directamente (matriz de adyacencia).
+Inicialmente supondremos que la distancia mı́nima entre S y cualquier otro nodo es la del peso de la arista que une directamente S con ese nodo en la matriz de adyacencia:
+> D[i] = L[S, i]
+Seguidamente, para cada nodo i, iremos comprobando si es mejor ir directamente desde S hasta i, o pasando por otro nodo v. Se irá comprobando para cada nodo i y cada nodo intermedio v por el que se pueda pasar, hasta que hayamos agotado todas las posibilidades. En cada proceso, iremos actualizando el camino mı́nimo.
+
+### 4.3.1. Algoritmo de Dijkstra: Diseño de componentes Greedy
+Los componentes del algoritmo son:
+* Lista de candidatos: los nodos del grafo original, salvo S.
+* Lista de candidatos utilizados: los nodos usados para obtener las aristas que forman la solución.
+* Función solución: se han seleccionado |V | − 1 nodos del grafo.
+* Función de selección: se selecciona el nodo v no utilizado cuyo valor D[v] sea mı́nimo.
+* Criterio de factibilidad: siempre es factible insertar un nodo en la solución optimal. Se cumple gracias a la función de selección.
+* Función objetivo: minimizar la distancia de un nodo inicial S al resto de nodos del grafo.
+
+### 4.3.2. Algoritmo de Dijkstra: Optimalidad
+Hay que demostrar que:
+1. Si un nodo i no está en C, entonces D[i] es óptimo.
+2. Si un nodo i está en C, entonces D[i] es óptimo considerando sólo los nodos intermedios entre S e i que no están en C.
+
+### 4.3.3. Algoritmo de Dijkstra: Demostración. Caso base
+Inicialmente, C = V /{S}, por lo que se cumple que el camino óptimo de S a cualquier
+otro nodo, sin pasar por nodos intermedios, es óptimo dado que se deriva directamente de la matriz de adyacencia.
+
+**Paso de demostración para el caso (1)**
+Cuando se selecciona un nodo v, tiene D[v] mı́nimo. No existirá otro nodo posterior v2 a seleccionar que haga D[v] se reduzca.
+
+Si existiese tal nodo v2, se hubiera seleccionado v2 antes que v por el criterio de selección, por lo que deducimos que no puede existir un nodo v2 con tales caracterı́sticas.
+
+Por tanto, todos los nodos en V/C tienen distancia D óptima porque no peude existir el nodo v2, seleccionado posteriormente, que haga que un nodo v en V/C reduzca su distancia mı́nima D[v].
+
+**Paso de demostración para el caso (2)**
+En el momento de seleccionar un nodo v, pasa al conjunto V/C (candidatos utilizados). Todos los demás nodos w en C actualizan su distancia mı́nima D[w] si es necesario, a:
+> D[w] = min{D[w], D[v] + L[v][w]}
+D[w] es optimal según la hipótesis del caso 2. Si no lo fuese, entonces existirá otro nodox en V/C, visitado antes que v, que cumpliese:
+> D[x] + L[x][w] ≤ min{D[w], D[v] + L[v][w]}
+haciendo que la distancia optimal D[w] sea inferior a la que el algoritmo calcula.
+
+Este nodo x no puede existir, pues al ser añadido anteriormente, el algoritmo ya hizo la comprobación del mı́nimo y D[w] se deberı́a haber actualizado entonces, de modo que:
+> D[w] = D[x] + L[x][w] ≤ D[v] + L[v][w]
+Como no puede existir ese nodo anteriormente escogido x, entonces D[w] debe ser óptimo bajo la hipótesis del caso 2.
+
+Al finalizar el algoritmo todso los nodos (menos uno, llamémosle w) están en V/C.
+
+Por tanto, todos los nodos en V/C tiene distancia D[v] óptima, y también D[w], pues no existe ningún otro nodo en C que pueda hacer reducir su distancia.
+
+### 4.3.4. Algoritmo de Dijkstra: Diseño del algoritmo de Greedy
+```java
+ALGORITMO [D,P] = Dijkstra(G = (V,A), L, S)
+    n = |V|
+    C = V \ {S}
+
+    PARA i = 1 HASTA n, HACER:
+        D[i] = L[S][i];
+        P[i] = S;
+
+    REPETIR n - 2 VECES:
+        v = elemento de C tal que D[v] es minimo
+        C = C \ {v}
+        PARA CADA w en C, HACER:
+            SI D[w] > D[v] + L[v][w] ENTONCES:
+                D[w] = D[v] + L[v][w];
+                P[w] = v;
+            FIN - SI
+        FIN - PARA
+    FIN - REPETIR
+
+DEVOLVER D, P
+```
+Eficiencia del algoritmo de Dijkstra:
+* Grafos densos: O(|V|²)
+* Grafos no densos: O(|A| · log(|V|))
+
+# 5. Coloreo de un grafo
+## 5.1. Enunciado del problema
