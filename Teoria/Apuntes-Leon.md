@@ -1234,5 +1234,96 @@ Fin Algoritmo
 * Greedy: (A,B), (B,D), (D,C), (C,A): Coste 9
 * Optimo: (A,D), (D,B), (B,C), (C,A): Coste 8
 
-# 8. Planificación de tareas en el sistema
+# Tema 4: Programacion Dinamica
+## Indice
+
+
+# 1. Caracterı́sticas de la programación dinámica
+Los algoritmos de programación dinámica se caracterizna por:
+* Construir la solución paso a paso, por etapas.
+* Dividir un problema de tamaño n en uno o varios porblemas de tamaño n − 1, que se solapan entre sı́.
+* Mantiene en memoria la solución a los subproblemas solucionados para evitar cálculos repetidos.
+Sus **ventajas** son:
+* Eficientes en tiempo.
+* Devuelven la solución óptima.
+* Fáciles de implementar.
+Sus **desventajas** son:
+* Ineficientes en tiempo.
+* Mayor dificultad para plantear el problema.
+* Tiene varios requisitos que deben cumplirse para poder aplicar la técnica.
+
+## 1.1 En comparación con DyV
+* DyV se aplica cuando los subproblemas son independientes mientras que P.D se aplica cuando los subproblemas se solapan.
+* DyV utiliza recurisividad (+tiempo, -memoria) y P.D. intenta evitar recurisividad (-tiempo, +memoria).
+* P.D. solo resuelve problemas de optimización.
+* P.D. devuelve la solución óptima (DyV no tiene porqué tener una función de optimización objetivo).
+* DyV repetiriá muchos cálculos mientras que P.D. mantiene en memoria las subsoluciones para evitar repetir cálculos.
+
+## 1.2. En comparación con Greedy (algoritmos voraces)
+* Greedy selecciona un elemento en cada etapa y genera una única subsolución.
+* P.D. selecciona un elemento en cada etapa, pero genera múltiples caminos de etapas a seguir.
+* Greedy no asegura optimalidad.
+* P.D. asegura optimalidad.
+* Greedy es eficiente en tiempo y memoria.
+* P.D. es eficiente en tiempo, pero no memoria.
+
+## 1.3. Programación dinámica: Idea general
+Se utilizan para resolver problemas de optimización (maximización/minimización). Se expresa mediante ecuaciones recurrentes. Solucionan uno o varios subproblemas de tamaño menor para resolver un problema de tamaño mayor.
+
+Normalmente, los subproblemas se solapan entre sı́. Hacen uso de memoria para eviatar repetir operaciones.
+
+Algunos algortimos que no son de programación dinámica, pero que también hacen uso de la idea de abuscar de la memoria para conseguir una mayor eficiencia:
+* Cálculo de la sucesión de Fibonacci.
+* Cálculo del coeficiente binomial.
+* El problema de los Play-Offs.
+
+# 2. La técnica de programación dinámica
+Los requisitos que se deben cumplir para aplicar la técnica:
+* El problema a resolver debe ser un problema de optimización (maximización/minimización).
+* El problema debe poder resolverse por etapas.
+* El problema debe poder moderlarse mediante una ecuación recurrente.
+* Debe existir uno o varios casos base al problema.
+* Debe cumplirse al Principio de Optimalidad de Bellman.
+
+## 2.1. Principio de optimalidad de Bellman (P.O.B)
+Si una secuencia de pasos para resolver un problema es óptima, entonces cualquier subsecuencia de estos mismos pasos también es óptima.
+
+## 2.2. Pasos para resolver un problema mediante P.D.
+Los pasos para resolver un problema de P.D. son:
+* El problema debe resolverse por etapas.
+* Plantear el problema como una ecuación de minimización o maximización recursiva, con uno o varios casos base.
+* Encontrar una representación de la ecuación para almacenar las subsoluciones (una tabla, un vector, etc).
+* Verificar que se cumple el P.O.B.
+* Diseñar el algoritmo.
+
+# 3. El problema del cambio de monedas
+## 3.1. El enunciado del problema
+Supongamos que compramos un refresco en una máquina y, tras pagar, esta tiene que devolver un cambio N con el mı́nimo número de monedas. Asumiremos lo siguiente:
+* Hay monedas de n valores diferentes.
+* Las monedas tipo i tienen valor di > 0.
+* Las monedas están ordenadas por su valor, en orden creciente.
+* Al cliente hay que devolverle un cambio igual a N .
+* Objetivo: minimizar el número de monedas a devolver.
+
+## 3.2. Diseño del problema cambio de monedas: Resolución por etapas
+La resolución por etapas es la siguiente:
+* Asumimos que los tipos de monedas están ordenados de forma creciente, de modo que su valor es: d1 < d2 < d3 < ... < dn .
+* Sin pérdida de generalidad asumiremos di = 1 para simplificar la explicación del
+problema.
+* Llamaremos a T (i, j) = número mı́nimo de monedas necesario para devolver una cantidad igual a j usando sólo monedas del tipo desde 1 hasta i.
+* Por tanto, el objetivo es conocer T (n, N ).
+* Podemos resolver el problema T (n, N ) por etapas para devolver la cantidad N , donde en cada etapa podemos comprobar si se puede devolver una moneda del máximo valor para construir la solución, o no devolverla (en ese caso sólo se usarı́an monedas de hasta el tipo de moneda anterior).
+
+## 3.3. Diseño del problema de monedas: Ecuación (I)
+* Objetivo: conocer T (n, N ) = mı́nimo número de monedas para devolver la cantidad N considerando usar cualquier subconjunto de monedas de cualquier tipo, desde el 1 hasta el n.
+* Caso base:
+    * T (i, 0) = 0 → No hay que devolver cambio.
+    * T (1, j) = j → Sólo devolvemos monedas de tipo 1.
+* Caso general:
+> T [i][j] = min{T [i − 1][j], 1 + T [i][j − di ]}
+El caso general supone que para devolver la cantidad j usando sólo monedas desde el tipo 1 hasta el i, el mı́nimo número de monedas se conseguirá de una de las dos formas siguientes:
+* No echar una moenda de tipo i y usar sólo desde 1 hasta i − 1: primera parte T [i − 1][j].
+* Echar una moneda de tipo i, quedando por devolver sólo la cantidad j − di y viendo si podemos seguir echadno monedas del mismo tipo i: segunda parte 1 + T [i][j − di ].
+
+## 3.4. Diseño del problema del cambio de monedas: Verificación del P.O.B
 
