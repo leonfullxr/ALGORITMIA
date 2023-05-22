@@ -1071,8 +1071,168 @@ ALGORITMO [D,P] = Dijkstra(G = (V,A), L, S)
 DEVOLVER D, P
 ```
 Eficiencia del algoritmo de Dijkstra:
-* Grafos densos: O(|V|²)
-* Grafos no densos: O(|A| · log(|V|))
+* Grafos densos: `O(|V|²)`
+* Grafos no densos: `O(|A|·log(|V|))`
 
 # 5. Coloreo de un grafo
 ## 5.1. Enunciado del problema
+Sea G =< V, A > un grafo no dirigido. Se desea asignar un color a cada nodo del grafo de modo que:
+* No haya dos nodos adyacentes con el mismo color.
+* Se utilicen el mı́nimo número de colores posibles.
+![Image](https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1743598%2Ff66ea11cc3d8f0cf7fe3f80cc81806ef%2Fejemplo.JPG?generation=1582198157556349&alt=media)
+
+## 5.2. Complejidad del problema del coloreo de un grafo
+La complejidad del problema consiste en:
+* Clase de problemas P: engloba a todos los problemas que son resolubles en un tiempo inferior a orden polinómico O(n^k).
+* Clase de problemas NP: engloba a todos los problemas cuya solución es fácil de verificar, pero el cálculo de la misma conlleva una complejidad muy grande debido a la gran cantidad de potenciales solucoines (óptimas y no óptimas) a explorar.
+* El coloreo de un grafo es NP, por lo que no se conocer una solución eficiente al
+mismo.
+
+## 5.3. Heuristicas
+Al no conocerse soluciones óptimas eficientes a los problemas NP, si la eficiencia es un requisito en la implementación nos conformamos con soluciones suficientemente buenas o las mejores que podamos encontrar.
+
+## 5.4. La idea general
+Inicialmente, supondremos que ningún nodo del grafo estará coloreado. A continuación, seleccionaremos un nodo del grafo al azar, y lo pintaremos de un color.
+
+Entonces, escogeremos todos los nodso no adyacentes del nodo seleccionado que aún no estén colorados, y los pintaremos del mismo color. Por último, repetiremos el procedimiento anterior hasta completar todos los nodos del grafo.
+
+## 5.5. Algoritmo de coloreo de un grafo: Diseño Greedy
+El diseño del algoritmo es el siguiente:
+* Lista de candidatos: los nodos del grafo.
+* Lista de candidatos utilizados: los nodos ya coloreados.
+* Función solución: todos los nodos del grafo están coloreados.
+* Función de selección: seleccionar un nodo al azar.
+* Criterio de factibilidad: el nodo seleccionado no puede estar coloreado.
+* Función objetivo: minimizar el número de colores usado para colorear el grafo.
+
+## 5.6. Algoritmo del coloreo de un grafo: Diseño del algoritmo
+```java
+ALGORITMO T = Coloreo(G = <V,A>)
+    C = V // Conjunto de candidatos
+    T = {0}_n // Vecotr de n colores asignados al grafo, sin
+    ֒→ valor
+    K = 1; // Color actual
+
+    MIENTRAS (|C| > 0) HACER:
+        Seleccionar i = Nodo cualquiera de C
+        C = C \ {i}
+        T[i] = K // Asignar color K al nodo i
+
+        PARA CADA nodo j en C no adyacente a i, SI ES FACTIBLE
+֒        -→ , HACER:
+            T[j] = K
+            C = C \ {i}
+        FIN - PARA
+        K = K + 1
+    FIN - MIENTRAS 
+DEVOLVER T
+```
+# 6. El problema de la mochila
+## 6.1. Enunciado del problema
+Se dispone de un conjunto de n objetos, indexados de 1..n.. Para cada objeto i, se conoce su beneficio bi y su peso wi (números reales positivos).
+
+Se dispone de un contenedor (mochila) con una capacidad para almacenar un peso máximo de M . Se desea encontrar un conjunto de valores X = {x1 , x2 , ..., xn }, donde xi es la cantidad a llevar para el objeto i, tal que se maximice la siguiente expresión:
+> max_xi{Sumatoria i=1,---,n b_i·x_i}
+Sujeto a la restrucción:
+> {sumatoria i=1,---,n w_i·x_i} <= M
+
+## 6.2. Problemas de la mochila
+Existen tres tipos de problemas de mochila:
+* Mochila continua: cada objeto que podemos llevar puede fraccionarse.
+* Mochila O/1: los objetos son únicos y no se fraccionan. Nos llevamos todo el objeto o nada.
+* Mochila discreto: los objetos no se fraccionan, pero podemos lelvarnos más de uno del mismo tipo (2 de A, 1 de B, 3, de C, etc).
+
+## 6.3. Problema de la mochila continuo
+Supondremos que las cantidades que podemos llevar de cada objeto es un númeor real, normalizado al intervalo [0,1] (xi = 0 no llevamos nada del objeto i, xi = 1 nos llevamos el objeto i al completo, xi = r entre 0 y 1 nos llevamos el r % de i).
+
+### 6.3.1. Problema de la mochila continuo: posibles heurı́sticas
+* Escoger máxima cantidad del objeto de máximo beneficio.
+* Escoger máxima cantidad del objeto de menor peso.
+* Escoger máxima cantidad del objeto i tal que i = maxi {bi /wi }.
+
+### 6.3.2. Algoritmo de la mochila continua: Idea general
+Inicialmente, supondremos que la mochila está vacı́a y que no estamos llevando ningún objeto. En cada paso, iremos seleccionando un objeto a añadir entre los existentes, según el criterio que se desee escoger entre las 3 heurı́sticas explicadas.
+
+Insertaremos la máxima cantidad posible de ese elemento. Repetiremos hasta que no queden objetos por añadir o hasta que la capacidad de la mochila esté completa.
+
+### 6.3.3. Algoritmo de la mochila continuo: Diseño Greedy
+El diseño del algortimo es el siguiente:
+* Lista de candidatos: los objetos a llevar.
+* Lista de candidatos utilizados: los objetos incluidos ya en la mochila o descartados.
+* Función solución: no se puede insertar ninguna cantidad de ningún objeto más en la mochila.
+* Función de selección: (según heurı́stica escogida).
+* Criterio de factibilidad: el peso de los objetos incluidos no supera la capacidad de la mochila.
+* Función objetivo: maximizar el beneficio de los objetos a incluir en la mochila, sin superar su capacidad.
+
+### 6.3.4. Algoritmo de la mochila continuio: Optimalidad
+Suongamos que tenemos los objetos ordenados de mejor a peor beneficio/peso:
+> bi /wi ≥ b2 /w2 ≥ ... ≥ bn /wn
+Y que las cantidades de objetos devueltas por el algoritmo son:
+> X = (x1 , x2 , ..., xn )
+Si todos los xi = 1, entonces la solución es óptima trivial. En caso contrario, sea j el primer indice tal que xj < 1. Todos los indices k > j seran por tanto x_k = 0 y que {sumatoria i=1,---,n w_i·x_i = M}, con beneficio B(X) para la solucion X.
+
+Ahora supongamos otra solución factible Y = (y1 , y2 , ..., yn ), con beneficio B(Y).
+Si calculamos la diferencia de los beneficios entre X e Y :
+* Cuando i < j, xi = 1 y la diferencia de todos los (xi − yi ) ≥ 0.
+* Cuando i > j, xi = 0 y la diferenica de todos los (xi − yi ) ≤ 0.
+Por tanto, siempre se cumplirı́a (xi − yi )bi /wi ≥ (xi − yi )bj /wj y podemos reescribir la diferencia como:
+> B(X) − B(Y ) ≥ bj/wj · {sumatoria i=1,---,n w_i(x_i-y_i)} ≥ 0
+Por tanto, el beneficio de la solución de X es máximo global.
+
+### 6.3.5. El algortimo de la mochila continuo: Diseño del algoritmo
+![Image](https://miro.medium.com/v2/resize:fit:480/0*Bc79gFLQgdU_wl1o)
+
+### 6.3.6. El algoritmo de la mochila continuo: Ejemplo
+![Image](https://www.monografias.com/trabajos107/programacion-dinamica-optimizacion/img15.png)
+
+# 7. El viajante de comercio
+## 7.1. Enunciado del problema
+Sea un grafo G = (V, A), no dirigido, completo, con V vértices y A aristas, donde las aristas están ponderadas con pesos no negativos. El problema del viajante del comercio consiste en: ’Encontrar el circuito hamiltoniano minimal del grafo G’.
+
+Aun no existe ninguan solución óptima de orden polinomial al problema del viajante del comercio.
+
+## 7.2. El viajante de comercio: Idea general
+La idea general consiste en:
+* Supondremos que se parte de un nodo cualquiera del grafo.
+* A continuación, se seleccionará el nodo adyacente no visitado más cercano, e insertaremos la arista que lo une en la solución.
+* Al finalizar, uniremos la arista del último nodo seleccionado con el primero, para cerrar el circuito.
+
+## 7.3. Algoritmo del viajante de comercio: Diseño Greedy
+El diseño del algoritmo es el siguiente:
+* Lista de candidatos: los nodos del grafo original
+* Lista de candidatos utilizados: los nodos seleccionados previamente.
+* Función solución: el número de nodos en la solución es —V—.
+* Función de selección. se seleccoina un nodo v tal que la arista a que lo une con el último nodo visitado tiene coste mı́nimo.
+* Criterio de factibilidad: no se pueden formar ciclos. Siempre se cumple, dado que siempre escogemos un nodo nuevo.
+* Función objetivo: encontrar un ciclo hamiltoniano minimal del grafo.
+
+## 7.4. Algoritmo del viajante de comercio: Diseño del algoritmo
+```java
+Algoritmo TravelingSalesmanProblem(G=(V,A))
+    i = s = Seleccionar un nodo cualquiera de V
+    C = V /{s} // Candidatos
+    T = ∅ // Solución a crear
+
+    Mientras |C| = 0
+        v = Seleccionar nodo en C donde a = (s, v) tiene peso mı́nimo
+        C = C/{v}
+        T = T ∪ {(s, v)}
+        Actualizar s = v
+    Fin Mientras
+    
+    T = T ∪ {(s, i)}
+    // Arista restante (s,i) que queda para cerrar el circuito
+
+    Devolver T
+Fin Algoritmo
+```
+## 7.5. Algoritmo del viajante de comercio: Ejemplo
+![Image](https://www2.isye.gatech.edu/~mgoetsch/cali/VEHICLE/TSP/IMG00001.GIF)
+
+## 7.6. Algoritmo del viajante de comercio: Contraejemplo
+![Image](https://i.stack.imgur.com/yHQuy.jpg)
+* Greedy: (A,B), (B,D), (D,C), (C,A): Coste 9
+* Optimo: (A,D), (D,B), (B,C), (C,A): Coste 8
+
+# 8. Planificación de tareas en el sistema
+
