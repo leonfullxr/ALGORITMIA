@@ -1360,4 +1360,171 @@ El caso general supone que para devolver la cantidad j usando sólo monedas desd
 * Echar una moneda de tipo i, quedando por devolver sólo la cantidad j − di y viendo si podemos seguir echadno monedas del mismo tipo i: segunda parte 1 + T [i][j − di ].
 
 ## 3.4. Diseño del problema del cambio de monedas: Verificación del P.O.B
+* Para una cantidad j fija, T [i − 1][j] es óptimo. El caso base T [1[j] es óptimo trivial, ya que solo hay un tipo de monedas y sólo existe un posible cambio a dar.
+* Cuando hay 2 tipos de monedas, T [2][j] selecciona el mı́nimo número de monedas entre T [1][j] y seleccionar una moneda del tipo 2, quitando tantas como posibles hasta la cantidad qeu valga ese tipo de monedas; es decir, 1 + T [2][jd 2]. Este valor también es óptimo cuando d2 ≥ j.
+* Cuando llegamos a T [i − 1][j], este valor también tiene que ser óptimo, dado que le algoritmo ha ido seleccionando el mı́nimo.
+* Cuando llegamos a T [i − 1][j] no es posible que exista una secuencia de dcisiones distintas a las tomadas con un número inferior a T [i − 1][j] ya que eso implicarı́a una solución mı́nima inferior a la proporcionada por la ecuación recurrente, que siempre calcula el número de monedas mı́nimo. Por tanto, T [i − 1][j] es óptimo.
 
+## 3.5. Diseño del problema del cambio de monedas: Representación
+La representación de la solución al problema se realizará mediante una tabla T (i, j):
+* **Filas** (i): asociadas a los tipos de monedas, ordenados ascendentemente por su valor d1 < d2 < d3 < ... < dn .
+* **Columnas** (j): cantidades a devolver, desde 0 hasta N .
+* **Celdas**: cada celda T (i, j) contendrá el mı́nimo número de monedas necesario para devolver la cantidad j asumiendo que consideramos devolver monedas desde el tipo 1 hasta el i.
+
+# 4. El problema de la mochila
+## 4.1. El enunciado del problema
+Tenemos una mochila con una capacidad de peso máximo M , y un conjunot de n objetos a transportar. Cada objeto i tiene un peso wi y llevarlo supone un beneficio bi.
+
+El problema consiste en seleccionar qué objetos incluir en la mochila de modo que se maximice el beneficio, sin superar la capacidad de la misma, sabiendo que los objetos son indivisbles en fracciones y sólo se puede seleccionar llevar el objeto completo o no llevarlo. Si llevamos el objeto i, entonces xi = 1. En caso contrario, xi = 0.
+
+## 4.2.Diseño del problema de la mochila 0/1: Resolución por etapas
+* Capacidad máxima de la mochila M .
+* Número de objetos n = 1, 2, ..., n.
+* Beneficio de llevar cada objeto bi .
+* Peso de cada objeto wi .
+* Supondremos los objetos ordenados de menor a mayor bi /wi .
+* Función objetivo:
+    * Maximizar: {sumatoria i=1,---,n x_i·b_i}
+    * Sujeto: {sumatoria i=1,---,n x_i·w_i} <= M
+* xi = 1 para llevar el objeto y xi = 0 para no llevarlo.
+* Llamaremos T (i, j) al beneficio de haber considerado llevar los objetos desde el 1 al i, sabiendo que la capacidad de la mochila es j.
+* El problema se puede resolver por etapas: en cada etapa i seleccionaremos llevar (o no) el objeto i, consideradno la capacidad restante de la mochila. Si lo llevamos, restaremos su peso a j.
+
+## 4.3. Diseño del problema de la mochila 0/1: Ecuación (I)
+* **Objetivo**: conocer T (n, M ) = beneficio máximo de llevar (o no llevar) objetos desde el 1 hasta el n, para una capacidad de mochila M .
+* **Caso base**:
+    * T (i, 0): no hay capacidad de mochila disponible, no hay beneficio.
+    * T (1, 1..w1 ) = 0; T (1, w1 ..M ) = b1 . Si sólo consideramos llevar al objeto 1, sólo podremos llevarlo para una capacidad de mochila igual o superior a su peso.
+    * T (i, j) = −∞, cuando j < 0. No se puede echar en la mochila un elemento que supere su peso. Es solución no válida y usaremos el valor −∞ para plantear las recurrentes.
+* **Caso general**:
+> T [i][j] = max{T [i − 1][j], bi + T [i − 1][j − wi ]}
+El caso general supone que para una capacidad de mochila j considerando echar (o no) los objetos desde el tipo 1 hasta el i, el máximo beneficio se conseguirá de una de las dos formas siguientes:
+* No ehcar el objeto de tipo i y consdierar echar sólo desde 1 hasta i − 1: primera parte T [i − 1][j].
+* Echar el objeto de tipo i, restando su peso de la capacidad de la mochila j−wi , y aumentando el beneficio en bi . Seguidamente, viendo si podemos echar (o no) objetos desde el tipo 1 hasta el tipo i−1: segunda parte bi +T [i−1][j−wi ].
+
+## 4.4. Diseño del problema de la mochila 0/1: Verificación del P.O.B.
+T [i][j] es óptimo si las decisiiones tomadas anteriormente para T [i − 1][j] y T [i − 1][j − wi ] lo son.
+* Para una capacidad j fija, T [1][j] es óptimo ya que, tanto si wi ≤ j como si no, se selecciona llevar o no llevar el objeto con beneficio óptimo en la ecuación recurrente.
+* Para T [2][j] también es óptimo, ya que sólo se seleccionará llevar un objeto (o ninguno) si la suma de ambos pesos es superior a j, o ambios si no lo son, por la ecuación recurrente.
+* Se sigue por inducción hasta el caso T [i − 1][j] y suponemos este óptimo. Por reducción al absurdo, si no lo fuera existirı́a otra decisión óptima distina de T [i − 1][j] no considerada óptima, pero esto es imposible según al ecuación recurrente dada. Por tanto, T [i − 1][j] es óptimo.
+* Demostrado óptimo T [i − 1][j], queda demostrado también para cualquier caso T [i − 1][j − pi ], como caso particular de T [i − 1][j].
+
+## 4.5. Diseño del problema de la mochial 0/1: Representación
+Se representa la solución al problema como una tabla T (i, j):
+* **Filas (i)**: asociadas a los objetos, ordenados ascendentemente por su valor bi /wi < bw /ww < ... < bn /wn .
+* **Columnas (j)**: capacidades de la mochila, desde 0 hasta M .
+* **Celdas**: cada celda T (i, j) contendrá el máximo beneficio que se puede obtener para una capacidad de mochila j asumiendo que consideramos llevarnos objetos (o no) desde el tipo 1 hasta el i.
+* Para saber cuáles son los objetos que se insertan en la mochila, basta con comparar T [n][M ] con T [n − 1][M ]. Si estos valores son iguales, entonces el n-ésimo objeto no se ha insertado; en caso contrario, si que se ha insertado.
+* Seguidamente, se compara T [n − 1][M ] con T [n − 2][M ] (si no se insertó n-ésimo objeto) de igual forma, o T [n − 1][M − pn ] con T [n − 2][M − pn ] en el caso de que se insertarse el n-ésimo objeto. Se realiza esta operación recursivamente hasta llegar al objeto 1 o una capacidad de mochila giual a 0 para conocer el resto de objetos.
+
+## 4.6. Diseño del problema de la mochila 0/1: Recuperación
+![Image](https://www.monografias.com/trabajos104/programacion-dinamica/img17.png)
+
+# 5. Caminos minimos
+## 5.1. Enunciado del problema
+Sea G = (V, A) un grafo dirigido, con arcos ponderamos con pesos no negativos. El problema consiste en hallar el camino mı́nimo (secuencia de arcos que unen un nodo inicial y un nodo destino, cuya suma de pesos es mı́nima) entre cualquier par de nodos del grafo.
+
+La solución equivale a aplicar el algoritmo de Dijkstra n veces, considerando cada vez como nodo de partida un nodo distinto del grafo.
+
+## 5.2. Diseño del problema de caminos mı́nimos: Resolución por etapas
+* Numeramos los nodos desde 1..n.
+* Asumimos que D es la matriz de adyacencia del grafo, y D[i][j] es la distancia para ir directos desde el nodo i al nodo j.
+* D[i][j] = +∞ si no hay arco entre i y j.
+* Llamaremos Dk [i][j] = coste del camino mı́nimo entre i y j, con nodos intermediso en el conjunto {1..k}. Si k = 0, no hay nodos intermedios.
+* Función objetivo: minimizar Dn [i][j], con n el número de nodos del grafo, para todo i y todo j.
+* El problema es resoluble por etapas: en cada etapa se considera pasar por un nodo intermedio k para cada par de nodso i, j de origen y destino.
+
+## 5.3. Diseño del problema de caminos mı́nimos: Ecuación (I)
+* Objetivo: conocer Dn [i][j] = coste mı́nimo para desde i hasta j, considerando pasar (o no) por cualquier nodo intermedio desde 1 hasta n.
+* Caso base:
+    * D0 [i][j] = D[i][j]. Camino de i a j sin pasar por ningún nodo intermedio = Matriz de adyacencia.
+* Caso general:
+> Dk [i][j] = min{Dk−1 [i][j], Dk−1 [i][k] + Dk−1 [k][j]}
+El caso general supone que para viajar desde i hasta j, pudiendo pasar (o no) por los nodos 1 a k como intermedios, tiene dos posibilidades:
+* El camino de i a j no pasa por k. Primera parte: Dk−1 [i][j].
+* El camino de i a j pasa por k. Segunda parte: Dk−1 [i][k] + Dk−1 [k][j].
+
+## 5.4. Diseño del problema de caminos mı́nimos: Verificación del P.O.B.
+D0 [i][j] es óptimo: el mejor camino de i a j sin pasar por ningún nodo es D[i][j]. D1 [i][j] también es óptimo: selecciona el mejor camino entre ir directos de i a j o pasando por el nodo 1.
+
+Dk [i][j] es óptimo: en caso contrario, habrı́a otros nodos en el camino de i a j pasando por {1...k − 1} tal que sucoste sea menor que el considerando. Esto es imposible, dado que la ecuación recurrente siempre selecciona el menor coste.
+
+## 5.5. Diseño del problema de caminos mı́nimos: Recuperación
+La solución del problema se representa mediante dos tablas:
+* D(i, j), que contiene la distancia mı́nima enter i y j.
+* P (i, j) = k, que represneta que k es un nodo intermedio en el camino entre i y j. Por tanto, para recuperar el camino, tendremos que calcular también P (i, k) y P (k, j).
+
+## 5.6. Diseño del probleam de caminos mı́nmos: Implementación
+```java
+Procedimiento Floyd(MatrizAdy[1..n][1..n]){
+    PARA i = 1 HASTA n, HACER:
+        PARA j = 1 HASTA n, HACER:
+            D[i][j] = MatrizAdy[i][j] // Long. camino minimo
+        ֒    → inicial
+            P[i][j] = 0 // Inicialmente no se pasa por ningun
+        ֒    → nodo
+        FIN - PARA
+    FIN - PARA
+    PARA k = 1 HASTA n, HACER:
+        PARA i = 1 HASTA n, HACER:
+            PARA j = 1 HASTA n, HACER:
+                SI D[i][j] > D[i][k] + D[k][j], ENTONCES:
+                    D[i][j] = D[i][k] + D[k][j]
+                    P[i][j] = k
+                FIN - SI
+            FIN - PARA
+        FIN - PARA
+    FIN - PARA
+    DEVOLVER D, P
+}
+```
+## 5.7. Ejemplo del problema de caminos mı́nimos
+![Image](https://miro.medium.com/v2/resize:fit:1400/1*aJfwaqVN6vKvObqFDLE0ig.jpeg)
+
+# 6. Multiplicación encadenada de matrices
+## 6.1. Enunciado del problema
+Tenemos varias matrices en un orden dado, G = A · B · C · D.... Por la propiedad asociativa, podemos realizar antes unas multiplicaciones que otras. El problema consiste en encontrar la parentización óptima que debemos hacer para realizar el número mı́nimo de operacones posibles en total para realizar la multiplización de todas las matrices.
+
+El número posible de parentizaciones que se pueden probar es de 4n /n2 , donde n es el número de matrices a multiplicar, si comprobamos todas las posibilidades. Con P.D. O(n³).
+
+## 6.2. Diseño de la multiplicación encadenada de matrices: Resolución por etapas
+* Sean n matrices a multiplicar.
+* Llamaremos N (i, j) al número mı́nimo de operaciones necesarias para multiplicar todas las matrices entre las posiciones iy j.
+* El problema se puede resolver por etapas. En cada etapa, comprobaremos cuál es el k óptimo para multiplicar las matrices en las posiciones i,j, de acuerdo a la ecuación anterior.
+
+## 6.3. Diseño de la multplicación encadenada de matrices: Resolución por etapas
+* Objetivo: concer N (1, n), es decir, el número mı́nimo de operaciones para multiplicar las matrices desde la 1 hasta la n.
+* Caso base:
+    * Cuando i = j, N (i, j) = 0, entonces solo hay 1 matriz, no hay que multiplicar.
+* Caso base:
+> N (i, j) = mini≤k < j {N (i, k) + N (k + 1, j) + pi−1 · pk · pj }
+donde:
+* pi es el número de columans de la matriz.
+* i es el número de filas de la matriz i + 1.
+* pi−1 · pk · pj es el número de operaciones requerido para multiplicar las 2 matrices resultantes de la parentización.
+El caso general supone que, para multiplicar las matrices entre la posición i y la posición j, hay que encontrar una posición central que haga que multiplicar desde i hasta k por desde k + 1 hasta j sea óptimo.
+
+## 6.4. Diseño de la multplicación encadenada de matrices: P.O.B
+* El caso base es óptimo. El caso de tamaño 1 también.
+* Para resolver el caso de tamaño n, el coste de esta solución será óptimo si las subsoluciones N (i, k) y N (k + 1, n) es óptimo.
+* Necesariamente, ambas soluciones lo son. En caso contrario, existirı́a alguna otra solución que las sustituyese con menor número de operaciones, lo cual va en contra de la ecuación en recurrencias.
+
+## 6.5. Diseño de la multplicación encadenada de matrices: Representación
+La solución del problema se representará con dos tablas:
+* N (i, j), que va a contener el mı́nimo número de operaciones para multiplicar las matrices entre las posiciones i y j.
+* Solucion(i, j) = k, que representa que, para multiplicar las matrices entre las posiciones i y j, hay que multiplicar primero desde i hasta k y luego desde k + 1 hasta j.
+
+## 6.6. Diseño de la multplicación encadenada de matrices: Implementación
+```java
+Procedimiento MultiplicacionEncadenada(p,n){
+    PARA i = 1 HASTA n HACER
+        N[i][i] = 0
+    FIN - PARA
+    PARA I = 2 hasta n HACER
+        PARA i = 1 HASTA n - I + 1
+            j = i + I - 1
+            N[i][j] = inf
+            PARA k = i hasta j - 1 HACER
+                q = N[i][k] + N[k+1][j]
+}
+```
