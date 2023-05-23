@@ -8,6 +8,7 @@
 SRCD := src
 BIND := bin
 TXTD := data
+LIBD := lib
 
 DIRSTRUCT := $(BIND) $(TXTD)
 
@@ -58,7 +59,7 @@ $(DIRSTRUCT):
 
 $(BIND)/%.bin: $(SRCD)/%.cpp
 	@echo "\n$(LGFG)Compiling $@...$(EC)"
-	$(CC) $< $(CFLAGS) -o $@
+	$(CC) $< $(CFLAGS) -I$(LIBD) -o $@
 
 preamble:
 	@echo "$(PBG)*************************************************$(EC)"
@@ -77,6 +78,10 @@ preamble:
 indexes:
 	@echo "\n$(IFG)Execution indexes (type make <index> to execute):$(EC)"
 	@echo
-	@echo "$(IFG) - XX:$(EC) POR RELLENAR"
+	@echo "$(IFG) - DBP:$(EC) $(BIND)/DealerBagProblem.bin"
+
+DBP: $(BIND)/DealerBagProblem.bin
+	$(RR)$<
+	
 
 .PHONY: all clean
