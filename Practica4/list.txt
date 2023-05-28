@@ -1,0 +1,707 @@
+    Valor: 10.5
+    Peso: 2
+
+    Valor: 7.2
+    Peso: 5
+
+    Valor: 15.8
+    Peso: 3
+
+    Valor: 12.3
+    Peso: 4
+
+    Valor: 9.6
+    Peso: 1
+
+    Valor: 11.1
+    Peso: 6
+
+    Valor: 8.9
+    Peso: 2
+
+    Valor: 14.2
+    Peso: 3
+
+    Valor: 6.7
+    Peso: 5
+
+    Valor: 13.4
+    Peso: 4
+
+    Valor: 9.8
+    Peso: 3
+
+    Valor: 11.7
+    Peso: 2
+
+    Valor: 10.1
+    Peso: 4
+
+    Valor: 15.3
+    Peso: 1
+
+    Valor: 7.6
+    Peso: 5
+
+    Valor: 12.9
+    Peso: 6
+
+    Valor: 8.5
+    Peso: 2
+
+    Valor: 13.8
+    Peso: 3
+
+    Valor: 6.2
+    Peso: 4
+
+    Valor: 14.7
+    Peso: 2
+
+    Valor: 9.4
+    Peso: 3
+
+    Valor: 11.5
+    Peso: 5
+
+    Valor: 15.1
+    Peso: 4
+
+    Valor: 8.3
+    Peso: 2
+
+    Valor: 13.2
+    Peso: 3
+
+    Valor: 6.9
+    Peso: 5
+
+    Valor: 12.5
+    Peso: 1
+
+    Valor: 10.7
+    Peso: 6
+
+    Valor: 14.6
+    Peso: 2
+
+    Valor: 9.2
+    Peso: 3
+
+    Valor: 11.8
+    Peso: 4
+
+    Valor: 7.7
+    Peso: 2
+
+    Valor: 15.5
+    Peso: 3
+
+    Valor: 6.4
+    Peso: 5
+
+    Valor: 12.4
+    Peso: 6
+
+    Valor: 8.4
+    Peso: 2
+
+    Valor: 13.3
+    Peso: 3
+
+    Valor: 6.6
+    Peso: 4
+
+    Valor: 14.8
+    Peso: 2
+
+    Valor: 9.5
+    Peso: 3
+
+    Valor: 11.2
+    Peso: 5
+
+    Valor: 15.0
+    Peso: 4
+
+    Valor: 8.1
+    Peso: 2
+
+    Valor: 13.0
+    Peso: 3
+
+    Valor: 6.1
+    Peso: 5
+
+    Valor: 12.8
+    Peso: 1
+
+    Valor: 10.0
+    Peso: 6
+
+    Valor: 14.3
+    Peso: 2
+
+    Valor: 9.0
+    Peso: 3
+
+    Valor: 11.6
+    Peso: 4
+
+    Valor: 7.9
+    Peso: 2
+
+    Valor: 15.4
+    Peso: 3
+
+    Valor: 6.7
+    Peso: 5
+
+    Valor: 12.2
+    Peso: 6
+
+    Valor: 8.8
+    Peso: 2
+
+    Valor: 13.5
+    Peso: 3
+
+    Valor: 6.0
+    Peso: 4
+
+    Valor: 14.5
+    Peso: 2
+
+    Valor: 9.7
+    Peso: 3
+
+    Valor: 11.4
+    Peso: 5
+
+    Valor: 15.7
+    Peso: 4
+
+    Valor: 8.6
+    Peso: 2
+
+    Valor: 13.7
+    Peso: 3
+
+    Valor: 6.4
+    Peso: 5
+
+    Valor: 12.0
+    Peso: 1
+
+    Valor: 10.8
+    Peso: 6
+
+    Valor: 14.1
+    Peso: 2
+
+    Valor: 9.9
+    Peso: 3
+
+    Valor: 11.0
+    Peso: 4
+
+    Valor: 7.5
+    Peso: 2
+
+    Valor: 15.9
+    Peso: 3
+
+    Valor: 6.9
+    Peso: 5
+
+    Valor: 12.7
+    Peso: 6
+
+    Valor: 8.0
+    Peso: 2
+
+    Valor: 13.8
+    Peso: 3
+
+    Valor: 6.2
+    Peso: 4
+
+    Valor: 14.7
+    Peso: 2
+
+    Valor: 9.4
+    Peso: 3
+
+    Valor: 11.5
+    Peso: 5
+
+    Valor: 15.1
+    Peso: 4
+
+    Valor: 8.3
+    Peso: 2
+
+    Valor: 13.2
+    Peso: 3
+
+    Valor: 6.9
+    Peso: 5
+
+    Valor: 12.6
+    Peso: 1
+
+    Valor: 10.9
+    Peso: 6
+
+    Valor: 14.4
+    Peso: 2
+
+    Valor: 9.1
+    Peso: 3
+
+    Valor: 11.9
+    Peso: 4
+
+    Valor: 7.8
+    Peso: 2
+
+    Valor: 14.9
+    Peso: 3
+
+    Valor: 6.5
+    Peso: 4
+
+    Valor: 12.1
+    Peso: 6
+
+    Valor: 8.7
+    Peso: 2
+
+    Valor: 13.6
+    Peso: 3
+
+    Valor: 6.5
+    Peso: 4
+
+    Valor: 14.9
+    Peso: 2
+
+    Valor: 9.3
+    Peso: 3
+
+    Valor: 11.3
+    Peso: 5
+
+    Valor: 15.2
+    Peso: 4
+
+    Valor: 8.2
+    Peso: 2
+
+    Valor: 13.1
+    Peso: 3
+
+    Valor: 6.8
+    Peso: 5
+
+    Valor: 12.5
+    Peso: 1
+
+    Valor: 10.7
+    Peso: 6
+
+    Valor: 14.6
+    Peso: 2
+
+    Valor: 9.2
+    Peso: 3
+
+    Valor: 11.8
+    Peso: 4
+
+    Valor: 7.7
+    Peso: 2
+
+    Valor: 15.5
+    Peso: 3
+
+    Valor: 6.3
+    Peso: 5
+
+    Valor: 12.4
+    Peso: 6
+
+    Valor: 8.4
+    Peso: 2
+
+    Valor: 13.3
+    Peso: 3
+
+    Valor: 6.6
+    Peso: 4
+
+    Valor: 14.8
+    Peso: 2
+
+    Valor: 9.5
+    Peso: 3
+
+    Valor: 11.2
+    Peso: 5
+
+    Valor: 15.0
+    Peso: 4
+
+    Valor: 8.1
+    Peso: 2
+
+    Valor: 13.0
+    Peso: 3
+
+    Valor: 6.1
+    Peso: 5
+
+    Valor: 12.8
+    Peso: 1
+
+    Valor: 10.0
+    Peso: 6
+
+    Valor: 14.3
+    Peso: 2
+
+    Valor: 9.0
+    Peso: 3
+
+    Valor: 11.6
+    Peso: 4
+
+    Valor: 7.9
+    Peso: 2
+
+    Valor: 15.4
+    Peso: 3
+
+    Valor: 6.7
+    Peso: 5
+
+    Valor: 12.2
+    Peso: 6
+
+    Valor: 8.8
+    Peso: 2
+
+    Valor: 13.5
+    Peso: 3
+
+    Valor: 6.0
+    Peso: 4
+
+    Valor: 14.5
+    Peso: 2
+
+    Valor: 9.7
+    Peso: 3
+
+    Valor: 11.4
+    Peso: 5
+
+    Valor: 15.7
+    Peso: 4
+
+    Valor: 8.6
+    Peso: 2
+
+    Valor: 13.7
+    Peso: 3
+
+    Valor: 6.4
+    Peso: 5
+
+    Valor: 12.0
+    Peso: 1
+
+    Valor: 10.8
+    Peso: 6
+
+    Valor: 14.1
+    Peso: 2
+
+    Valor: 9.9
+    Peso: 3
+
+    Valor: 11.0
+    Peso: 4
+
+    Valor: 7.5
+    Peso: 2
+
+    Valor: 15.9
+    Peso: 3
+
+    Valor: 6.9
+    Peso: 5
+
+    Valor: 12.7
+    Peso: 6
+
+    Valor: 8.0
+    Peso: 2
+
+    Valor: 13.8
+    Peso: 3
+
+    Valor: 6.2
+    Peso: 4
+
+    Valor: 14.7
+    Peso: 2
+
+    Valor: 9.4
+    Peso: 3
+
+    Valor: 11.5
+    Peso: 5
+
+    Valor: 15.1
+    Peso: 4
+
+    Valor: 8.3
+    Peso: 2
+
+    Valor: 13.2
+    Peso: 3
+
+    Valor: 6.9
+    Peso: 5
+
+    Valor: 12.6
+    Peso: 1
+
+    Valor: 10.9
+    Peso: 6
+
+    Valor: 14.4
+    Peso: 2
+
+    Valor: 9.1
+    Peso: 3
+
+    Valor: 11.9
+    Peso: 4
+
+    Valor: 7.8
+    Peso: 2
+
+    Valor: 14.9
+    Peso: 3
+
+    Valor: 6.5
+    Peso: 4
+
+    Valor: 12.1
+    Peso: 6
+
+    Valor: 8.7
+    Peso: 2
+
+    Valor: 13.6
+    Peso: 3
+
+    Valor: 6.5
+    Peso: 4
+
+    Valor: 14.9
+    Peso: 2
+
+    Valor: 9.3
+    Peso: 3
+
+    Valor: 11.3
+    Peso: 5
+
+    Valor: 15.2
+    Peso: 4
+
+    Valor: 8.2
+    Peso: 2
+
+    Valor: 13.1
+    Peso: 3
+
+    Valor: 6.8
+    Peso: 5
+
+    Valor: 12.5
+    Peso: 1
+
+    Valor: 10.7
+    Peso: 6
+
+    Valor: 14.6
+    Peso: 2
+
+    Valor: 9.2
+    Peso: 3
+
+    Valor: 11.8
+    Peso: 4
+
+    Valor: 7.7
+    Peso: 2
+
+    Valor: 15.5
+    Peso: 3
+
+    Valor: 6.3
+    Peso: 5
+
+    Valor: 12.4
+    Peso: 6
+
+    Valor: 8.4
+    Peso: 2
+
+    Valor: 13.3
+    Peso: 3
+
+    Valor: 6.6
+    Peso: 4
+
+    Valor: 14.8
+    Peso: 2
+
+    Valor: 9.5
+    Peso: 3
+
+    Valor: 11.2
+    Peso: 5
+
+    Valor: 15.0
+    Peso: 4
+
+    Valor: 8.1
+    Peso: 2
+
+    Valor: 13.0
+    Peso: 3
+
+    Valor: 6.1
+    Peso: 5
+
+    Valor: 12.8
+    Peso: 1
+
+    Valor: 10.0
+    Peso: 6
+
+    Valor: 14.3
+    Peso: 2
+
+    Valor: 9.0
+    Peso: 3
+
+    Valor: 11.6
+    Peso: 4
+
+    Valor: 7.9
+    Peso: 2
+
+    Valor: 15.4
+    Peso: 3
+
+    Valor: 6.7
+    Peso: 5
+
+    Valor: 12.2
+    Peso: 6
+
+    Valor: 8.8
+    Peso: 2
+
+    Valor: 13.5
+    Peso: 3
+
+    Valor: 6.0
+    Peso: 4
+
+    Valor: 14.5
+    Peso: 2
+
+    Valor: 9.7
+    Peso: 3
+
+    Valor: 11.4
+    Peso: 5
+
+    Valor: 15.7
+    Peso: 4
+
+    Valor: 8.6
+    Peso: 2
+
+    Valor: 13.7
+    Peso: 3
+
+    Valor: 6.4
+    Peso: 5
+
+    Valor: 12.0
+    Peso: 1
+
+    Valor: 10.8
+    Peso: 6
+
+    Valor: 14.1
+    Peso: 2
+
+    Valor: 9.9
+    Peso: 3
+
+    Valor: 11.0
+    Peso: 4
+
+    Valor: 7.5
+    Peso: 2
+
+    Valor: 15.9
+    Peso: 3
+
+    Valor: 6.9
+    Peso: 5
+
+    Valor: 12.7
+    Peso: 6
+
+    Valor: 8.0
+    Peso: 2
+
+    Valor: 13.8
+    Peso: 3
+
+    Valor: 6.2
+    Peso: 4
+
+    Valor: 14.7
+    Peso: 2
+
+    Valor: 9.4
+    Peso: 3
+
+    Valor: 11.5
+    Peso: 5
+
+    Valor: 15.1
+    Peso: 4
+
+    Valor: 8.3
+    Peso: 2
+
+    Valor: 13.2
+    Peso: 3
+
+    Valor: 6.9
+    Peso: 5
+
+    Valor: 12.6
+    Peso: 1

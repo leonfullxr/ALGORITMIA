@@ -6,5 +6,5 @@ int main(void) {
   srand(time(NULL));
   DealerBag bag;
 
-  bag.showMedicines();
+  bag.fillBag(10);
 }
