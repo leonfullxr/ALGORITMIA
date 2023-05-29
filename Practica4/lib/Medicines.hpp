@@ -8,15 +8,15 @@
 #include <iostream>
 
 #define MAX_COST 450    // euros
-#define MAX_WEIGHT 9    // grams
+#define MAX_WEIGHT 10    // grams
 
 #define INC_COST 50     // cost increment
-#define INC_STEPS 10    // possible increments until MAX_COST
+#define COL_WEIGHT 1    // weight per column
 
 using namespace std;
 
 enum MedicineType {
-  STIMULANTS, OPIOIDS, DEPRESSANTS, HALLUCINOGENS, DISSOCIATIVES, INHALANTS, CANNABIS, ALL, NONE
+  STIMULANTS, OPIOIDS, DEPRESSANTS, HALLUCINOGENS, DISSOCIATIVES, INHALANTS, CANNABIS
 };
 
 class Medicine {
@@ -65,15 +65,38 @@ public:
   friend bool operator<(const Medicine &l, const Medicine &r) {
     return l.m_cost_weight_factor < r.m_cost_weight_factor;
   }
+
+  // Save state
+  friend ostream& operator<<(ostream& os, const Medicine& m) {
+    os << m.m_name << '\n'
+       << m.m_cost << '\n'
+       << m.m_weight << '\n';
+
+    return os;
+  }
+
+  // Load state
+  friend istream& operator>>(istream& is, Medicine& m) {
+    is >> m.m_name
+       >> m.m_cost
+       >> m.m_weight;
+
+    return is;
+  }
+
 };
 
 class MedicineStock {
-private:
+protected:
+  vector<string> medicine_names;
   vector<Medicine> stock;
 
 public:
   MedicineStock() {}; /* default */
 
+  /**
+   * showStock: Prints stock elements details
+   **/  
   void showStock(string medicine_type) {
     cout << endl << endl;
     cout << "***************************" << endl;
@@ -85,124 +108,154 @@ public:
       stock[i].showMedicine();
   }
 
-  void refill(vector<string> stock_names) {
-    int stock_size = stock_names.size();
+  /**
+   * refill: Assign random values to each stock variable element
+   **/  
+  void refill() {
+    int stock_size = this->medicine_names.size();
     for(int i = 0; i < stock_size; ++i)
-      this->stock.push_back({stock_names[i], (unsigned int)(rand()%MAX_COST+INC_COST), (unsigned int)(rand()%MAX_WEIGHT+1)});
+      this->stock.push_back({this->medicine_names[i], (unsigned int)(rand()%MAX_COST+INC_COST), (unsigned int)(rand()%MAX_WEIGHT+1)});
 
     sort(this->stock.begin(), this->stock.end());
   }
 
+  /**
+   * size: Returns stock size
+   **/
   size_t size() {
     return stock.size();
   }
- 
+
+  /**
+   * operator[]: Overload operator [] to return element at pos idx
+   **/ 
   const Medicine operator[](int idx) const {
     return stock[idx];
   }
+  
+  /**
+   * operator=: Overload operator =
+   **/  
+  void operator=(const MedicineStock &new_medicine) {
+    this->stock = new_medicine.stock;
+  }
 };
 
-class Stimulants : public MedicineStock {
-private:
-  vector<string> medicine_names = { "Adderall············", 
-                                    "Ritalin·············", 
-                                    "Synthetic marijuana·", 
-                                    "Cocaine·············", 
-                                    "Methamphetamine·····", 
-                                    "Ecstasy·············", 
-                                    "Caffeine············" };
 
+
+
+/////////////////////////////
+// Medicine Stock Examples //
+/////////////////////////////
+
+class Stimulants : public MedicineStock {
 public:
-  Stimulants() { this->refill(medicine_names); }
+  Stimulants() { 
+    vector<string> stimulants_names = { "Adderall············", 
+                                        "Ritalin·············", 
+                                        "Synthetic marijuana·", 
+                                        "Cocaine·············", 
+                                        "Methamphetamine·····", 
+                                        "Ecstasy·············", 
+                                        "Caffeine············" };
+
+    this->medicine_names = stimulants_names;
+    this->refill(); 
+  }
 };
 
 class Opioids : public MedicineStock {
-private:
-  vector<string> medicine_names = { "Heroin······",
-                                    "Morphine····",
-                                    "Hydrocodone·",
-                                    "Opium·······",
-                                    "Vidodim·····",
-                                    "Oxycontin···",
-                                    "Percocet····",
-                                    "Codeine·····" };
-
 public:
-  Opioids() { this->refill(medicine_names); }
+  Opioids() { 
+    vector<string> opioids_names = { "Heroin··············",
+                                     "Morphine············",
+                                     "Hydrocodone·········",
+                                     "Opium···············",
+                                     "Vidodim·············",
+                                     "Oxycontin···········",
+                                     "Percocet············",
+                                     "Codeine·············" };
+
+    this->medicine_names = opioids_names;
+    this->refill(); 
+  }
 };
 
 class Depressants : public MedicineStock { 
-private:
-  vector<string> medicine_names = { "Phenobarbital·",
-                                    "Pentobarbital·",
-                                    "Rohypnol······",
-                                    "Xanax·········",
-                                    "Valium········",
-                                    "Alcohol·······",
-                                    "Tobaco········" };
-
 public:
-  Depressants() { this->refill(medicine_names); }
+  Depressants() { 
+    vector<string> depressants_names = { "Phenobarbital·······",
+                                         "Pentobarbital·······",
+                                         "Rohypnol············",
+                                         "Xanax···············",
+                                         "Valium··············",
+                                         "Alcohol·············",
+                                         "Tobaco··············" };
+
+    this->medicine_names = depressants_names;
+    this->refill(); 
+  }
 };
 
 class Hallucinogens : public MedicineStock {
-private:
-  vector<string> medicine_names = { "Psilocybin·",
-                                    "Peyote·····",
-                                    "LSD········" };
-
 public:
-  Hallucinogens() { this->refill(medicine_names); }
+  Hallucinogens() { 
+    vector<string> hallucinogens_names = { "Psilocybin··········",
+                                           "Peyote··············",
+                                           "LSD·················" };
+
+    this->medicine_names = hallucinogens_names;
+    this->refill(); 
+  }
 };
 
 class Dissociatives : public MedicineStock {
-private:
-  vector<string> medicine_names = { "Ketamina·",
-                                    "DXM······",
-                                    "PCP······" };
-
 public:
-  Dissociatives() { this->refill(medicine_names); }
+  Dissociatives() { 
+    vector<string> dissociatives_names = { "Ketamina············",
+                                           "DXM·················",
+                                           "PCP·················" };
+
+    this->medicine_names = dissociatives_names;
+    this->refill(); 
+  }
 };
 
 class Inhalants : public MedicineStock {
-private:
-  vector<string> medicine_names = { "Glue··········",
-                                    "Gasoline······",
-                                    "Nitrous oxide·",
-                                    "Aerosol·······",
-                                    "Deodorizers···" };
-
 public:
-  Inhalants() { this->refill(medicine_names); }
+  Inhalants() { 
+    vector<string> inhalants_names = { "Glue················",
+                                       "Gasoline············",
+                                       "Nitrous oxide·······",
+                                       "Aerosol·············",
+                                       "Deodorizers·········" };
+
+    this->medicine_names = inhalants_names;
+    this->refill(); 
+  }
 };
 
 class Cannabis : public MedicineStock {
 public:
-  vector<string> medicine_names = { "Marijuana···",
-                                    "Hashish·····",
-                                    "Hashish oil·",
-                                    "Sativex·····" };
-
-public:
-  Cannabis() { this->refill(medicine_names); }
+  Cannabis() { 
+    vector<string> cannabis_names = { "Marijuana···········",
+                                      "Hashish·············",
+                                      "Hashish oil·········",
+                                      "Sativex·············" };
+    
+    this->medicine_names = cannabis_names;
+    this->refill(); 
+  }
 };
 
-// Save state
-friend std::ostream& operator<<(std::ostream& os, const Medicine& m) {
-    os << m.m_name << '\n'
-       << m.m_cost << '\n'
-       << m.m_weight << '\n';
-    return os;
-}
-
-// Load state
-friend std::istream& operator>>(std::istream& is, Medicine& m) {
-    is >> m.m_name
-       >> m.m_cost
-       >> m.m_weight;
-    return is;
-}
-
+struct Examples { 
+  Stimulants stimulants_stock;
+  Opioids opioids_stock;
+  Depressants depressants_stock;
+  Hallucinogens hallucinogens_stock;
+  Dissociatives dissociatives_stock;
+  Inhalants inhalants_stock;
+  Cannabis cannabis_stock;
+};
 
 #endif /* MEDICINES */

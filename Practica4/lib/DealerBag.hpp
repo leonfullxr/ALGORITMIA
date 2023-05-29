@@ -5,120 +5,179 @@
 
 class DealerBag {
 private:
-  Stimulants stimulants_stock;
-  Opioids opioids_stock;
-  Depressants depressants_stock;
-  Hallucinogens hallucinogens_stock;
-  Dissociatives dissociatives_stock;
-  Inhalants inhalants_stock;
-  Cannabis cannabis_stock;
-
+  MedicineStock stock;
   MedicineType stock_type;
 
+  int max_weight;
+  int col_weight;
+  vector<vector<int>> solution;
+
 public:
-  DealerBag() { stock_type = ALL; }
+  DealerBag() {
+    this->max_weight = MAX_WEIGHT;
+    this->col_weight = COL_WEIGHT;
+    int steps = this->max_weight/this->col_weight;
 
-  DealerBag(MedicineType stock_type) {
+    vector<int> aux(steps, 0); 
+
+    for(int i = 0; i < steps; ++i)
+      solution.push_back(aux);
+ }
+
+  DealerBag(MedicineType stock_type, int max_weight=MAX_WEIGHT, int col_weight=COL_WEIGHT) {
     this->stock_type = stock_type;
-  }
+    this->max_weight = max_weight;
+    this->col_weight = col_weight;
 
-  void fillBag(int max_weight, int inc_weight=1) {
-    if(stock_type == ALL || stock_type == STIMULANTS) {
-      stimulants_stock.showStock("Stimulants");
-      fillBag_DP(stimulants_stock, max_weight, inc_weight);
+    Examples stock_examples;
+
+    switch(stock_type) {
+      case STIMULANTS:
+        this->stock = stock_examples.stimulants_stock;
+        break;
+
+      case OPIOIDS:
+        this->stock = stock_examples.opioids_stock;
+        break;
+
+      case DEPRESSANTS:
+        this->stock = stock_examples.depressants_stock;
+        break;
+
+      case HALLUCINOGENS: 
+        this->stock = stock_examples.hallucinogens_stock;
+        break;
+
+      case DISSOCIATIVES: 
+        this->stock = stock_examples.dissociatives_stock;
+        break;
+
+      case INHALANTS:
+        this->stock = stock_examples.inhalants_stock;
+        break;
+
+      case CANNABIS:
+        this->stock = stock_examples.cannabis_stock;
+      break;
+    }
+     
+    int cols = this->max_weight/this->col_weight;
+
+    vector<int> aux(cols, 0); 
+
+    int rows = this->stock.size();
+
+    for(int i = 0; i < rows; ++i)
+      solution.push_back(aux);
+   }
+
+  void fillBag() {
+    string medicine_name;
+
+    switch(stock_type) {
+      case STIMULANTS:
+        medicine_name = "Stimulants";
+        break;
+
+      case OPIOIDS:
+        medicine_name = "Opioids";
+        break;
+
+      case DEPRESSANTS:
+        medicine_name = "Depressants";
+        break;
+
+      case HALLUCINOGENS: 
+        medicine_name = "Hallucinogens";
+        break;
+
+      case DISSOCIATIVES:  
+        medicine_name = "Dissociatives";
+        break;
+
+      case INHALANTS:
+        medicine_name = "Inhalants";
+        break;
+
+      case CANNABIS:
+        medicine_name = "Cannabis";
+      break;
     }
 
-    if(stock_type == ALL || stock_type == OPIOIDS) {
-      opioids_stock.showStock("Opioids");
-      fillBag_DP(opioids_stock, max_weight, inc_weight);
-    }
-
-    if(stock_type == ALL || stock_type == DEPRESSANTS) {
-      depressants_stock.showStock("Depressants"); 
-      fillBag_DP(depressants_stock, max_weight, inc_weight);
-    }
-
-    if(stock_type == ALL || stock_type == HALLUCINOGENS) {
-      hallucinogens_stock.showStock("Hallucinogens");
-      fillBag_DP(hallucinogens_stock, max_weight, inc_weight);
-    }
-
-    if(stock_type == ALL || stock_type == DISSOCIATIVES) {
-      dissociatives_stock.showStock("Dissociatives");
-      fillBag_DP(dissociatives_stock, max_weight, inc_weight);
-    }
-
-    if(stock_type == ALL || stock_type == INHALANTS) {
-      inhalants_stock.showStock("Inhalants");
-      fillBag_DP(inhalants_stock, max_weight, inc_weight);
-    }
-
-    if(stock_type == ALL || stock_type == CANNABIS) {
-      cannabis_stock.showStock("Cannabis");
-      fillBag_DP(cannabis_stock, max_weight, inc_weight);
-    }
+    this->stock.showStock(medicine_name);
+    fillBag_DP();
+    showSolution(); 
   } 
 
 private:
-  void fillBag_DP(MedicineStock bag_stock, int max_weight, int inc_weight=1) {
-    int steps = max_weight/inc_weight;
-    int bag_size = bag_stock.size();
-
-    vector<int> aux(steps, 0);
-    vector<vector<int>> solution(bag_size, aux);
+  void fillBag_DP() {
+    int bag_size = this->stock.size();
+    int steps = this->solution[0].size();
 
     for(int i = 0; i < bag_size; ++i) {
-      int idx_cost = bag_stock[i].cost();
-      int idx_weight = bag_stock[i].weight();
+      int idx_cost = this->stock[i].cost();
+      int idx_weight = this->stock[i].weight();
 
       for(int j = 0; j < steps; ++j) {
         if(i == 0) {
           if(j+1 >= idx_weight)
-            solution[i][j] = idx_cost;
+            this->solution[i][j] = idx_cost;
         } else {
           if(j+1 < idx_weight)
-            solution[i][j] = solution[i-1][j];
+            this->solution[i][j] = this->solution[i-1][j];
           else
-            solution[i][j] = max(solution[i-1][j], idx_cost+solution[i-1][j-idx_weight]);
+            this->solution[i][j] = max(this->solution[i-1][j], idx_cost+this->solution[i-1][j-idx_weight]);
         }
       }
     }
+  }
 
-    for(int i = 0; i < bag_size; ++i) {
-      cout << bag_stock[i].name();
+  void showSolution() {
+    int rows = solution.size();
+    int cols = solution[0].size();
 
-      for(int j = 0; j < steps; ++j)
-        cout << "\t" << solution[i][j];
+    for(int i = 0; i < rows; ++i) {
+      for(int j = 0; j < cols; ++j) {
+        if(i == 0) {
+          if(j == 0)
+            cout << "   ELEMENT\\WEIGHT   ";
+          
+          cout << "\t" << j+1;
+        } else {
+          if(j == 0)
+            cout << stock[i].name();
+          
+          cout << "\t" << solution[i][j];
+        }
+      }
 
       cout << endl;
     }
   }
-};
 
+  /**
+  // Save state
+  friend ostream& operator<<(ostream& os, const DealerBag& db) {
+    os << db.stock.size() << '\n';
 
-// Save state
-friend std::ostream& operator<<(std::ostream& os, const DealerBag& db) {
-    os << db.stimulants_stock.size() << '\n';
-    for (const auto& item : db.stimulants_stock)
-        os << item;
-
-    // tengo que llenar los demas tipos..?
+    for(const Medicine &item : db.stock)
+      os << item;
     
     return os;
-}
+  }
 
-// Load state
-friend std::istream& operator>>(std::istream& is, DealerBag& db) {
-    std::size_t size;
+  // Load state
+  friend istream& operator>>(istream& is, DealerBag& db) {
+    size_t size;
     is >> size;
-    db.stimulants_stock.resize(size);
-    for (auto& item : db.stimulants_stock)
-        is >> item;
 
-    // tengo que llenar los demas tipos..?
+    db.stock.resize(size);
+
+    for(Medicine &item : db.stock)
+      is >> item;
     
     return is;
-}
-
-
+  }
+  **/
+};
 #endif /* DEALER_BAG */

@@ -4,7 +4,7 @@ using namespace std;
 
 int main(void) {
   srand(time(NULL));
-  DealerBag bag;
+  DealerBag bag(STIMULANTS);
 
-  bag.fillBag(10);
+  bag.fillBag();
 }
