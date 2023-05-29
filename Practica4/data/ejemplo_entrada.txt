@@ -1,0 +1,11 @@
+//numero de items
+//nombre -> coste -> peso
+// Ejemplo:
+
+5
+Aspirin 100 10
+Ibuprofen 200 20
+Paracetamol 150 15
+Codeine 500 50
+Morphine 1000 100
+

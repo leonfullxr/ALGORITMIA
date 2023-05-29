@@ -188,4 +188,21 @@ public:
   Cannabis() { this->refill(medicine_names); }
 };
 
+// Save state
+friend std::ostream& operator<<(std::ostream& os, const Medicine& m) {
+    os << m.m_name << '\n'
+       << m.m_cost << '\n'
+       << m.m_weight << '\n';
+    return os;
+}
+
+// Load state
+friend std::istream& operator>>(std::istream& is, Medicine& m) {
+    is >> m.m_name
+       >> m.m_cost
+       >> m.m_weight;
+    return is;
+}
+
+
 #endif /* MEDICINES */

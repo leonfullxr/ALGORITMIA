@@ -95,4 +95,30 @@ private:
   }
 };
 
+
+// Save state
+friend std::ostream& operator<<(std::ostream& os, const DealerBag& db) {
+    os << db.stimulants_stock.size() << '\n';
+    for (const auto& item : db.stimulants_stock)
+        os << item;
+
+    // tengo que llenar los demas tipos..?
+    
+    return os;
+}
+
+// Load state
+friend std::istream& operator>>(std::istream& is, DealerBag& db) {
+    std::size_t size;
+    is >> size;
+    db.stimulants_stock.resize(size);
+    for (auto& item : db.stimulants_stock)
+        is >> item;
+
+    // tengo que llenar los demas tipos..?
+    
+    return is;
+}
+
+
 #endif /* DEALER_BAG */
