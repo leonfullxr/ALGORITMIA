@@ -1,5 +1,5 @@
-#ifndef DEALER_BAG
-#define DEALER_BAG
+#ifndef DEALERBAG
+#define DEALERBAG
 
 #include "Medicines.hpp"
 
@@ -22,7 +22,7 @@ public:
 
     for(int i = 0; i < steps; ++i)
       solution.push_back(aux);
- }
+  }
 
   DealerBag(MedicineType stock_type, int max_weight=MAX_WEIGHT, int col_weight=COL_WEIGHT) {
     this->stock_type = stock_type;
@@ -60,7 +60,7 @@ public:
         this->stock = stock_examples.cannabis_stock;
       break;
     }
-     
+
     int cols = this->max_weight/this->col_weight;
 
     vector<int> aux(cols, 0); 
@@ -69,7 +69,7 @@ public:
 
     for(int i = 0; i < rows; ++i)
       solution.push_back(aux);
-   }
+  }
 
   void fillBag() {
     string medicine_name;
@@ -108,6 +108,33 @@ public:
     fillBag_DP();
     showSolution(); 
   } 
+
+  bool save(const string &file_path) {
+    ofstream out;
+    out.open(file_path);
+
+    if(not out.is_open()) return false;
+
+    out << this->stock;
+
+    out.close();
+
+    return true;
+  }
+    
+  bool load(const string &file_path) {
+    ifstream in;
+
+    in.open(file_path);
+
+    if(not in.is_open()) return false;
+
+    in >> this->stock;
+
+    in.close();
+
+    return true;
+  }
 
 private:
   void fillBag_DP() {
@@ -154,30 +181,5 @@ private:
       cout << endl;
     }
   }
-
-  /**
-  // Save state
-  friend ostream& operator<<(ostream& os, const DealerBag& db) {
-    os << db.stock.size() << '\n';
-
-    for(const Medicine &item : db.stock)
-      os << item;
-    
-    return os;
-  }
-
-  // Load state
-  friend istream& operator>>(istream& is, DealerBag& db) {
-    size_t size;
-    is >> size;
-
-    db.stock.resize(size);
-
-    for(Medicine &item : db.stock)
-      is >> item;
-    
-    return is;
-  }
-  **/
 };
-#endif /* DEALER_BAG */
+#endif /* DEALERBAG */

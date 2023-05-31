@@ -5,6 +5,7 @@
 #include <cfloat>     // DBL_MAX
 #include <vector>     // stl vector
 #include <algorithm>  // sort
+#include <fstream>    // files
 #include <iostream>
 
 #define MAX_COST 450    // euros
@@ -119,25 +120,57 @@ public:
     sort(this->stock.begin(), this->stock.end());
   }
 
+  void resize(size_t size) {
+    stock.resize(size);
+  }
+
   /**
    * size: Returns stock size
    **/
-  size_t size() {
+  size_t size() const {
     return stock.size();
   }
 
   /**
-   * operator[]: Overload operator [] to return element at pos idx
+   * &operator[]: Overload operator [] to set element at pos idx
    **/ 
-  const Medicine operator[](int idx) const {
+  Medicine &operator[](const int &idx) {
     return stock[idx];
   }
   
   /**
    * operator=: Overload operator =
    **/  
-  void operator=(const MedicineStock &new_medicine) {
+  MedicineStock &operator=(const MedicineStock &new_medicine) {
     this->stock = new_medicine.stock;
+    return *this;
+  }
+
+  // Save state
+  friend ostream& operator<<(ostream& os, MedicineStock &ms) {
+    os << ms.stock.size() << '\n';
+
+    for(int i = 0; i < (int)ms.stock.size(); ++i) {
+      os << ms.stock[i];
+    }
+    
+    return os;
+  }
+
+  // Load state
+  friend istream& operator>>(istream& is, MedicineStock &ms) {
+    size_t size;
+    is >> size;
+
+    ms.stock.resize(size);
+
+    for(int i = 0; i < (int)ms.stock.size(); ++i) {
+      Medicine aux;
+      is >> aux;
+      ms.stock[i] = aux;
+    }
+   
+    return is;
   }
 };
 

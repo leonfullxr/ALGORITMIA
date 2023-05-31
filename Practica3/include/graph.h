@@ -135,7 +135,7 @@ public:
         std::mt19937 gen(rd());
         int num_of_cycles = std::min(EDGES_TO_POSITION, cycles_poiss(gen) + 1);
         
-        int edges_left = EDGES_TO_POSITION;
+        int edges_left = EDGES_TO_POSITION;argument discards qualifiers bracket operator
         std::normal_distribution<> cycle_length_normal;
         for(int cycle=1; cycle<=num_of_cycles - 1; cycle++) {
             int cycles_left = num_of_cycles - cycle; // without counting this one
