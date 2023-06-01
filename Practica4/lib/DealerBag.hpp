@@ -16,19 +16,19 @@ public:
   DealerBag() {
     this->max_weight = MAX_WEIGHT;
     this->col_weight = COL_WEIGHT;
-    int steps = this->max_weight/this->col_weight;
-
-    vector<int> aux(steps, 0); 
-
-    for(int i = 0; i < steps; ++i)
-      solution.push_back(aux);
   }
 
   DealerBag(MedicineType stock_type, int max_weight=MAX_WEIGHT, int col_weight=COL_WEIGHT) {
-    this->stock_type = stock_type;
+    initializeWithExample(stock_type);
+
     this->max_weight = max_weight;
     this->col_weight = col_weight;
+    
+    initializeSolution();
+  }
 
+  void initializeWithExample(MedicineType stock_type) {
+    this->stock_type = stock_type;
     Examples stock_examples;
 
     switch(stock_type) {
@@ -60,18 +60,9 @@ public:
         this->stock = stock_examples.cannabis_stock;
       break;
     }
+  } 
 
-    int cols = this->max_weight/this->col_weight;
-
-    vector<int> aux(cols, 0); 
-
-    int rows = this->stock.size();
-
-    for(int i = 0; i < rows; ++i)
-      solution.push_back(aux);
-  }
-
-  void fillBag() {
+  void fillBag(bool show_flag=false) {
     string medicine_name;
 
     switch(stock_type) {
@@ -101,12 +92,15 @@ public:
 
       case CANNABIS:
         medicine_name = "Cannabis";
-      break;
+        break;
+      default:
+        medicine_name = "Custom";
+        break;
     }
 
-    this->stock.showStock(medicine_name);
+    this->stock.showStock(medicine_name, show_flag);
     fillBag_DP();
-    showSolution(); 
+    showSolution(show_flag); 
   } 
 
   bool save(const string &file_path) {
@@ -130,13 +124,25 @@ public:
     if(not in.is_open()) return false;
 
     in >> this->stock;
-
     in.close();
+
+    initializeSolution();
 
     return true;
   }
 
-private:
+private: 
+  void initializeSolution() {
+    int cols = this->max_weight/this->col_weight;
+
+    vector<int> aux(cols, 0); 
+
+    int rows = this->stock.size();
+
+    for(int i = 0; i < rows; ++i)
+      solution.push_back(aux); 
+  }
+
   void fillBag_DP() {
     int bag_size = this->stock.size();
     int steps = this->solution[0].size();
@@ -159,27 +165,31 @@ private:
     }
   }
 
-  void showSolution() {
+  void showSolution(bool show_flag) {
     int rows = solution.size();
     int cols = solution[0].size();
 
-    for(int i = 0; i < rows; ++i) {
-      for(int j = 0; j < cols; ++j) {
-        if(i == 0) {
-          if(j == 0)
-            cout << "   ELEMENT\\WEIGHT   ";
-          
-          cout << "\t" << j+1;
-        } else {
-          if(j == 0)
-            cout << stock[i].name();
-          
-          cout << "\t" << solution[i][j];
+    if(show_flag) {
+      for(int i = 0; i < rows; ++i) {
+        for(int j = 0; j < cols; ++j) {
+          if(i == 0) {
+            if(j == 0)
+              cout << "   ELEMENT\\WEIGHT   ";
+            
+            cout << "\t" << j+1;
+          } else {
+            if(j == 0)
+              cout << stock[i].name();
+            
+            cout << "\t" << solution[i][j];
+          }
         }
+  
+        cout << endl;
       }
-
-      cout << endl;
     }
+
+    cout << "Final solution = " << solution[rows-1][cols-1] << endl;
   }
 };
 #endif /* DEALERBAG */

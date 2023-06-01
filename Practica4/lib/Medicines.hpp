@@ -82,6 +82,8 @@ public:
        >> m.m_cost
        >> m.m_weight;
 
+    m.m_cost_weight_factor = (double)m.m_cost/m.m_weight;
+
     return is;
   }
 
@@ -98,15 +100,17 @@ public:
   /**
    * showStock: Prints stock elements details
    **/  
-  void showStock(string medicine_type) {
-    cout << endl << endl;
-    cout << "***************************" << endl;
-    cout << medicine_type << endl;
-    cout << "***************************" << endl;    
+  void showStock(string medicine_type, bool show_flag=false) {
+    if(show_flag) {
+      cout << endl << endl;
+      cout << "***************************" << endl;
+      cout << medicine_type << endl;
+      cout << "***************************" << endl;    
 
-    int stock_size = stock.size();
-    for(int i = 0; i < stock_size; ++i)
-      stock[i].showMedicine();
+      int stock_size = stock.size();
+      for(int i = 0; i < stock_size; ++i)
+        stock[i].showMedicine();
+    }
   }
 
   /**
@@ -159,15 +163,13 @@ public:
 
   // Load state
   friend istream& operator>>(istream& is, MedicineStock &ms) {
-    size_t size;
+    int size;
     is >> size;
 
-    ms.stock.resize(size);
-
-    for(int i = 0; i < (int)ms.stock.size(); ++i) {
+    for(int i = 0; i < size; ++i) {
       Medicine aux;
       is >> aux;
-      ms.stock[i] = aux;
+      ms.stock.push_back(aux);
     }
    
     return is;

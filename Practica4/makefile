@@ -52,7 +52,7 @@ all: preamble $(DIRSTRUCT) $(BINF) indexes
 
 clean:
 	@echo "\n$(LRFG)Deleting $(BIN)...$(EC)\n"
-	-rm -rf ./$(BIND) ./$(TXTD)
+	-rm -rf ./$(BIND)
 
 $(DIRSTRUCT):
 	@mkdir -p $@
