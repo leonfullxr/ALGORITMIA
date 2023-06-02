@@ -2,7 +2,7 @@
 
 #define N_ELEMENTS 10000
 #define N_COLUMNS 100000
-#define COLUMN_STEP 1
+#define COLUMN_STEP 1000
 
 using namespace std;
 
