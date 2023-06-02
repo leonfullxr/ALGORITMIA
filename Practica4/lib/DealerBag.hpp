@@ -37,40 +37,35 @@ public:
     initializeSolution();
   }
 
-  void initializeWithExample(const MedicineType &stock_type) {
-    this->stock_type = stock_type;
-    Examples stock_examples;
-
-    switch(stock_type) {
-      case STIMULANTS:
-        this->stock = stock_examples.stimulants_stock;
+  void defaultOptions(const int &option) {
+    switch(option) {
+      case 1:
+        initializeWithExample(STIMULANTS);
+        break;
+      case 2:
+        initializeWithExample(OPIOIDS);
+        break;
+      case 3:
+        initializeWithExample(DEPRESSANTS);
+        break;
+      case 4:
+        initializeWithExample(HALLUCINOGENS);
+        break;
+      case 5:
+        initializeWithExample(DISSOCIATIVES);
+        break;
+      case 6:
+        initializeWithExample(INHALANTS);
+        break;
+      case 7:
+        initializeWithExample(CANNABIS);
         break;
 
-      case OPIOIDS:
-        this->stock = stock_examples.opioids_stock;
+      default:
+        cerr << "ERROR: Non valid option" << endl;
         break;
-
-      case DEPRESSANTS:
-        this->stock = stock_examples.depressants_stock;
-        break;
-
-      case HALLUCINOGENS: 
-        this->stock = stock_examples.hallucinogens_stock;
-        break;
-
-      case DISSOCIATIVES: 
-        this->stock = stock_examples.dissociatives_stock;
-        break;
-
-      case INHALANTS:
-        this->stock = stock_examples.inhalants_stock;
-        break;
-
-      case CANNABIS:
-        this->stock = stock_examples.cannabis_stock;
-      break;
     }
-  } 
+  }
 
   void fillBag(const bool &show_flag=false) {
     string medicine_name;
@@ -165,6 +160,43 @@ private:
 
     for(int i = 0; i < rows; ++i)
       solution.push_back(aux); 
+  }
+
+  void initializeWithExample(const MedicineType &stock_type) {
+    this->stock_type = stock_type;
+    Examples stock_examples;
+
+    switch(stock_type) {
+      case STIMULANTS:
+        this->stock = stock_examples.stimulants_stock;
+        break;
+
+      case OPIOIDS:
+        this->stock = stock_examples.opioids_stock;
+        break;
+
+      case DEPRESSANTS:
+        this->stock = stock_examples.depressants_stock;
+        break;
+
+      case HALLUCINOGENS: 
+        this->stock = stock_examples.hallucinogens_stock;
+        break;
+
+      case DISSOCIATIVES: 
+        this->stock = stock_examples.dissociatives_stock;
+        break;
+
+      case INHALANTS:
+        this->stock = stock_examples.inhalants_stock;
+        break;
+
+      case CANNABIS:
+        this->stock = stock_examples.cannabis_stock;
+      break;
+    }
+  
+    initializeSolution();
   }
 
   void fillBag_DP() {
