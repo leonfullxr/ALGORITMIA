@@ -1,6 +1,7 @@
 #ifndef DEALERBAG
 #define DEALERBAG
 
+#include <chrono>
 #include "Medicines.hpp"
 
 class DealerBag {
@@ -18,7 +19,7 @@ public:
     this->col_weight = COL_WEIGHT;
   }
 
-  DealerBag(MedicineType stock_type, int max_weight=MAX_WEIGHT, int col_weight=COL_WEIGHT) {
+  DealerBag(const MedicineType &stock_type, const int &max_weight=MAX_WEIGHT, const int &col_weight=COL_WEIGHT) {
     initializeWithExample(stock_type);
 
     this->max_weight = max_weight;
@@ -27,7 +28,16 @@ public:
     initializeSolution();
   }
 
-  void initializeWithExample(MedicineType stock_type) {
+  void initializeBenchmark(const int &number_of_elements, const int &max_weight, const int &col_weight) {
+    stock.randomFill(number_of_elements);
+
+    this->max_weight = max_weight;
+    this->col_weight = col_weight;
+ 
+    initializeSolution();
+  }
+
+  void initializeWithExample(const MedicineType &stock_type) {
     this->stock_type = stock_type;
     Examples stock_examples;
 
@@ -62,7 +72,7 @@ public:
     }
   } 
 
-  void fillBag(bool show_flag=false) {
+  void fillBag(const bool &show_flag=false) {
     string medicine_name;
 
     switch(stock_type) {
@@ -93,13 +103,27 @@ public:
       case CANNABIS:
         medicine_name = "Cannabis";
         break;
+
       default:
         medicine_name = "Custom";
         break;
     }
 
     this->stock.showStock(medicine_name, show_flag);
+
+    chrono::time_point<std::chrono::high_resolution_clock> t_begin, t_end;
+
+    t_begin = std::chrono::high_resolution_clock::now();
+
     fillBag_DP();
+
+    t_end = std::chrono::high_resolution_clock::now();
+
+    unsigned long T;
+
+    T = std::chrono::duration_cast<std::chrono::microseconds>(t_end-t_begin).count();
+    
+    cout << "Time: " << T << " µs\n" << endl;
     showSolution(show_flag); 
   } 
 
@@ -165,7 +189,7 @@ private:
     }
   }
 
-  void showSolution(bool show_flag) {
+  void showSolution(const bool &show_flag) {
     int rows = solution.size();
     int cols = solution[0].size();
 

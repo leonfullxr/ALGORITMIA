@@ -97,6 +97,16 @@ protected:
 public:
   MedicineStock() {}; /* default */
 
+  void randomFill(const int &number_of_elements) {
+    for(int i = 0; i < number_of_elements; ++i) {
+      this->medicine_names.push_back("Element" + to_string(i)); // element name
+
+      this->stock.push_back({this->medicine_names[i], (unsigned int)(rand()%MAX_COST+INC_COST), (unsigned int)(rand()%MAX_WEIGHT+1)});
+    }
+
+    sort(this->stock.begin(), this->stock.end());    
+  }
+
   /**
    * showStock: Prints stock elements details
    **/  

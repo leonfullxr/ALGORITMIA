@@ -1,5 +1,9 @@
 #include "DealerBag.hpp"
 
+#define N_ELEMENTS 10000
+#define N_COLUMNS 100000
+#define COLUMN_STEP 1
+
 using namespace std;
 
 void defaultOptions(const int &option, DealerBag &bag) {
@@ -32,31 +36,47 @@ void defaultOptions(const int &option, DealerBag &bag) {
   }
 }
 
-int main(int argc, char *argv[]) {
-  if(argc < 4) {
-    cerr << "ERROR: Use -f <FILE> | -s <SEED> (RANDOM EXAMPLE AND VALUES) | -d < 1 (STIMULANTS) | 2 (OPIOIDS) | 3 (DEPRESSANTS) | 4 (HALLUCINOGENS) | 5 (DISSOCIATIVES) | 6 (INHALANTS) | 7 (CANNABIS) > && <-v (INFO) | -n (NO INFO)>" << endl;
-    return 1;
-  }
+void printError() {
+  cerr << "ERROR: Use f <FILE> | b (10000 elements | 1000000 columns | 1 column step) | d < 1 (STIMULANTS) | 2 (OPIOIDS) | 3 (DEPRESSANTS) | 4 (HALLUCINOGENS) | 5 (DISSOCIATIVES) | 6 (INHALANTS) | 7 (CANNABIS) > && <v (INFO) | n (NO INFO)>" << endl; 
+}
 
+int main_to_fix(int argc, char *argv[]) {
   char* option = argv[1];
-  char* option_arg = argv[2];
-  string show_option = "";
-
-  if(argc == 4)
-    show_option = argv[3];
-
-  bool show_flag = (show_option == "-v");
+  char* file_name;
+  int default_option = 0;
+  char *show_option = argv[argc-1];
+  bool show_flag = (show_option == "v");
 
   DealerBag bag;
 
-  if(option == "-f") {
-    bag.load("./data/example1.txt");
-  } else if(option_arg == "-s") {
-    srand(atoi(option_arg));
-    defaultOptions(rand()%7+1, bag);
-  } else if(option_arg == "-d") {
-    defaultOptions(atoi(option_arg), bag);
+  if(option == "f") {
+    if(argc < 4) {
+      printError();
+      return 1;
+    }
+
+    file_name = argv[2];
+    bag.load(file_name);
+  }else if(option == "b"){
+    cerr << "PRE" << endl;
+    bag.initializeBenchmark(N_ELEMENTS, N_COLUMNS, COLUMN_STEP);
+    cerr << "POS" << endl;
+  } else if(option == "d") {
+    if(argc < 4) {
+      printError();
+      return 1;
+    }
+
+    defaultOptions(default_option, bag);
   }
 
   bag.fillBag(show_flag);
+}
+
+int main(void) {
+  DealerBag bag;
+
+  bag.initializeBenchmark(N_ELEMENTS, N_COLUMNS, COLUMN_STEP);
+
+  bag.fillBag();
 }
