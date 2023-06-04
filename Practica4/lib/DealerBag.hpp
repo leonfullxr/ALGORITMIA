@@ -3,6 +3,8 @@
 
 #include <chrono>
 #include "Medicines.hpp"
+#include <fstream>
+#include <chrono>
 
 class DealerBag {
 private:
@@ -202,7 +204,9 @@ private:
   void fillBag_DP() {
     int bag_size = this->stock.size();
     int steps = this->solution[0].size();
-
+    chrono::time_point<std::chrono::high_resolution_clock> t0, tf;
+    
+	t0= std::chrono::high_resolution_clock::now();
     for(int i = 0; i < bag_size; ++i) {
       int idx_cost = this->stock[i].cost();
       int idx_weight = this->stock[i].weight();
@@ -219,6 +223,9 @@ private:
         }
       }
     }
+    tf= std::chrono::high_resolution_clock::now();
+    unsigned long tejecucion= std::chrono::duration_cast<std::chrono::microseconds>(tf - t0).count();
+    cout <<bag_size<<"\t"<<tejecucion<<"\n";
   }
 
   void showSolution(const bool &show_flag) {

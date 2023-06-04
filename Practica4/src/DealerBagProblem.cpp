@@ -1,4 +1,4 @@
-#include "DealerBag.hpp"
+#include "../lib/DealerBag.hpp"
 
 #define N_ELEMENTS 10000
 #define N_COLUMNS 100000
