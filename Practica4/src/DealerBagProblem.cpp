@@ -1,8 +1,8 @@
-#include "../lib/DealerBag.hpp"
+#include "DealerBag.hpp"
 
-#define N_ELEMENTS 10000
-#define N_COLUMNS 100000
-#define COLUMN_STEP 1000
+#define N_ELEMENTS 100
+#define N_COLUMNS 10
+#define COLUMN_STEP 1
 
 using namespace std;
 

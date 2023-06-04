@@ -98,13 +98,22 @@ public:
   MedicineStock() {}; /* default */
 
   void randomFill(const int &number_of_elements) {
+    string points = "············";
+    int point_flag = 10;
+    srand(time(NULL));
+
     for(int i = 0; i < number_of_elements; ++i) {
-      this->medicine_names.push_back("Element" + to_string(i)); // element name
+      if(i == point_flag) {
+        points.pop_back();
+        point_flag *= 10;
+      }
+
+      this->medicine_names.push_back("Element" + to_string(i) + points); // element name
 
       this->stock.push_back({this->medicine_names[i], (unsigned int)(rand()%MAX_COST+INC_COST), (unsigned int)(rand()%MAX_WEIGHT+1)});
     }
 
-    sort(this->stock.begin(), this->stock.end());    
+//    sort(this->stock.begin(), this->stock.end());    
   }
 
   /**
