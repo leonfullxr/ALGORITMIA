@@ -3,8 +3,6 @@
 
 #include <chrono>
 #include "Medicines.hpp"
-#include <fstream>
-#include <chrono>
 
 class DealerBag {
 private:
@@ -28,6 +26,10 @@ public:
     this->col_weight = col_weight;
     
     initializeSolution();
+  }
+  
+  vector<Medicine> getStock() const{
+  	return stock.getStock();
   }
 
   void initializeBenchmark(const int &number_of_elements, const int &max_weight) {
@@ -108,6 +110,7 @@ public:
 
     this->stock.showStock(medicine_name, show_flag);
 
+<<<<<<< HEAD
     int cols = this->max_weight/this->col_weight;
     vector<int> column_weights(cols, this->col_weight);
 
@@ -128,6 +131,10 @@ public:
     
     cout << "Time: " << T << " µs\n" << endl;
     showSolution(column_weights, show_flag); 
+=======
+    fillBag_DP();
+    showSolution(show_flag); 
+>>>>>>> 82308a2 (merge)
   } 
 
   bool save(const string &file_path) {
@@ -227,9 +234,6 @@ private:
         }
       }
     }
-    tf= std::chrono::high_resolution_clock::now();
-    unsigned long tejecucion= std::chrono::duration_cast<std::chrono::microseconds>(tf - t0).count();
-    cout <<bag_size<<"\t"<<tejecucion<<"\n";
   }
 
   int gcd(const int &a, const int &b) {

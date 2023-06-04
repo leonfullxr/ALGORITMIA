@@ -115,6 +115,10 @@ public:
 
 //    sort(this->stock.begin(), this->stock.end());    
   }
+  
+  vector<Medicine> getStock() const{
+  	return stock;
+  }
 
   /**
    * showStock: Prints stock elements details

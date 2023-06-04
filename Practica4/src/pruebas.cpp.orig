@@ -1,8 +1,11 @@
+<<<<<<< HEAD
 /**
 * Fichero para realizar las pruebas de eficiencia 
 * Incluye casos de 1000 items hasta 100.000
 */
-#include "../lib/DealerBag.hpp"
+#include "DealerBag.hpp"
+=======
+>>>>>>> 82308a2 (merge)
 #include <iostream>
 #include <fstream>
 #include "../lib/DealerBag.hpp"
@@ -11,6 +14,12 @@
 using namespace std;
 
 int main() {
+<<<<<<< HEAD
+	// Hare un bucle donde se vayan creando objetos con pesos y valores distintos de manera random
+	
+	
+	return 0;
+=======
 	// Como mucho un elemento puede pesar 10g y valer 450$
   int start_value = 1000;
   int increment = 100;
@@ -37,4 +46,6 @@ int main() {
   outputFile.close();
 
   return 0;
+>>>>>>> 82308a2 (merge)
 }
+
