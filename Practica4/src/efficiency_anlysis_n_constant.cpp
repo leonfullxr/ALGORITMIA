@@ -1,3 +1,4 @@
+//g++ efficiency_analysis_n_constant.cpp -o
 #include "../lib/DealerBag.hpp"
 #include <iostream>
 #include <fstream>
