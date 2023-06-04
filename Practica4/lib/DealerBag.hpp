@@ -71,6 +71,7 @@ public:
 
   void fillBag(const bool &show_flag=false) {
     string medicine_name;
+    chrono::time_point<std::chrono::high_resolution_clock> t0, tf;
 
     switch(stock_type) {
       case STIMULANTS:
@@ -113,20 +114,12 @@ public:
 
     for(int i = 0; i < cols; ++i)
       column_weights[i] += col_weight*i;  
-
-    chrono::time_point<std::chrono::high_resolution_clock> t_begin, t_end;
-
-    t_begin = std::chrono::high_resolution_clock::now();
-
+	
+	t0 = std::chrono::high_resolution_clock::now();
     fillBag_DP(column_weights);
-
-    t_end = std::chrono::high_resolution_clock::now();
-
-    unsigned long T;
-
-    T = std::chrono::duration_cast<std::chrono::microseconds>(t_end-t_begin).count();
-    
-    cout << "Time: " << T << " µs\n" << endl;
+    tf= std::chrono::high_resolution_clock::now();
+    unsigned long tejecucion= std::chrono::duration_cast<std::chrono::microseconds>(tf - t0).count();
+    cout<<this->max_weight<<"\t"<<this->stock.size()<<"\t"<<tejecucion<<"\n";
     showSolution(column_weights, show_flag); 
   } 
 
@@ -227,9 +220,7 @@ private:
         }
       }
     }
-    tf= std::chrono::high_resolution_clock::now();
-    unsigned long tejecucion= std::chrono::duration_cast<std::chrono::microseconds>(tf - t0).count();
-    cout <<bag_size<<"\t"<<tejecucion<<"\n";
+    
   }
 
   int gcd(const int &a, const int &b) {

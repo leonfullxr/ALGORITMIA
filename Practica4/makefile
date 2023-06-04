@@ -80,6 +80,7 @@ indexes:
 	@echo
 		@echo "$(IFG) - DBP-B (Benchmark):$(EC) $(BIND)/DealerBagProblem.bin b n"
 		@echo "$(IFG) - DBP-F1 (File 1):$(EC) $(BIND)/DealerBagProblem.bin f ./data/example1.txt v"
+		@echo "$(IFG) - DBP-F2 (File 2):$(EC) $(BIND)/DealerBagProblem.bin f ./data/example2.txt v"
 		@echo "$(IFG) - DBP-E1 (Example 1):$(EC) $(BIND)/DealerBagProblem.bin e 1 v"
 		@echo "$(IFG) - DBP-E2 (Example 2):$(EC) $(BIND)/DealerBagProblem.bin e 2 v"
 		@echo "$(IFG) - DBP-E3 (Example 3):$(EC) $(BIND)/DealerBagProblem.bin e 3 v"
@@ -87,12 +88,17 @@ indexes:
 		@echo "$(IFG) - DBP-E5 (Example 5):$(EC) $(BIND)/DealerBagProblem.bin e 5 v"
 		@echo "$(IFG) - DBP-E6 (Example 6):$(EC) $(BIND)/DealerBagProblem.bin e 6 v"
 		@echo "$(IFG) - DBP-E7 (Example 7):$(EC) $(BIND)/DealerBagProblem.bin e 7 v"
+		@echo "$(IFG) - DBP-W (analisis eficiencia W cte):$(EC) $(BIND)/efficiency_analysis_w_constant.bin"
+		@echo "$(IFG) - DBP-N (analisis eficiencia N cte):$(EC) $(BIND)/efficiency_analysis_n_constant.bin"
 
 DBP-B: $(BIND)/DealerBagProblem.bin
 	$(RR)$< b n
 
 DBP-F1: $(BIND)/DealerBagProblem.bin
 	$(RR)$< f $(TXTD)/example1.txt v
+	
+DBP-F2: $(BIND)/DealerBagProblem.bin
+	$(RR)$< f $(TXTD)/example2.txt v
 
 DBP-E1: $(BIND)/DealerBagProblem.bin
 	$(RR)$< e 1 v
@@ -114,5 +120,11 @@ DBP-E6: $(BIND)/DealerBagProblem.bin
 
 DBP-E7: $(BIND)/DealerBagProblem.bin
 	$(RR)$< e 7 v
+	
+DBP-W: $(BIND)/efficiency_analysis_w_constant.bin
+	$(RR)$<
+	
+DBP-N: $(BIND)/efficiency_analysis_n_constant.bin
+	$(RR)$<
 
 .PHONY: all clean
