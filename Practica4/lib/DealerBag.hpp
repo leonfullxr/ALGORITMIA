@@ -28,11 +28,11 @@ public:
     initializeSolution();
   }
 
-  void initializeBenchmark(const int &number_of_elements, const int &max_weight, const int &col_weight) {
-    stock.randomFill(number_of_elements);
+  void initializeBenchmark(const int &number_of_elements, const int &max_weight) {
+    stock.randomFill(number_of_elements, max_weight);
 
     this->max_weight = max_weight;
-    this->col_weight = col_weight;
+    this->col_weight = findGCD();
  
     initializeSolution();
   }
@@ -106,11 +106,17 @@ public:
 
     this->stock.showStock(medicine_name, show_flag);
 
+    int cols = this->max_weight/this->col_weight;
+    vector<int> column_weights(cols, this->col_weight);
+
+    for(int i = 0; i < cols; ++i)
+      column_weights[i] += col_weight*i;  
+
     chrono::time_point<std::chrono::high_resolution_clock> t_begin, t_end;
 
     t_begin = std::chrono::high_resolution_clock::now();
 
-    fillBag_DP();
+    fillBag_DP(column_weights);
 
     t_end = std::chrono::high_resolution_clock::now();
 
@@ -119,7 +125,7 @@ public:
     T = std::chrono::duration_cast<std::chrono::microseconds>(t_end-t_begin).count();
     
     cout << "Time: " << T << " µs\n" << endl;
-    showSolution(show_flag); 
+    showSolution(column_weights, show_flag); 
   } 
 
   bool save(const string &file_path) {
@@ -199,20 +205,20 @@ private:
     initializeSolution();
   }
 
-  void fillBag_DP() {
+  void fillBag_DP(const vector<int> &column_weights) {
+    int cols = this->max_weight/this->col_weight;
     int bag_size = this->stock.size();
-    int steps = this->solution[0].size();
 
     for(int i = 0; i < bag_size; ++i) {
       int idx_cost = this->stock[i].cost();
       int idx_weight = this->stock[i].weight();
 
-      for(int j = 0; j < steps; ++j) {
+      for(int j = 0; j < cols; ++j) {
         if(i == 0) {
-          if(j+1 >= idx_weight)
+          if(column_weights[j] >= idx_weight)
             this->solution[i][j] = idx_cost;
         } else {
-          if(j+1 < idx_weight)
+          if(column_weights[j] < idx_weight)
             this->solution[i][j] = this->solution[i-1][j];
           else
             this->solution[i][j] = max(this->solution[i-1][j], idx_cost+this->solution[i-1][j-idx_weight]);
@@ -221,7 +227,26 @@ private:
     }
   }
 
-  void showSolution(const bool &show_flag) {
+  int gcd(const int &a, const int &b) {
+    if(a == 0)
+      return b;
+
+    return gcd(b % a, a);
+  }
+
+  int findGCD() {
+    int result = stock[0].weight();
+    
+    for(int i = 1; i < (int)stock.size(); ++i) {
+      result = gcd(stock[i].weight(), result);
+ 
+      if(result == 1) return 1;
+    }
+
+    return result;
+  }
+
+  void showSolution(const vector<int> &column_weights, const bool &show_flag) {
     int rows = solution.size();
     int cols = solution[0].size();
 
@@ -232,7 +257,7 @@ private:
             if(j == 0)
               cout << "   ELEMENT\\WEIGHT   ";
             
-            cout << "\t" << j+1;
+            cout << "\t" << column_weights[j];
           } else {
             if(j == 0)
               cout << stock[i-1].name();

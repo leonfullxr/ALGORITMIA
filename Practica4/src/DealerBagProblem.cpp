@@ -1,8 +1,8 @@
 #include "DealerBag.hpp"
 
-#define N_ELEMENTS 100
-#define N_COLUMNS 10
-#define COLUMN_STEP 1
+#define N_ELEMENTS 5
+#define MAX_BAG_WEIGHT 1000
+#define COLUMN_STEP 10
 
 using namespace std;
 
@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
         return 1;
       }
   
-      bag.initializeBenchmark(N_ELEMENTS, N_COLUMNS, COLUMN_STEP);
+      bag.initializeBenchmark(N_ELEMENTS, MAX_BAG_WEIGHT);
       break;
     case 'e':
       if(argc < 4) {
